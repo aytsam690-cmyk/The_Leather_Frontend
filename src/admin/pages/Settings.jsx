@@ -70,10 +70,10 @@ function GeneralTab({ onSave, settings }) {
   return (
     <div className="space-y-5">
       <Field label="Site Name"><input className={inputCls} value={form.siteName} onChange={e => set('siteName', e.target.value)} /></Field>
-      <div className="grid grid-cols-2 gap-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
         <UploadZone label="Site Logo" preview={form.logo} onUpload={v => set('logo', v)} />
       </div>
-      <div className="grid grid-cols-2 gap-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
         <Field label="Default Currency">
           <select className={inputCls} value={form.currency} onChange={e => set('currency', e.target.value)}>
             {CURRENCIES.map(c => <option key={c}>{c}</option>)}
@@ -95,7 +95,7 @@ function ShippingTab({ onSave, settings }) {
 
   return (
     <div className="space-y-5">
-      <div className="grid grid-cols-2 gap-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
         <Field label="Default Shipping Cost ($)"><input type="number" className={inputCls} value={form.shippingCost} onChange={e => set('shippingCost', e.target.value)} /></Field>
         <Field label="Free Shipping Threshold ($)"><input type="number" className={inputCls} value={form.freeShippingAbove} onChange={e => set('freeShippingAbove', e.target.value)} /></Field>
       </div>
@@ -137,7 +137,7 @@ function ContactTab({ onSave, settings }) {
 
   return (
     <div className="space-y-5">
-      <div className="grid grid-cols-2 gap-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
         <Field label="Phone Number"><input className={inputCls} value={form.phone} onChange={e => set('phone', e.target.value)} /></Field>
         <Field label="Email Address"><input type="email" className={inputCls} value={form.email} onChange={e => set('email', e.target.value)} /></Field>
       </div>
@@ -233,7 +233,7 @@ function PromoBannerTab({ onSave, settings }) {
         </button>
       </div>
 
-      <div className="grid grid-cols-2 gap-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
         <Field label="Eyebrow Text (small label)">
           <input className={inputCls} value={form.eyebrow} onChange={e => set('eyebrow', e.target.value)} placeholder="e.g. Limited Time" />
         </Field>
@@ -250,7 +250,7 @@ function PromoBannerTab({ onSave, settings }) {
         <textarea className={inputCls} rows={2} value={form.subtext} onChange={e => set('subtext', e.target.value)} placeholder="e.g. Don't miss our biggest sale..." />
       </Field>
 
-      <div className="grid grid-cols-2 gap-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
         <Field label="Button Text">
           <input className={inputCls} value={form.buttonText} onChange={e => set('buttonText', e.target.value)} placeholder="e.g. Shop the Sale →" />
         </Field>
@@ -312,12 +312,12 @@ export default function Settings() {
       <ToastUI />
       <h1 className="text-xl font-black text-[#111111] mb-5">Settings</h1>
 
-      <div className="flex gap-5 items-start">
+      <div className="flex flex-col lg:flex-row gap-5 items-start">
         {/* Vertical tabs */}
-        <div className="bg-white rounded-sm border border-[#E8E8E4] p-2 w-48 shrink-0">
+        <div className="bg-white rounded-sm border border-[#E8E8E4] p-2 w-full lg:w-48 shrink-0 flex lg:flex-col flex-row overflow-x-auto lg:overflow-visible gap-1">
           {TABS.map(({ id, label, icon: Icon }) => (
             <button key={id} onClick={() => setActiveTab(id)}
-              className={`w-full flex items-center gap-2.5 px-3 py-2.5 rounded-sm text-sm font-medium mb-0.5 transition-all ${activeTab === id ? 'text-white' : 'text-[#6B6B6B] hover:bg-[#F8F8F6] hover:text-[#111111]'}`}
+              className={`lg:w-full flex items-center gap-2.5 px-3 py-2.5 rounded-sm text-sm font-medium whitespace-nowrap mb-0 lg:mb-0.5 transition-all ${activeTab === id ? 'text-white' : 'text-[#6B6B6B] hover:bg-[#F8F8F6] hover:text-[#111111]'}`}
               style={activeTab === id ? { background: CORAL } : {}}>
               <Icon size={16} /> {label}
             </button>

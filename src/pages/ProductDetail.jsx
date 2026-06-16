@@ -146,7 +146,7 @@ function Gallery({ images }) {
               {images[active]?.url ? (
                 <img src={images[active].url} alt="zoom" style={{ maxHeight: '88vh', maxWidth: '88vw', objectFit: 'contain' }} />
               ) : (
-                <div style={{ width: 600, height: 600, background: images[active]?.bg || '#F8F8F6', borderRadius: 2 }} />
+                <div style={{ width: 600, height: 600, maxWidth: '90vw', maxHeight: '90vh', background: images[active]?.bg || '#F8F8F6', borderRadius: 2 }} />
               )}
             </div>
 
@@ -607,7 +607,7 @@ export default function ProductDetail() {
             </p>
 
             {/* Name */}
-            <h1 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 40, fontWeight: 500, color: '#111111', lineHeight: 1.15, margin: 0 }}>
+            <h1 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(24px, 5vw, 40px)', fontWeight: 500, color: '#111111', lineHeight: 1.15, margin: 0 }}>
               {product.name}
             </h1>
 

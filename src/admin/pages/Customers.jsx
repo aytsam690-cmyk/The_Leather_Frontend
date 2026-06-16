@@ -284,7 +284,7 @@ export default function Customers() {
         <h1 className="text-xl font-black text-[#111111]">Customers ({customers.length})</h1>
         <div className="flex flex-wrap items-center gap-2">
           <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search name or email…"
-            className="pl-4 pr-4 py-2.5 text-sm border border-[#D0D0CA] rounded-sm outline-none focus:border-[#C9A96E] transition-all w-56" />
+            className="pl-4 pr-4 py-2.5 text-sm border border-[#D0D0CA] rounded-sm outline-none focus:border-[#C9A96E] transition-all w-full sm:w-56" />
           <select value={statusFilter} onChange={e => setStatusFilter(e.target.value)}
             className="text-sm border border-[#D0D0CA] rounded-sm px-3 py-2.5 outline-none focus:border-[#C9A96E] text-[#6B6B6B] bg-white">
             <option value="">All Status</option>

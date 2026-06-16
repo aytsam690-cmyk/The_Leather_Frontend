@@ -54,8 +54,8 @@ function Countdown({ endDate }) {
   return (
     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 12 }}>
       {segs.map(({ label, val }) => (
-        <div key={label} style={{ background: S.dark2, border: '1px solid #333333', borderRadius: 2, padding: '20px 12px', textAlign: 'center' }}>
-          <div style={{ fontFamily: S.cm, fontSize: 44, fontWeight: 500, color: S.white, lineHeight: 1 }}>{val}</div>
+        <div key={label} style={{ background: S.dark2, border: '1px solid #333333', borderRadius: 2, padding: 'clamp(12px, 3vw, 20px) clamp(8px, 2vw, 12px)', textAlign: 'center' }}>
+          <div style={{ fontFamily: S.cm, fontSize: 'clamp(24px, 6vw, 44px)', fontWeight: 500, color: S.white, lineHeight: 1 }}>{val}</div>
           <div style={{ fontFamily: S.dm, fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'rgba(255,255,255,0.4)', marginTop: 8 }}>{label}</div>
         </div>
       ))}
@@ -458,7 +458,7 @@ export default function Home() {
               <p style={{ fontFamily: S.dm, fontSize: 11, fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.12em', color: S.gold, marginBottom: 12 }}>
                 Shop by Category
               </p>
-              <h2 style={{ fontFamily: S.cm, fontSize: 40, fontWeight: 500, color: S.black, lineHeight: 1.1, margin: 0 }}>
+              <h2 style={{ fontFamily: S.cm, fontSize: 'clamp(28px, 5vw, 40px)', fontWeight: 500, color: S.black, lineHeight: 1.1, margin: 0 }}>
                 Find What You Love
               </h2>
             </motion.div>
@@ -470,7 +470,7 @@ export default function Home() {
             >
               {categories.map((cat, i) => (
                 <motion.div key={cat.name} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-                  transition={{ delay: i * 0.06, duration: 0.4 }} style={{ flexShrink: 0, width: 200 }}>
+                  transition={{ delay: i * 0.06, duration: 0.4 }} style={{ flexShrink: 0, width: 'clamp(150px, 40vw, 200px)' }}>
                   <Link to={`/products?category=${encodeURIComponent(cat.name)}`} style={{ textDecoration: 'none', display: 'block' }}>
                     <div className="cat-card" style={{
                       background: S.white, border: `1px solid ${S.border}`, borderRadius: 2,

@@ -278,13 +278,13 @@ function ShippingForm({ data, setData, onNext }) {
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
         {/* Row 1: Name + Email */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16 }}>
           <DSInput label="Full Name" name="fullName" value={data.fullName || ''} onChange={handleChange} error={errors.fullName} required />
           <DSInput label="Email (Optional)" name="email" type="email" value={data.email || ''} onChange={handleChange} error={errors.email} />
         </div>
 
         {/* Row 2: Phone + Address */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16 }}>
           <DSInput label="Phone" name="phone" value={data.phone || ''} onChange={handleChange} error={errors.phone} required />
           <DSInput label="Address Line 1" name="address1" value={data.address1 || ''} onChange={handleChange} error={errors.address1} required />
         </div>
@@ -293,13 +293,13 @@ function ShippingForm({ data, setData, onNext }) {
         <DSInput label="Address Line 2 (optional)" name="address2" value={data.address2 || ''} onChange={handleChange} />
 
         {/* Row 4: City + Province */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16 }}>
           <DSInput label="City" name="city" value={data.city || ''} onChange={handleChange} error={errors.city} required />
           <DSSelect label="Province" name="state" value={data.state || ''} onChange={handleChange} error={errors.state} required options={PROVINCES} />
         </div>
 
         {/* Row 5: ZIP + Country */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16 }}>
           <DSInput label="ZIP / Postal Code" name="zip" value={data.zip || ''} onChange={handleChange} error={errors.zip} required />
           <DSInput label="Country" name="country" value={data.country || ''} onChange={handleChange} error={errors.country} required />
         </div>
@@ -359,7 +359,7 @@ function ReviewOrder({ shipping, onBack, onNext }) {
   return (
     <div>
       {/* Summary cards */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 16 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: 16, marginBottom: 16 }}>
         {/* Shipping card */}
         <div style={{ background: '#F8F8F6', border: '1px solid #E8E8E4', borderRadius: 2, padding: 20 }}>
           <MapPin size={18} style={{ color: '#C9A96E', marginBottom: 12 }} />
@@ -495,7 +495,7 @@ function ConfirmOrder({ onBack, onPlace, loading }) {
         <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: '#6B6B6B', lineHeight: 1.6, margin: '0 0 16px', maxWidth: 300 }}>
           Safe &amp; trusted. Pay with cash when your order arrives at your doorstep.
         </p>
-        <div style={{ display: 'flex', gap: 12 }}>
+        <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
           {['🔒 Secure', '✓ Verified', '🏠 Pay at Door'].map(t => (
             <span key={t} style={{
               fontFamily: "'DM Sans', sans-serif", fontSize: 11,

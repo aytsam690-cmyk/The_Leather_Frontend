@@ -39,7 +39,7 @@ function ProfileTab({ user }) {
     <div className="bg-white border border-[#E8E8E4] rounded-sm p-8">
       <h2 className="font-cormorant text-[24px] font-medium text-[#111111] mb-8">My Profile</h2>
       <form onSubmit={handleSave}>
-        <div className="grid grid-cols-2 gap-5 mb-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-6">
           <div className="col-span-2">
             <label className="font-dm text-[10px] font-medium uppercase tracking-[0.08em] text-[#6B6B6B] mb-1.5 block">Full Name</label>
             <input name="name" value={form.name} onChange={handleChange} className="bg-white border border-[#E8E8E4] rounded-sm px-4 py-3 font-dm text-sm text-[#111111] placeholder:text-[#9E9E9E] focus:border-[#111111] focus:outline-none focus:ring-0 focus:shadow-[0_0_0_3px_rgba(17,17,17,0.06)] transition-all w-full" />
@@ -106,7 +106,7 @@ function OrdersTab() {
 
   return (
     <div>
-      <div className="flex gap-0 border-b border-[#E8E8E4] mb-6">
+      <div className="flex gap-0 border-b border-[#E8E8E4] mb-6 overflow-x-auto flex-nowrap">
         {['All', 'Pending', 'Processing', 'Shipped', 'Delivered', 'Cancelled'].map(f => (
           <button
             key={f}
@@ -291,7 +291,7 @@ export default function Account({ defaultTab = 'profile' }) {
 
   return (
     <div className="min-h-screen bg-[#F8F8F6]">
-      <div className="max-w-6xl mx-auto px-6 py-12">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12">
         <div className="mb-8">
           <p className="font-dm text-[11px] font-medium uppercase tracking-[0.12em] text-[#C9A96E] mb-3">My Account</p>
           <h1 className="font-cormorant text-[32px] font-medium text-[#111111] leading-tight">Welcome, {user?.name?.split(' ')[0] || 'User'}</h1>

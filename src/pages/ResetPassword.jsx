@@ -150,7 +150,7 @@ export default function ResetPassword() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: 0.08 }}
-          className="bg-white border border-[#E8E8E4] rounded-sm p-10"
+          className="bg-white border border-[#E8E8E4] rounded-sm p-6 sm:p-10"
         >
           <AnimatePresence mode="wait">
             {!success ? (

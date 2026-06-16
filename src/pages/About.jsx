@@ -124,7 +124,7 @@ export default function About() {
       {/* ── Stats strip ───────────────────────────────────────────────────── */}
       <section style={{ background: '#F8F8F6', borderBottom: '1px solid #E8E8E4' }}>
         <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 24px' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))' }}>
             {STATS.map((s, i) => (
               <motion.div
                 key={s.label}
@@ -175,7 +175,7 @@ export default function About() {
               }}>Who We Are</p>
               <h2 style={{
                 fontFamily: "'Cormorant Garamond', serif",
-                fontSize: 44,
+                fontSize: 'clamp(28px, 5vw, 44px)',
                 fontWeight: 500,
                 color: '#111111',
                 lineHeight: 1.1,

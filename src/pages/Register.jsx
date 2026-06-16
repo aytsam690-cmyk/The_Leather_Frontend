@@ -137,7 +137,7 @@ export default function Register() {
         initial={{ opacity: 0, scale: 0.97 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.4 }}
-        className="bg-white border border-[#E8E8E4] rounded-sm p-10 lg:p-14 w-full max-w-md shadow-card"
+        className="bg-white border border-[#E8E8E4] rounded-sm p-6 sm:p-10 lg:p-14 w-full max-w-md shadow-card"
       >
         <div className="flex flex-col items-center">
           <Link to="/" className="flex flex-col items-center no-underline">

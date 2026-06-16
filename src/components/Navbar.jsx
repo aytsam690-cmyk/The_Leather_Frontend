@@ -368,7 +368,7 @@ export default function Navbar() {
                         left: '50%',
                         transform: 'translateX(-50%)',
                         marginTop: 8,
-                        width: 480,
+                        width: Math.min(480, window.innerWidth - 48),
                         background: '#FFFFFF',
                         border: '1px solid #E8E8E4',
                         borderRadius: 2,
@@ -442,7 +442,7 @@ export default function Navbar() {
                     <motion.input
                       ref={searchRef}
                       initial={{ width: 0, opacity: 0 }}
-                      animate={{ width: 200, opacity: 1 }}
+                      animate={{ width: window.innerWidth < 640 ? 160 : 200, opacity: 1 }}
                       exit={{ width: 0, opacity: 0 }}
                       transition={{ duration: 0.3 }}
                       value={searchQuery}
@@ -481,7 +481,7 @@ export default function Navbar() {
                     top: '100%',
                     right: 0,
                     marginTop: 8,
-                    width: 320,
+                    width: '100%', maxWidth: 320, right: 0,
                     background: '#FFFFFF',
                     border: '1px solid #E8E8E4',
                     borderRadius: 2,
@@ -755,7 +755,7 @@ export default function Navbar() {
                   to={link.path}
                   style={{
                     fontFamily: "'Cormorant Garamond', serif",
-                    fontSize: 36,
+                    fontSize: 'clamp(24px, 6vw, 36px)',
                     fontWeight: 600,
                     color: '#111111',
                     textDecoration: 'none',

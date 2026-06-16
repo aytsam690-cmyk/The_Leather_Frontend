@@ -212,3 +212,11 @@ img { max-width: 100%; height: auto; }
   h1 { word-break: break-word; }
   h2 { word-break: break-word; }
 }
+
+/* ── Touch devices: always show quick-add bar ──────────────────────────────── */
+@media (hover: none) {
+  .quick-add-bar {
+    transform: translateY(0) !important;
+    opacity: 1 !important;
+  }
+}

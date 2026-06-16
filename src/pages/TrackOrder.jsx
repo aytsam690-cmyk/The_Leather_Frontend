@@ -273,7 +273,7 @@ export default function TrackOrder() {
         </div>
 
         {/* Search Form */}
-        <form onSubmit={handleTrack} style={{ display: 'flex', gap: 12, marginBottom: 40 }}>
+        <form onSubmit={handleTrack} style={{ display: 'flex', gap: 12, marginBottom: 40, flexWrap: 'wrap' }}>
           <div style={{ flex: 1, position: 'relative' }}>
             <Phone size={18} style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)', color: '#9E9E9E' }} />
             <input

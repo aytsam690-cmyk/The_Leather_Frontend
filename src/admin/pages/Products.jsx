@@ -150,7 +150,7 @@ function ProductForm({ initial, saving, onCancel, onSave, categories }) {
 
       {/* Section 2 — Pricing & Stock */}
       <Section title="Pricing & Inventory">
-        <div className="grid grid-cols-3 gap-4 mb-2">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-2">
           {[[`Selling Price (${symbol})`, 'price'], [`Original Price / MRP (${symbol})`, 'comparePrice'], [`Cost Price (${symbol})`, 'costPrice']].map(([l, k]) => (
             <div key={k}>
               <label className={labelCls}>{l}</label>
@@ -163,7 +163,7 @@ function ProductForm({ initial, saving, onCancel, onSave, categories }) {
             🏷️ Discount: {Math.round(((Number(form.comparePrice) - Number(form.price)) / Number(form.comparePrice)) * 100)}% OFF — Customer will see crossed-out original price
           </p>
         )}
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           {[['SKU', 'sku'], ['Barcode', 'barcode'], ['Stock Qty', 'stock']].map(([l, k]) => (
             <div key={k}>
               <label className={labelCls}>{l}</label>
@@ -193,7 +193,7 @@ function ProductForm({ initial, saving, onCancel, onSave, categories }) {
             }} />
         </div>
         {form.images.length > 0 && (
-          <div className="grid grid-cols-4 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {form.images.map((img, i) => (
               <div key={img.id} className="relative rounded-sm overflow-hidden border border-[#D0D0CA]" style={{ aspectRatio:'1' }}>
                 <img src={img.url} alt={img.name} className="w-full h-full object-cover" />
@@ -218,7 +218,7 @@ function ProductForm({ initial, saving, onCancel, onSave, categories }) {
 
       {/* Section 5 — Variants */}
       <Section title="Product Variants">
-        <div className="grid grid-cols-4 gap-3 mb-3">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-3">
           {[['Size', 'size'], ['Color', 'color'], ['Price', 'price'], ['Stock', 'stock']].map(([l, k]) => (
             <div key={k}>
               <label className={labelCls}>{l}</label>
@@ -509,7 +509,7 @@ export default function Products() {
           <div className="relative">
             <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#9E9E9E]" />
             <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search name or SKU…"
-              className="pl-9 pr-4 py-2.5 text-sm border border-[#D0D0CA] rounded-sm outline-none focus:border-[#C9A96E] transition-all w-52" />
+              className="pl-9 pr-4 py-2.5 text-sm border border-[#D0D0CA] rounded-sm outline-none focus:border-[#C9A96E] transition-all w-full sm:w-52" />
           </div>
           <select value={categoryFilter} onChange={e => setCategoryFilter(e.target.value)}
             className="text-sm border border-[#D0D0CA] rounded-sm px-3 py-2.5 outline-none focus:border-[#C9A96E] text-[#6B6B6B] bg-white">

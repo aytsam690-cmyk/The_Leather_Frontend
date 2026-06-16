@@ -10,6 +10,17 @@ import useAdminStore from './store/adminStore';
 
 const CORAL = '#111111';
 
+// Hook to detect desktop (lg breakpoint = 1024px)
+function useIsDesktop() {
+  const [isDesktop, setIsDesktop] = useState(typeof window !== 'undefined' ? window.innerWidth >= 1024 : true);
+  useEffect(() => {
+    const onResize = () => setIsDesktop(window.innerWidth >= 1024);
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, []);
+  return isDesktop;
+}
+
 const NAV_LINKS = [
   { path: '/admin',          label: 'Dashboard',  icon: LayoutDashboard, end: true },
   { path: '/admin/products', label: 'Products',   icon: Package },
@@ -92,12 +103,10 @@ function Sidebar({ collapsed, onToggle, mobileOpen, onMobileClose }) {
       )}
 
       <aside
-        className="fixed top-0 left-0 h-screen bg-white flex flex-col z-40 transition-all duration-300"
+        className={`fixed top-0 left-0 h-screen bg-white flex flex-col z-40 transition-all duration-300 ${mobileOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0`}
         style={{
           width: collapsed ? 72 : 260,
           boxShadow: '2px 0 20px rgba(0,0,0,0.06)',
-          transform: mobileOpen ? 'translateX(0)' : undefined,
-          left: mobileOpen ? 0 : undefined,
         }}
       >
         {/* Logo */}
@@ -176,6 +185,7 @@ function Sidebar({ collapsed, onToggle, mobileOpen, onMobileClose }) {
 
 // ─── Header ───────────────────────────────────────────────────────────────────
 function Header({ collapsed, onMobileOpen }) {
+  const isDesktop = useIsDesktop();
   const { user, logout } = useAdminAuthStore();
   const { breadcrumbs } = useAdminStore();
   const [searchOpen, setSearchOpen] = useState(false);
@@ -192,7 +202,7 @@ function Header({ collapsed, onMobileOpen }) {
   return (
     <header
       className="fixed top-0 right-0 bg-white border-b border-[#E8E8E4] flex items-center px-4 h-16 z-20 transition-all duration-300"
-      style={{ left: collapsed ? 72 : 260 }}
+      style={{ left: isDesktop ? (collapsed ? 72 : 260) : 0 }}
     >
       {/* Mobile hamburger */}
       <button onClick={onMobileOpen} className="lg:hidden p-2 rounded-sm hover:bg-[#F8F8F6] transition-all text-[#6B6B6B] mr-3">
@@ -264,6 +274,7 @@ function Header({ collapsed, onMobileOpen }) {
 export default function AdminLayout() {
   const { sidebarCollapsed, toggleSidebar } = useAdminStore();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const isDesktop = useIsDesktop();
 
   return (
     <div className="min-h-screen bg-[#F8F8F6]">
@@ -276,9 +287,9 @@ export default function AdminLayout() {
       <Header collapsed={sidebarCollapsed} onMobileOpen={() => setMobileOpen(true)} />
       <main
         className="transition-all duration-300 pt-16"
-        style={{ marginLeft: sidebarCollapsed ? 72 : 260 }}
+        style={{ marginLeft: isDesktop ? (sidebarCollapsed ? 72 : 260) : 0 }}
       >
-        <div className="p-6">
+        <div className="p-4 sm:p-6">
           <Outlet />
         </div>
       </main>

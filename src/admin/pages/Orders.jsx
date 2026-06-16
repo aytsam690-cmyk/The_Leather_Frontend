@@ -348,7 +348,7 @@ export default function Orders() {
         <div className="flex flex-wrap items-center gap-2">
           <div className="relative">
             <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search order or customer…"
-              className="pl-4 pr-4 py-2.5 text-sm border border-[#D0D0CA] rounded-sm outline-none focus:border-[#C9A96E] transition-all w-56" />
+              className="pl-4 pr-4 py-2.5 text-sm border border-[#D0D0CA] rounded-sm outline-none focus:border-[#C9A96E] transition-all w-full sm:w-56" />
           </div>
           <input type="date" value={dateFrom} onChange={e => setDateFrom(e.target.value)}
             className="text-sm border border-[#D0D0CA] rounded-sm px-3 py-2.5 outline-none focus:border-[#C9A96E] text-[#6B6B6B] bg-white" />

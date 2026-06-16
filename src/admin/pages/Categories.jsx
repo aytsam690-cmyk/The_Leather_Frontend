@@ -294,9 +294,9 @@ export default function Categories() {
         </button>
       </div>
 
-      <div className="flex gap-5 items-start">
+      <div className="flex flex-col lg:flex-row gap-5 items-start">
         {/* Tree */}
-        <div className={`bg-white rounded-sm border border-[#E8E8E4] p-4 ${showForm ? 'w-2/5' : 'w-full'} transition-all`}>
+        <div className={`bg-white rounded-sm border border-[#E8E8E4] p-4 w-full ${showForm ? 'lg:w-2/5' : 'lg:w-full'} transition-all`}>
           <p className="text-xs font-semibold text-[#9E9E9E] uppercase tracking-widest mb-3">Category Tree</p>
           {cats.map(cat => (
             <TreeNode key={cat.id} cat={cat} depth={0}
@@ -313,7 +313,7 @@ export default function Categories() {
 
         {/* Form panel */}
         {showForm && (
-          <div className="w-3/5 bg-white rounded-sm border border-[#E8E8E4] p-5">
+          <div className="w-full lg:w-3/5 bg-white rounded-sm border border-[#E8E8E4] p-5">
             <h3 className="font-bold text-[#111111] mb-4">{editCat ? `Edit: ${editCat.name}` : 'Add Category'}</h3>
             <CategoryForm
               initial={editCat}
