@@ -526,7 +526,8 @@ export default function Home() {
           {featuredProducts.length > 0 ? (
             <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }}
               variants={{ visible: { transition: { staggerChildren: 0.08 } } }}
-              style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: 20 }}>
+              className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-5"
+              style={{ display: 'grid' }}>
               {featuredProducts.map(p => (
                 <motion.div key={p.id} variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.45 } } }}>
                   <ProductCard product={p} />

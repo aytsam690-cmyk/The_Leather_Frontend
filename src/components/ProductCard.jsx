@@ -94,32 +94,28 @@ export default function ProductCard({ product }) {
           )}
 
           {/* Badges */}
-          <div style={{ position: 'absolute', top: 12, left: 12, display: 'flex', flexDirection: 'column', gap: 6, zIndex: 2 }}>
+          <div style={{ position: 'absolute', top: 8, left: 8, display: 'flex', flexDirection: 'column', gap: 4, zIndex: 2 }} className="pc-badges">
             {discountPct && (
-              <span style={{
+              <span className="pc-badge-discount" style={{
                 background: '#E53935',
                 color: '#FFFFFF',
                 fontFamily: "'DM Sans', sans-serif",
-                fontSize: 11,
                 fontWeight: 700,
                 letterSpacing: '0.02em',
-                padding: '4px 10px',
                 borderRadius: 2,
               }}>
-                -{discountPct}% OFF
+                -{discountPct}%
               </span>
             )}
             {!discountPct && product.isNew && (
-              <span style={{
+              <span className="pc-badge-new" style={{
                 background: '#FFFFFF',
                 color: '#111111',
                 border: '1px solid #E8E8E4',
                 fontFamily: "'DM Sans', sans-serif",
-                fontSize: 10,
                 fontWeight: 600,
                 textTransform: 'uppercase',
                 letterSpacing: '0.06em',
-                padding: '3px 8px',
                 borderRadius: 2,
               }}>
                 New
@@ -138,14 +134,10 @@ export default function ProductCard({ product }) {
               bottom: 0,
               left: 0,
               right: 0,
-              padding: '14px 0',
-              minHeight: 44,
               textAlign: 'center',
               fontFamily: "'DM Sans', sans-serif",
-              fontSize: 11,
               fontWeight: 500,
               textTransform: 'uppercase',
-              letterSpacing: '0.10em',
               color: '#FFFFFF',
               background: clicked ? '#333333' : '#111111',
               cursor: 'pointer',
@@ -169,29 +161,26 @@ export default function ProductCard({ product }) {
         </div>
 
         {/* ── Card body ──────────────────────────────────────────────────── */}
-        <div style={{ padding: '12px 16px' }} className="product-card-body">
+        <div className="pc-body">
           {/* Category */}
           {category && (
-            <p style={{
+            <p className="pc-category" style={{
               fontFamily: "'DM Sans', sans-serif",
-              fontSize: 10,
               textTransform: 'uppercase',
               letterSpacing: '0.10em',
               color: '#9E9E9E',
-              marginBottom: 6,
+              marginBottom: 4,
             }}>
               {category}
             </p>
           )}
 
           {/* Product name */}
-          <h3 style={{
+          <h3 className="pc-name" style={{
             fontFamily: "'DM Sans', sans-serif",
-            fontSize: 14,
             fontWeight: 400,
             color: '#111111',
-            lineHeight: 1.4,
-            marginBottom: 12,
+            lineHeight: 1.35,
             display: '-webkit-box',
             WebkitLineClamp: 2,
             WebkitBoxOrient: 'vertical',
@@ -201,26 +190,26 @@ export default function ProductCard({ product }) {
           </h3>
 
           {/* Price row */}
-          <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, flexWrap: 'wrap', marginBottom: 8 }}>
-            <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 16, fontWeight: 600, color: discountPct ? '#E53935' : '#111111' }}>
+          <div style={{ display: 'flex', alignItems: 'baseline', gap: 4, flexWrap: 'wrap', marginBottom: 6 }} className="pc-price-row">
+            <span className="pc-price" style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 600, color: discountPct ? '#E53935' : '#111111' }}>
               {formatPrice(product.price)}
             </span>
             {product.comparePrice && product.comparePrice > product.price && (
-              <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: '#9E9E9E', textDecoration: 'line-through' }}>
+              <span className="pc-compare" style={{ fontFamily: "'DM Sans', sans-serif", color: '#9E9E9E', textDecoration: 'line-through' }}>
                 {formatPrice(product.comparePrice)}
               </span>
             )}
             {discountPct && (
-              <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 11, color: '#2D6A4F', fontWeight: 600 }}>
+              <span className="pc-discount-text" style={{ fontFamily: "'DM Sans', sans-serif", color: '#2D6A4F', fontWeight: 600 }}>
                 {discountPct}% off
               </span>
             )}
           </div>
 
           {/* Star row */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
             <Stars rating={product.ratings?.average || product.rating || 0} />
-            <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 11, color: '#9E9E9E' }}>
+            <span className="pc-review-count" style={{ fontFamily: "'DM Sans', sans-serif", color: '#9E9E9E' }}>
               ({(product.ratings?.count || product.reviews || 0).toLocaleString()})
             </span>
           </div>
@@ -231,8 +220,33 @@ export default function ProductCard({ product }) {
       <style>{`
         .group:hover .product-card-img { transform: scale(1.05); }
         .group:hover .quick-add-bar { transform: translateY(0) !important; }
+
+        /* Mobile-first card sizing (2-col layout) */
+        .pc-body { padding: 8px 10px; }
+        .pc-category { font-size: 9px; }
+        .pc-name { font-size: 11px; margin-bottom: 6px; }
+        .pc-price { font-size: 13px; }
+        .pc-compare { font-size: 10px; }
+        .pc-discount-text { font-size: 9px; }
+        .pc-review-count { font-size: 10px; }
+        .pc-badge-discount { font-size: 9px; padding: 2px 6px; }
+        .pc-badge-new { font-size: 8px; padding: 2px 6px; }
+        .pc-badges { top: 6px !important; left: 6px !important; }
+        .quick-add-bar { padding: 8px 0; min-height: 36px; font-size: 9px; letter-spacing: 0.06em; }
+
+        /* sm+ (640px) — restore desktop sizes */
         @media (min-width: 640px) {
-          .product-card-body { padding: 16px !important; }
+          .pc-body { padding: 14px 16px; }
+          .pc-category { font-size: 10px; }
+          .pc-name { font-size: 14px; margin-bottom: 10px; }
+          .pc-price { font-size: 16px; }
+          .pc-compare { font-size: 13px; }
+          .pc-discount-text { font-size: 11px; }
+          .pc-review-count { font-size: 11px; }
+          .pc-badge-discount { font-size: 11px; padding: 4px 10px; }
+          .pc-badge-new { font-size: 10px; padding: 3px 8px; }
+          .pc-badges { top: 12px !important; left: 12px !important; }
+          .quick-add-bar { padding: 14px 0; min-height: 44px; font-size: 11px; letter-spacing: 0.10em; }
         }
       `}</style>
     </Link>

@@ -851,7 +851,7 @@ export default function ProductDetail() {
                 </button>
               </div>
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: 20 }}>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-5">
               {relatedProducts.slice(relatedPage * ITEMS_PER_SLIDE, (relatedPage + 1) * ITEMS_PER_SLIDE).map(p => (
                 <ProductCard key={p._id} product={p} />
               ))}
