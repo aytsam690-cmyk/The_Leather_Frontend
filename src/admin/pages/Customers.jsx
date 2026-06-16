@@ -113,21 +113,26 @@ function CustomerDrawer({ customer, onClose, onRefresh }) {
               <p className="font-bold text-[#111111] text-base">{customer.name}</p>
               <p className="text-sm text-[#6B6B6B] mt-0.5">{customer.email}</p>
               <p className="text-sm text-[#6B6B6B]">{customer.phone}</p>
-              <div className="flex items-center gap-3 mt-3">
-                <span className="text-xs font-semibold text-[#6B6B6B]">Account Status:</span>
-                {/* Toggle switch */}
-                <button onClick={handleToggle} disabled={toggling}
-                  className={`relative w-11 h-6 rounded-full transition-colors duration-300 ${active ? 'bg-[#2D6A4F]' : 'bg-[#D0D0CA]'}`}>
-                  <div className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform duration-300 ${active ? 'translate-x-5' : 'translate-x-0'}`} />
-                </button>
-                <span className={`text-xs font-semibold ${active ? 'text-[#2D6A4F]' : 'text-[#9E9E9E]'}`}>
-                  {toggling ? 'Updating…' : active ? 'Active' : 'Inactive'}
-                </span>
-                
-                <button onClick={handleDelete} className="ml-auto text-red-500 hover:text-red-700 bg-red-50 hover:bg-red-100 p-2 rounded-md transition-colors" title="Delete User">
-                  <Trash2 size={16} />
-                </button>
-              </div>
+              {customer.isGuest ? (
+                <div className="flex items-center gap-2 mt-3">
+                  <span className="px-2.5 py-1 rounded-full text-xs font-semibold" style={{ background:'#EEF2FF', color:'#4338CA' }}>Guest Customer</span>
+                </div>
+              ) : (
+                <div className="flex items-center gap-3 mt-3">
+                  <span className="text-xs font-semibold text-[#6B6B6B]">Account Status:</span>
+                  <button onClick={handleToggle} disabled={toggling}
+                    className={`relative w-11 h-6 rounded-full transition-colors duration-300 ${active ? 'bg-[#2D6A4F]' : 'bg-[#D0D0CA]'}`}>
+                    <div className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform duration-300 ${active ? 'translate-x-5' : 'translate-x-0'}`} />
+                  </button>
+                  <span className={`text-xs font-semibold ${active ? 'text-[#2D6A4F]' : 'text-[#9E9E9E]'}`}>
+                    {toggling ? 'Updating…' : active ? 'Active' : 'Inactive'}
+                  </span>
+                  
+                  <button onClick={handleDelete} className="ml-auto text-red-500 hover:text-red-700 bg-red-50 hover:bg-red-100 p-2 rounded-md transition-colors" title="Delete User">
+                    <Trash2 size={16} />
+                  </button>
+                </div>
+              )}
             </div>
           </div>
 
@@ -223,11 +228,12 @@ export default function Customers() {
       .then((data) => {
         const items = Array.isArray(data) ? data : (data?.customers || []);
         setCustomers(items.map((c, i) => ({
-          id: c._id, _id: c._id, name: c.name, email: c.email,
+          id: c._id, _id: c._id, name: c.name || 'Guest', email: c.email || '—',
           phone: c.phone || '—', orders: c.totalOrders || 0,
           spent: c.totalSpent || 0,
-          joined: new Date(c.createdAt).toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' }),
-          status: c.isActive !== false ? 'active' : 'inactive',
+          joined: c.createdAt ? new Date(c.createdAt).toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' }) : '—',
+          status: c.isGuest ? 'guest' : (c.isActive !== false ? 'active' : 'inactive'),
+          isGuest: c.isGuest || false,
         })));
       })
       .catch(() => setCustomers([]))
@@ -290,6 +296,7 @@ export default function Customers() {
             <option value="">All Status</option>
             <option value="active">Active</option>
             <option value="inactive">Inactive</option>
+            <option value="guest">Guest</option>
           </select>
           <select value={sortBy} onChange={e => setSortBy(e.target.value)}
             className="text-sm border border-[#D0D0CA] rounded-sm px-3 py-2.5 outline-none focus:border-[#C9A96E] text-[#6B6B6B] bg-white">
@@ -354,10 +361,14 @@ export default function Customers() {
                     <td className="px-4 py-3 text-sm font-semibold text-[#111111]">${c.spent.toLocaleString()}</td>
                     <td className="px-4 py-3 text-xs text-[#9E9E9E] whitespace-nowrap">{c.joined}</td>
                     <td className="px-4 py-3">
-                      <span className={`px-2.5 py-1 rounded-full text-xs font-semibold`}
-                        style={c.status === 'active' ? { background:'#dcfce7', color:'#16a34a' } : { background:'#F8F8F6', color:'#64748b' }}>
-                        {c.status === 'active' ? 'Active' : 'Inactive'}
-                      </span>
+                      {c.isGuest ? (
+                        <span className="px-2.5 py-1 rounded-full text-xs font-semibold" style={{ background:'#EEF2FF', color:'#4338CA' }}>Guest</span>
+                      ) : (
+                        <span className={`px-2.5 py-1 rounded-full text-xs font-semibold`}
+                          style={c.status === 'active' ? { background:'#dcfce7', color:'#16a34a' } : { background:'#F8F8F6', color:'#64748b' }}>
+                          {c.status === 'active' ? 'Active' : 'Inactive'}
+                        </span>
+                      )}
                     </td>
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-1">
@@ -365,17 +376,19 @@ export default function Customers() {
                           className="w-8 h-8 rounded-sm flex items-center justify-center text-[#9E9E9E] hover:text-[#C9A96E] hover:bg-[#F8F8F6] transition-all">
                           <Eye size={15} />
                         </button>
-                        {confirmDelete === c.id ? (
-                          <span className="flex items-center gap-2 text-xs">
-                            <span className="text-[#6B6B6B]">Sure?</span>
-                            <button onClick={() => handleDelete(c.id)} className="text-[#9B2226] font-semibold hover:underline">Yes</button>
-                            <button onClick={() => setConfirmDelete(null)} className="text-[#9E9E9E] hover:underline">No</button>
-                          </span>
-                        ) : (
-                          <button onClick={() => setConfirmDelete(c.id)}
-                            className="w-8 h-8 rounded-sm flex items-center justify-center text-[#9E9E9E] hover:text-[#9B2226] hover:bg-[#FEF2F2] transition-all">
-                            <Trash2 size={14} />
-                          </button>
+                        {!c.isGuest && (
+                          confirmDelete === c.id ? (
+                            <span className="flex items-center gap-2 text-xs">
+                              <span className="text-[#6B6B6B]">Sure?</span>
+                              <button onClick={() => handleDelete(c.id)} className="text-[#9B2226] font-semibold hover:underline">Yes</button>
+                              <button onClick={() => setConfirmDelete(null)} className="text-[#9E9E9E] hover:underline">No</button>
+                            </span>
+                          ) : (
+                            <button onClick={() => setConfirmDelete(c.id)}
+                              className="w-8 h-8 rounded-sm flex items-center justify-center text-[#9E9E9E] hover:text-[#9B2226] hover:bg-[#FEF2F2] transition-all">
+                              <Trash2 size={14} />
+                            </button>
+                          )
                         )}
                       </div>
                     </td>
