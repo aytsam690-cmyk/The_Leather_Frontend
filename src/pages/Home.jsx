@@ -212,7 +212,7 @@ export default function Home() {
       ═══════════════════════════════════════════════════════════════════════ */}
       {bannersLoading ? (
         /* ── Loading State ── */
-        <section className="hero-billboard" style={{ width: '100%', height: '100vh', minHeight: 600, background: S.black, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+        <section className="hero-billboard" style={{ width: '100%', height: '100vh', minHeight: 600, background: S.black, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '0 16px' }}>
           <div style={{ fontFamily: S.cm, fontSize: 28, fontWeight: 500, color: S.white, letterSpacing: '0.14em', textTransform: 'uppercase' }}>{settings?.siteName || 'Store'}</div>
           <div style={{ width: 128, height: 1, background: 'rgba(255,255,255,0.2)', marginTop: 24, position: 'relative', overflow: 'hidden', borderRadius: 1 }}>
             <motion.div
@@ -224,7 +224,7 @@ export default function Home() {
         </section>
       ) : homeBanners.length === 0 ? (
         /* ── No Banners Fallback ── */
-        <section id="hero-billboard" className="hero-billboard" style={{ width: '100%', height: '100vh', minHeight: 600, background: '#0a0a0a', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', padding: '0 24px' }}>
+        <section id="hero-billboard" className="hero-billboard" style={{ width: '100%', height: '100vh', minHeight: 600, background: '#0a0a0a', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', padding: '0 16px' }}>
           <div style={{ fontFamily: S.dm, fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.2em', color: 'rgba(255,255,255,0.4)', marginBottom: 24 }}>Welcome</div>
           <h1 style={{ fontFamily: S.cm, fontSize: 'clamp(48px, 8vw, 72px)', fontWeight: 500, color: S.white, lineHeight: 1, margin: 0 }}>Discover More</h1>
           <p style={{ fontFamily: S.dm, fontSize: 14, color: 'rgba(255,255,255,0.5)', fontWeight: 300, marginTop: 24, maxWidth: 400 }}>Add banners from your admin panel to display campaigns here.</p>
@@ -323,7 +323,7 @@ export default function Home() {
                   )}
 
                   {/* CTA Buttons */}
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 20, marginTop: 40 }}>
+                  <div className="hero-cta-wrap" style={{ display: 'flex', alignItems: 'center', gap: 20, marginTop: 40, flexWrap: 'wrap' }}>
                     <motion.button
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
@@ -362,7 +362,7 @@ export default function Home() {
             <div className="hero-bottom-controls" style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between' }}>
 
               {/* Left — Progress bars */}
-              <div className="hero-progress-bars" style={{ display: 'flex', alignItems: 'center' }}>
+              <div className="hero-progress-bars" style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                 {homeBanners.map((_, i) => (
                   <div
                     key={i}
@@ -392,6 +392,7 @@ export default function Home() {
                   onClick={goToPrev}
                   className="hero-arrow-btn"
                   style={{
+                    width: 44, height: 44,
                     border: '1px solid rgba(255,255,255,0.3)', borderRadius: 2,
                     background: 'none', cursor: 'pointer',
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -406,6 +407,7 @@ export default function Home() {
                   onClick={goToNext}
                   className="hero-arrow-btn"
                   style={{
+                    width: 44, height: 44,
                     border: '1px solid rgba(255,255,255,0.3)', borderRadius: 2,
                     background: 'none', cursor: 'pointer',
                     display: 'flex', alignItems: 'center', justifyContent: 'center',

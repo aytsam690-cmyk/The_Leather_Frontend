@@ -26,8 +26,8 @@ const navLinks = [
 
 /* ─── Inline styles ──────────────────────────────────────────────────────── */
 const iconBtnStyle = {
-  width: 40,
-  height: 40,
+  width: 44,
+  height: 44,
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
@@ -434,7 +434,7 @@ export default function Navbar() {
             </div>
 
             {/* Right Actions */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
 
               {/* Animated Search */}
               <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
@@ -621,6 +621,7 @@ export default function Navbar() {
                 <button
                   onClick={() => setSearchOpen(!searchOpen)}
                   style={iconBtnStyle}
+                  className="navbar-search-toggle"
                   onMouseEnter={e => { e.currentTarget.style.borderColor = '#111111'; e.currentTarget.style.color = '#111111'; }}
                   onMouseLeave={e => { e.currentTarget.style.borderColor = '#E8E8E4'; e.currentTarget.style.color = '#6B6B6B'; }}
                 >
@@ -704,10 +705,7 @@ export default function Navbar() {
               {/* Hamburger */}
               <button
                 onClick={() => setMobileOpen(!mobileOpen)}
-                style={{
-                  ...iconBtnStyle,
-                  display: 'none',
-                }}
+                style={iconBtnStyle}
                 className="navbar-hamburger"
                 onMouseEnter={e => { e.currentTarget.style.borderColor = '#111111'; e.currentTarget.style.color = '#111111'; }}
                 onMouseLeave={e => { e.currentTarget.style.borderColor = '#E8E8E4'; e.currentTarget.style.color = '#6B6B6B'; }}
@@ -743,13 +741,14 @@ export default function Navbar() {
                 right: 0,
                 bottom: 0,
                 background: '#FFFFFF',
-                zIndex: 40,
+                zIndex: 60,
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
                 justifyContent: 'center',
                 gap: 8,
                 padding: 32,
+                overflowY: 'auto',
               }}
             >
               {navLinks.map((link) => (
@@ -871,6 +870,9 @@ export default function Navbar() {
             .navbar-hamburger { display: flex !important; }
             .navbar-login-btn { display: none !important; }
             .navbar-user-menu { display: none !important; }
+          }
+          @media (max-width: 639px) {
+            .navbar-search-toggle { display: none !important; }
           }
         `}</style>
       </motion.nav>

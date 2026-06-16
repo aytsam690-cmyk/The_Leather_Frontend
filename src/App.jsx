@@ -115,7 +115,7 @@ function App() {
             </Route>
           </Route>
           <Route path="/*" element={
-            <div style={{ minHeight: '100vh', background: '#FFFFFF', color: '#111111', fontFamily: "'DM Sans', sans-serif" }}>
+            <div style={{ minHeight: '100vh', background: '#FFFFFF', color: '#111111', fontFamily: "'DM Sans', sans-serif", overflowX: 'hidden', width: '100%' }}>
               <Navbar />
               <CartDrawer />
               <CustomerRoutes />
