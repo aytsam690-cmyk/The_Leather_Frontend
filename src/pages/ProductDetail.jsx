@@ -105,8 +105,9 @@ function Gallery({ images }) {
             <button
               key={i}
               onClick={() => setActive(i)}
+              className="pd-thumb"
               style={{
-                width: 80, height: 80, flexShrink: 0,
+                width: 64, height: 64, flexShrink: 0,
                 borderRadius: 2, overflow: 'hidden',
                 border: i === active ? '2px solid #111111' : '2px solid transparent',
                 cursor: 'pointer', background: '#F8F8F6',
@@ -155,7 +156,7 @@ function Gallery({ images }) {
               onClick={() => setLightboxOpen(false)}
               style={{
                 position: 'absolute', top: 24, right: 24,
-                width: 40, height: 40,
+                width: 44, height: 44,
                 border: '1px solid #333333', borderRadius: 2,
                 background: 'transparent', color: '#FFFFFF',
                 cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -173,7 +174,7 @@ function Gallery({ images }) {
               disabled={active === 0}
               style={{
                 position: 'absolute', left: 24, top: '50%', transform: 'translateY(-50%)',
-                width: 40, height: 40,
+                width: 44, height: 44,
                 border: '1px solid #333333', borderRadius: 2,
                 background: 'transparent', color: '#FFFFFF',
                 cursor: active === 0 ? 'not-allowed' : 'pointer',
@@ -191,7 +192,7 @@ function Gallery({ images }) {
               disabled={active === images.length - 1}
               style={{
                 position: 'absolute', right: 24, top: '50%', transform: 'translateY(-50%)',
-                width: 40, height: 40,
+                width: 44, height: 44,
                 border: '1px solid #333333', borderRadius: 2,
                 background: 'transparent', color: '#FFFFFF',
                 cursor: active === images.length - 1 ? 'not-allowed' : 'pointer',
@@ -248,7 +249,7 @@ function Tabs({ product, reviews, onReviewSubmit }) {
   return (
     <div style={{ marginTop: 64, borderTop: '1px solid #E8E8E4' }}>
       {/* Tab bar */}
-      <div style={{ display: 'flex' }}>
+      <div className="pd-tab-bar" style={{ display: 'flex', overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
         {TABS.map(t => (
           <button
             key={t}
@@ -258,7 +259,7 @@ function Tabs({ product, reviews, onReviewSubmit }) {
               fontSize: 12,
               textTransform: 'uppercase',
               letterSpacing: '0.1em',
-              padding: '16px 24px',
+              padding: '14px 16px', flexShrink: 0, minHeight: 44,
               cursor: 'pointer',
               background: 'transparent',
               border: 'none',
@@ -323,7 +324,7 @@ function Tabs({ product, reviews, onReviewSubmit }) {
               {reviews.length > 0 && (
                 <div style={{
                   display: 'flex',
-                  gap: 48,
+                  gap: 24,
                   alignItems: 'center',
                   paddingBottom: 32,
                   borderBottom: '1px solid #E8E8E4',
@@ -331,7 +332,7 @@ function Tabs({ product, reviews, onReviewSubmit }) {
                 }}>
                   {/* Left: big score */}
                   <div style={{ textAlign: 'center' }}>
-                    <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 64, fontWeight: 500, color: '#111111', lineHeight: 1 }}>
+                    <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(48px, 10vw, 64px)', fontWeight: 500, color: '#111111', lineHeight: 1 }}>
                       {avgRating}
                     </div>
                     <StarDisplay rating={parseFloat(avgRating)} size={16} />
@@ -571,9 +572,9 @@ export default function ProductDetail() {
         {product.images?.[0]?.url && <meta property="og:image" content={product.images[0].url} />}
       </Helmet>
 
-      <div style={{ maxWidth: 1280, margin: '0 auto', padding: '48px 24px' }}>
+      <div className="pd-container" style={{ maxWidth: 1280, margin: '0 auto', padding: '24px 16px' }}>
         {/* Breadcrumb */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 32 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 32, overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>
           {[{ label: 'Home', to: '/' }, { label: 'Products', to: '/products' }].map((item, i) => (
             <span key={item.to} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
               <Link to={item.to} style={{
@@ -589,13 +590,13 @@ export default function ProductDetail() {
               <span style={{ color: '#E8E8E4', fontFamily: "'DM Sans', sans-serif" }}>/</span>
             </span>
           ))}
-          <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#111111' }}>
+          <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#111111', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '50vw' }}>
             {product.name}
           </span>
         </div>
 
         {/* Two-column grid */}
-        <div className="pd-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 64 }}>
+        <div className="pd-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 32 }}>
           {/* LEFT: Gallery */}
           <Gallery images={product.images} />
 
@@ -652,13 +653,14 @@ export default function ProductDetail() {
                       key={i}
                       onClick={() => setSelectedColor(i)}
                       style={{
-                        width: 28, height: 28, borderRadius: '50%',
+                        width: 32, height: 32, borderRadius: '50%',
                         background: c,
                         border: '2px solid transparent',
                         cursor: 'pointer',
                         outline: selectedColor === i ? '2px solid #111111' : 'none',
                         outlineOffset: 3,
                         transition: 'transform 0.15s ease',
+                        minWidth: 44, minHeight: 44,
                       }}
                       onMouseEnter={e => { e.currentTarget.style.transform = 'scale(1.1)'; }}
                       onMouseLeave={e => { e.currentTarget.style.transform = 'scale(1)'; }}
@@ -682,7 +684,7 @@ export default function ProductDetail() {
                       style={{
                         border: selectedSize === s ? '1px solid #111111' : '1px solid #E8E8E4',
                         borderRadius: 2,
-                        padding: '8px 16px',
+                        padding: '10px 16px', minHeight: 44,
                         fontFamily: "'DM Sans', sans-serif", fontSize: 13,
                         background: selectedSize === s ? '#111111' : 'transparent',
                         color: selectedSize === s ? '#FFFFFF' : '#6B6B6B',
@@ -818,7 +820,7 @@ export default function ProductDetail() {
 
         {/* Related Products */}
         {relatedProducts.length > 0 && (
-          <div style={{ marginTop: 80, background: '#F8F8F6', marginLeft: -24, marginRight: -24, padding: '64px 24px' }}>
+          <div style={{ marginTop: 80, background: '#F8F8F6', marginLeft: -16, marginRight: -16, padding: '48px 16px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 32 }}>
               <div>
                 <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 11, fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.12em', color: '#C9A96E', marginBottom: 8 }}>
@@ -832,7 +834,7 @@ export default function ProductDetail() {
                 <button
                   onClick={() => setRelatedPage(p => Math.max(0, p - 1))}
                   disabled={relatedPage === 0}
-                  style={{ width: 40, height: 40, border: '1px solid #E8E8E4', borderRadius: 2, background: '#FFFFFF', color: '#6B6B6B', cursor: relatedPage === 0 ? 'not-allowed' : 'pointer', opacity: relatedPage === 0 ? 0.35 : 1, display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.15s' }}
+                  style={{ width: 44, height: 44, border: '1px solid #E8E8E4', borderRadius: 2, background: '#FFFFFF', color: '#6B6B6B', cursor: relatedPage === 0 ? 'not-allowed' : 'pointer', opacity: relatedPage === 0 ? 0.35 : 1, display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.15s' }}
                   onMouseEnter={e => { if (relatedPage > 0) { e.currentTarget.style.borderColor = '#111111'; e.currentTarget.style.color = '#111111'; } }}
                   onMouseLeave={e => { e.currentTarget.style.borderColor = '#E8E8E4'; e.currentTarget.style.color = '#6B6B6B'; }}
                 >
@@ -841,7 +843,7 @@ export default function ProductDetail() {
                 <button
                   onClick={() => setRelatedPage(p => Math.min(relatedSlides - 1, p + 1))}
                   disabled={relatedPage >= relatedSlides - 1}
-                  style={{ width: 40, height: 40, border: '1px solid #E8E8E4', borderRadius: 2, background: '#FFFFFF', color: '#6B6B6B', cursor: relatedPage >= relatedSlides - 1 ? 'not-allowed' : 'pointer', opacity: relatedPage >= relatedSlides - 1 ? 0.35 : 1, display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.15s' }}
+                  style={{ width: 44, height: 44, border: '1px solid #E8E8E4', borderRadius: 2, background: '#FFFFFF', color: '#6B6B6B', cursor: relatedPage >= relatedSlides - 1 ? 'not-allowed' : 'pointer', opacity: relatedPage >= relatedSlides - 1 ? 0.35 : 1, display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.15s' }}
                   onMouseEnter={e => { if (relatedPage < relatedSlides - 1) { e.currentTarget.style.borderColor = '#111111'; e.currentTarget.style.color = '#111111'; } }}
                   onMouseLeave={e => { e.currentTarget.style.borderColor = '#E8E8E4'; e.currentTarget.style.color = '#6B6B6B'; }}
                 >
@@ -849,7 +851,7 @@ export default function ProductDetail() {
                 </button>
               </div>
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: 20 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: 20 }}>
               {relatedProducts.slice(relatedPage * ITEMS_PER_SLIDE, (relatedPage + 1) * ITEMS_PER_SLIDE).map(p => (
                 <ProductCard key={p._id} product={p} />
               ))}
@@ -860,7 +862,14 @@ export default function ProductDetail() {
 
       {/* Responsive */}
       <style>{`
-        @media (max-width: 1024px) { .pd-grid { grid-template-columns: 1fr !important; } }
+  .pd-container { padding: 24px 16px; }
+  @media (min-width: 768px) { .pd-container { padding: 48px 24px; } }
+  @media (max-width: 1023px) { .pd-grid { grid-template-columns: 1fr !important; gap: 32px !important; } }
+  @media (max-width: 639px) { 
+    .pd-thumb { width: 56px !important; height: 56px !important; }
+  }
+  .pd-tab-bar::-webkit-scrollbar { display: none; }
+  .pd-tab-bar { scrollbar-width: none; }
       `}</style>
     </div>
   );

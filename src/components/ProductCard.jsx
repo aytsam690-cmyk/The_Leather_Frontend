@@ -138,7 +138,8 @@ export default function ProductCard({ product }) {
               bottom: 0,
               left: 0,
               right: 0,
-              padding: '12px 0',
+              padding: '14px 0',
+              minHeight: 44,
               textAlign: 'center',
               fontFamily: "'DM Sans', sans-serif",
               fontSize: 11,
@@ -168,7 +169,7 @@ export default function ProductCard({ product }) {
         </div>
 
         {/* ── Card body ──────────────────────────────────────────────────── */}
-        <div style={{ padding: '16px' }}>
+        <div style={{ padding: '12px 16px' }} className="product-card-body">
           {/* Category */}
           {category && (
             <p style={{
@@ -229,8 +230,10 @@ export default function ProductCard({ product }) {
       {/* Scoped hover styles */}
       <style>{`
         .group:hover .product-card-img { transform: scale(1.05); }
-
         .group:hover .quick-add-bar { transform: translateY(0) !important; }
+        @media (min-width: 640px) {
+          .product-card-body { padding: 16px !important; }
+        }
       `}</style>
     </Link>
   );

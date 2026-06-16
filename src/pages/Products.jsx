@@ -1,7 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { ChevronDown, ChevronLeft, ChevronRight, ChevronUp, X, FilterX } from 'lucide-react';
+import { ChevronDown, ChevronLeft, ChevronRight, ChevronUp, X, FilterX, SlidersHorizontal } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
+import { motion, AnimatePresence } from 'framer-motion';
 import ProductCard from '../components/ProductCard';
 import { getProducts, getCategories, getFilters, getBanners } from '../services/api';
 import useSettingsStore from '../store/settingsStore';
@@ -267,6 +268,7 @@ export default function Products() {
 
   const [page, setPage] = useState(Number(searchParams.get('page')) || 1);
   const [loading, setLoading] = useState(true);
+  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
 
   // Sync state to URL
   useEffect(() => {
@@ -401,7 +403,7 @@ export default function Products() {
   // ─── Render ───────────────────────────────────────────────────────────────
   return (
     <div style={{ background: S.surface, minHeight: '100vh', paddingTop: 96, paddingBottom: 64 }}>
-      <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 24px' }}>
+      <div className="products-container" style={{ maxWidth: 1280, margin: '0 auto', padding: '0 16px' }}>
         <Helmet>
           <title>{filters.search ? `Search: ${filters.search}` : filters.category !== 'All' ? `${filters.category} Products` : 'All Products'} — {settings?.siteName || 'Store'}</title>
           <meta name="description" content="Browse our extensive collection of products. Filter by category, brand, price, and more." />
@@ -412,7 +414,7 @@ export default function Products() {
           <p style={{ fontFamily: S.dm, fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.12em', color: S.gold, marginBottom: 8 }}>
             Our Collection
           </p>
-          <h1 style={{ fontFamily: S.cm, fontSize: 36, fontWeight: 500, color: S.black, lineHeight: 1.2, margin: 0 }}>
+          <h1 style={{ fontFamily: S.cm, fontSize: 'clamp(28px, 5vw, 36px)', fontWeight: 500, color: S.black, lineHeight: 1.2, margin: 0 }}>
             {filters.search ? `Search: "${filters.search}"` : 'All Products'}
           </h1>
           <p style={{ fontFamily: S.dm, fontSize: 13, color: S.muted, marginTop: 4 }}>
@@ -422,7 +424,7 @@ export default function Products() {
 
         {/* ── Category Banners ─────────────────────────────────────────────── */}
         {availableFilters.categoryBanners?.length > 0 && (
-          <div style={{ marginBottom: 32, display: 'grid', gap: 16, gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))' }}>
+          <div style={{ marginBottom: 32, display: 'grid', gap: 16, gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))' }}>
             {availableFilters.categoryBanners.map(b => (
               <div key={b._id || b.id} style={{ position: 'relative', borderRadius: 2, overflow: 'hidden', border: `1px solid ${S.border}`, height: 160 }}>
                 <a href={b.link || '#'} style={{
@@ -449,7 +451,7 @@ export default function Products() {
         )}
 
         {/* ── Layout ────────────────────────────────────────────────────────── */}
-        <div style={{ display: 'flex', gap: 32, alignItems: 'flex-start' }}>
+        <div className="products-layout" style={{ display: 'flex', flexDirection: 'column', gap: 0, alignItems: 'stretch' }}>
           <Sidebar
             filters={filters}
             setFilters={setFilters}
@@ -462,6 +464,31 @@ export default function Products() {
               setSearchParams(params, { replace: true });
             }}
           />
+
+          {/* Mobile Filter Button */}
+          <button
+            onClick={() => setMobileFiltersOpen(true)}
+            className="lg:hidden"
+            style={{
+              display: 'flex', alignItems: 'center', gap: 8,
+              border: '1px solid #E8E8E4', borderRadius: 2,
+              padding: '10px 16px', background: '#FFFFFF',
+              fontFamily: "'DM Sans', sans-serif", fontSize: 12,
+              fontWeight: 500, textTransform: 'uppercase',
+              letterSpacing: '0.06em', color: '#111111',
+              cursor: 'pointer', minHeight: 44, marginBottom: 16,
+            }}
+          >
+            <SlidersHorizontal size={15} />
+            Filters
+            {activeFiltersCount > 0 && (
+              <span style={{
+                background: '#111111', color: '#FFFFFF', fontSize: 10,
+                fontWeight: 700, borderRadius: '50%', width: 20, height: 20,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+              }}>{activeFiltersCount}</span>
+            )}
+          </button>
 
           {/* ── Main Content ─────────────────────────────────────────────── */}
           <div style={{ flex: 1, minWidth: 0 }}>
@@ -498,7 +525,7 @@ export default function Products() {
 
                 <select value={sort} onChange={e => setSort(e.target.value)} style={{
                   background: S.white, border: `1px solid ${S.border}`, borderRadius: 2,
-                  padding: '8px 12px', fontFamily: S.dm, fontSize: 13, color: S.black, outline: 'none', cursor: 'pointer',
+                  padding: '8px 12px', fontFamily: S.dm, fontSize: 13, color: S.black, outline: 'none', cursor: 'pointer', minHeight: 44,
                 }}>
                   <option value="newest">Newest First</option>
                   <option value="price_asc">Price: Low → High</option>
@@ -552,7 +579,7 @@ export default function Products() {
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, marginTop: 48 }}>
                 <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1}
                   style={{
-                    width: 40, height: 40, border: `1px solid ${S.border}`, borderRadius: 2,
+                    width: 44, height: 44, minWidth: 44, minHeight: 44, border: `1px solid ${S.border}`, borderRadius: 2,
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                     background: S.white, color: S.secondary,
                     cursor: page === 1 ? 'not-allowed' : 'pointer', opacity: page === 1 ? 0.35 : 1,
@@ -561,7 +588,7 @@ export default function Products() {
                 </button>
                 {Array.from({ length: totalPages }, (_, i) => i + 1).map((n) => (
                   <button key={n} onClick={() => setPage(n)} style={{
-                    width: 40, height: 40,
+                    width: 44, height: 44, minWidth: 44, minHeight: 44,
                     border: `1px solid ${page === n ? S.black : S.border}`,
                     borderRadius: 2,
                     background: page === n ? S.black : S.white,
@@ -574,7 +601,7 @@ export default function Products() {
                 ))}
                 <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages}
                   style={{
-                    width: 40, height: 40, border: `1px solid ${S.border}`, borderRadius: 2,
+                    width: 44, height: 44, minWidth: 44, minHeight: 44, border: `1px solid ${S.border}`, borderRadius: 2,
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                     background: S.white, color: S.secondary,
                     cursor: page === totalPages ? 'not-allowed' : 'pointer', opacity: page === totalPages ? 0.35 : 1,
@@ -586,6 +613,102 @@ export default function Products() {
           </div>
         </div>
       </div>
+
+      {/* Mobile Filter Drawer */}
+      <AnimatePresence>
+        {mobileFiltersOpen && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setMobileFiltersOpen(false)}
+              style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.4)', zIndex: 60 }}
+            />
+            <motion.div
+              initial={{ y: '100%' }}
+              animate={{ y: 0 }}
+              exit={{ y: '100%' }}
+              transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+              style={{
+                position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 70,
+                background: '#FFFFFF', borderTop: '1px solid #E8E8E4',
+                borderRadius: '4px 4px 0 0', maxHeight: '85vh', overflowY: 'auto',
+              }}
+            >
+              <div style={{ width: 40, height: 4, background: '#E8E8E4', borderRadius: 9999, margin: '16px auto 8px' }} />
+              <div style={{ padding: '0 20px 24px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
+                  <h3 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 20, fontWeight: 500, color: '#111111', margin: 0 }}>Filters</h3>
+                  <button onClick={() => setMobileFiltersOpen(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 8 }}>
+                    <X size={20} color="#6B6B6B" />
+                  </button>
+                </div>
+                {/* Reuse same filter sections as Sidebar */}
+                <FilterSection label="Category" isOpen={true} onToggle={() => {}}>
+                  <div style={{ maxHeight: 200, overflowY: 'auto' }}>
+                    {['All', ...(availableFilters.categories || [])].map((c) => (
+                      <button key={c} onClick={() => { setFilters(f => ({ ...f, category: c })); }} style={{
+                        width: '100%', textAlign: 'left', fontFamily: "'DM Sans', sans-serif", fontSize: 13,
+                        color: filters.category === c ? '#111111' : '#6B6B6B', padding: '10px 0',
+                        paddingLeft: filters.category === c ? 12 : 0, background: 'transparent', border: 'none',
+                        borderLeft: filters.category === c ? '2px solid #111111' : '2px solid transparent',
+                        cursor: 'pointer', fontWeight: filters.category === c ? 500 : 400, minHeight: 44,
+                      }}>{c}</button>
+                    ))}
+                  </div>
+                </FilterSection>
+                {availableFilters.brands?.length > 0 && (
+                  <FilterSection label="Brand" isOpen={true} onToggle={() => {}}>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+                      {availableFilters.brands.map((b) => {
+                        const on = filters.brands.includes(b);
+                        return (
+                          <button key={b} onClick={() => setFilters(f => ({ ...f, brands: on ? f.brands.filter(x => x !== b) : [...f.brands, b] }))} style={{
+                            border: `1px solid ${on ? '#111111' : '#E8E8E4'}`, background: on ? '#111111' : 'transparent',
+                            color: on ? '#FFFFFF' : '#111111', fontFamily: "'DM Sans', sans-serif", fontSize: 13,
+                            padding: '8px 14px', borderRadius: 2, cursor: 'pointer', minHeight: 44,
+                          }}>{b}</button>
+                        );
+                      })}
+                    </div>
+                  </FilterSection>
+                )}
+                {availableFilters.sizes?.length > 0 && (
+                  <FilterSection label="Size" isOpen={true} onToggle={() => {}}>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+                      {availableFilters.sizes.map((s) => {
+                        const on = filters.sizes.includes(s);
+                        return (
+                          <button key={s} onClick={() => setFilters(f => ({ ...f, sizes: on ? f.sizes.filter(x => x !== s) : [...f.sizes, s] }))} style={{
+                            border: `1px solid ${on ? '#111111' : '#E8E8E4'}`, background: on ? '#111111' : 'transparent',
+                            color: on ? '#FFFFFF' : '#111111', fontFamily: "'DM Sans', sans-serif", fontSize: 13,
+                            padding: '8px 14px', borderRadius: 2, cursor: 'pointer', minHeight: 44,
+                          }}>{s}</button>
+                        );
+                      })}
+                    </div>
+                  </FilterSection>
+                )}
+              </div>
+              <div style={{ position: 'sticky', bottom: 0, background: '#FFFFFF', borderTop: '1px solid #E8E8E4', padding: '16px 20px', display: 'flex', gap: 12 }}>
+                <button onClick={resetAll} style={{
+                  flex: 1, padding: '12px 0', border: '1px solid #E8E8E4', borderRadius: 2,
+                  background: 'transparent', fontFamily: "'DM Sans', sans-serif", fontSize: 12,
+                  fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.06em',
+                  color: '#6B6B6B', cursor: 'pointer', minHeight: 44,
+                }}>Clear All</button>
+                <button onClick={() => setMobileFiltersOpen(false)} style={{
+                  flex: 1, padding: '12px 0', border: 'none', borderRadius: 2,
+                  background: '#111111', fontFamily: "'DM Sans', sans-serif", fontSize: 12,
+                  fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.06em',
+                  color: '#FFFFFF', cursor: 'pointer', minHeight: 44,
+                }}>Show Results</button>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
 
       {/* ── Scoped styles ────────────────────────────────────────────────────── */}
       <style>{`
@@ -609,6 +732,11 @@ export default function Products() {
           border-radius: 50%; top: -6px;
           box-shadow: 0 1px 4px rgba(0,0,0,0.18);
           pointer-events: none; z-index: 5;
+        }
+        .products-container { padding: 0 16px; }
+        @media (min-width: 768px) { .products-container { padding: 0 24px; } }
+        @media (min-width: 1024px) {
+          .products-layout { flex-direction: row !important; gap: 32px !important; align-items: flex-start !important; }
         }
       `}</style>
     </div>
