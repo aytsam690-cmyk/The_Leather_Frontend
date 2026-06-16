@@ -454,8 +454,8 @@ export default function Home() {
           CATEGORIES — bigger images, tighter layout
       ═══════════════════════════════════════════════════════════════════════ */}
       {categories.length > 0 && (
-        <section style={{ padding: '64px 0', background: S.surface }}>
-          <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 24px' }}>
+        <section style={{ padding: 'clamp(48px, 8vw, 64px) 0', background: S.surface }}>
+          <div className="home-container" style={{ maxWidth: 1280, margin: '0 auto', padding: '0 16px' }}>
             <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.45 }}>
               <p style={{ fontFamily: S.dm, fontSize: 11, fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.12em', color: S.gold, marginBottom: 12 }}>
                 Shop by Category
@@ -506,15 +506,15 @@ export default function Home() {
       {/* ══════════════════════════════════════════════════════════════════════
           FEATURED PRODUCTS
       ═══════════════════════════════════════════════════════════════════════ */}
-      <section style={{ padding: '64px 0', background: S.white }}>
-        <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 24px' }}>
+      <section style={{ padding: 'clamp(48px, 8vw, 64px) 0', background: S.white }}>
+        <div className="home-container" style={{ maxWidth: 1280, margin: '0 auto', padding: '0 16px' }}>
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-            transition={{ duration: 0.45 }} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 32 }}>
+            transition={{ duration: 0.45 }} className="featured-header" style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 32 }}>
             <div>
               <p style={{ fontFamily: S.dm, fontSize: 11, fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.12em', color: S.gold, marginBottom: 12 }}>
                 Curated Picks
               </p>
-              <h2 style={{ fontFamily: S.cm, fontSize: 40, fontWeight: 500, color: S.black, lineHeight: 1.1, margin: 0 }}>
+              <h2 style={{ fontFamily: S.cm, fontSize: 'clamp(28px, 5vw, 40px)', fontWeight: 500, color: S.black, lineHeight: 1.1, margin: 0 }}>
                 Featured Products
               </h2>
             </div>
@@ -526,7 +526,7 @@ export default function Home() {
           {featuredProducts.length > 0 ? (
             <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }}
               variants={{ visible: { transition: { staggerChildren: 0.08 } } }}
-              style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(230px, 1fr))', gap: 20 }}>
+              style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: 20 }}>
               {featuredProducts.map(p => (
                 <motion.div key={p.id} variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.45 } } }}>
                   <ProductCard product={p} />
@@ -550,18 +550,18 @@ export default function Home() {
       {/* ══════════════════════════════════════════════════════════════════════
           WHY CHOOSE US — tighter
       ═══════════════════════════════════════════════════════════════════════ */}
-      <section style={{ padding: '64px 0', background: S.surface }}>
-        <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 24px' }}>
+      <section style={{ padding: 'clamp(48px, 8vw, 64px) 0', background: S.surface }}>
+        <div className="home-container" style={{ maxWidth: 1280, margin: '0 auto', padding: '0 16px' }}>
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
             transition={{ duration: 0.45 }} style={{ textAlign: 'center', marginBottom: 40 }}>
             <p style={{ fontFamily: S.dm, fontSize: 11, fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.12em', color: S.gold, marginBottom: 12 }}>Our Promise</p>
-            <h2 style={{ fontFamily: S.cm, fontSize: 40, fontWeight: 500, color: S.black, lineHeight: 1.1, margin: 0 }}>Why Shop With Us</h2>
+            <h2 style={{ fontFamily: S.cm, fontSize: 'clamp(28px, 5vw, 40px)', fontWeight: 500, color: S.black, lineHeight: 1.1, margin: 0 }}>Why Shop With Us</h2>
             <p style={{ fontFamily: S.dm, fontSize: 15, color: S.secondary, fontWeight: 300, maxWidth: 480, margin: '14px auto 0' }}>
               We're committed to providing the best shopping experience with every order.
             </p>
           </motion.div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: 20 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))', gap: 20 }}>
             {[
               { icon: '🚚', title: 'Free Delivery', desc: 'Free shipping on all orders. Fast and reliable delivery across Pakistan.' },
               { icon: '💵', title: 'Cash on Delivery', desc: 'Pay when your order arrives. No online payment required.' },
@@ -572,7 +572,7 @@ export default function Home() {
                 viewport={{ once: true }} transition={{ delay: i * 0.08, duration: 0.45 }}>
                 <div style={{
                   background: S.white, border: `1px solid ${S.border}`, borderRadius: 2,
-                  padding: 28, height: '100%', boxSizing: 'border-box', transition: 'box-shadow 0.25s ease',
+                  padding: 'clamp(16px, 3vw, 28px)', height: '100%', boxSizing: 'border-box', transition: 'box-shadow 0.25s ease',
                 }}
                   onMouseEnter={e => { e.currentTarget.style.boxShadow = '0 4px 16px rgba(0,0,0,0.04)'; }}
                   onMouseLeave={e => { e.currentTarget.style.boxShadow = 'none'; }}>
@@ -605,10 +605,10 @@ export default function Home() {
 
         return (
           <section style={{
-            padding: '64px 0',
+            padding: 'clamp(48px, 8vw, 64px) 0',
             background: bgImage ? `linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url(${bgImage}) center/cover no-repeat` : S.black,
           }}>
-            <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 24px' }}>
+            <div className="home-container" style={{ maxWidth: 1280, margin: '0 auto', padding: '0 16px' }}>
               <div className="promo-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 48, alignItems: 'center' }}>
                 <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.45 }}>
                   <p style={{ fontFamily: S.dm, fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.14em', color: S.gold, marginBottom: 16 }}>{eyebrow}</p>
@@ -641,7 +641,7 @@ export default function Home() {
           FOOTER
       ═══════════════════════════════════════════════════════════════════════ */}
       <footer style={{ background: S.black, borderTop: '1px solid #333333' }}>
-        <div style={{ maxWidth: 1280, margin: '0 auto', padding: '48px 24px' }}>
+        <div className="home-container" style={{ maxWidth: 1280, margin: '0 auto', padding: '48px 16px' }}>
           <div className="footer-grid" style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr', gap: 32 }}>
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
@@ -656,7 +656,7 @@ export default function Home() {
               <div style={{ display: 'flex', gap: 8, marginTop: 20 }}>
                 {['𝕏', 'f', 'in', '📷'].map(s => (
                   <button key={s} style={{
-                    width: 34, height: 34, border: '1px solid #333333', borderRadius: 2,
+                    width: 36, height: 36, minWidth: 44, minHeight: 44, border: '1px solid #333333', borderRadius: 2,
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                     color: 'rgba(255,255,255,0.5)', background: 'transparent', cursor: 'pointer',
                     fontSize: 13, fontFamily: S.dm, transition: 'all 0.2s',
@@ -752,6 +752,10 @@ export default function Home() {
         @media (max-width: 640px) {
           .footer-grid { grid-template-columns: 1fr !important; }
         }
+        .home-container { padding-left: 16px !important; padding-right: 16px !important; }
+        @media (min-width: 768px) { .home-container { padding-left: 24px !important; padding-right: 24px !important; } }
+        .featured-header { flex-direction: column; gap: 12px; }
+        @media (min-width: 640px) { .featured-header { flex-direction: row !important; justify-content: space-between !important; align-items: flex-end !important; gap: 0 !important; } }
       `}</style>
     </div>
   );
