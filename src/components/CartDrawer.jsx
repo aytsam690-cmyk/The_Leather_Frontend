@@ -33,7 +33,7 @@ function CartItem({ item }) {
         overflow: 'hidden', background: '#F8F8F6',
       }}>
         {item.images?.[0]?.url ? (
-          <img src={item.images[0].url} alt={item.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+          <img src={item.images[0].url} alt={item.name} loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
         ) : item.bg?.startsWith('url') ? (
           <div style={{ width: '100%', height: '100%', background: item.bg, backgroundSize: 'cover', backgroundPosition: 'center' }} />
         ) : (

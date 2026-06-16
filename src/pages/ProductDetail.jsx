@@ -117,7 +117,7 @@ function Gallery({ images }) {
               onMouseLeave={e => { if (i !== active) e.currentTarget.style.borderColor = 'transparent'; }}
             >
               {img.url ? (
-                <img src={img.url} alt={img.alt || 'thumb'} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                <img src={img.url} alt={img.alt || 'thumb'} loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               ) : (
                 <div style={{ width: '100%', height: '100%', background: img.bg || '#E8E8E4' }} />
               )}

@@ -481,7 +481,7 @@ export default function Home() {
                     >
                       <div style={{ width: '100%', height: 140, overflow: 'hidden' }}>
                         {cat.image ? (
-                          <img src={cat.image} alt={cat.name} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', transition: 'transform 0.3s ease' }}
+                          <img src={cat.image} alt={cat.name} loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', transition: 'transform 0.3s ease' }}
                             className="cat-img" />
                         ) : (
                           <div style={{ width: '100%', height: '100%', background: GRADIENTS[i % GRADIENTS.length] }} />
@@ -644,7 +644,7 @@ export default function Home() {
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                 {settings?.logo && (
-                  <img src={settings.logo} alt={settings.siteName || 'Store Logo'} style={{ maxHeight: '32px', maxWidth: '140px', width: 'auto', height: 'auto', objectFit: 'contain' }} />
+                  <img src={settings.logo} alt={settings.siteName || 'Store Logo'} loading="lazy" style={{ maxHeight: '32px', maxWidth: '140px', width: 'auto', height: 'auto', objectFit: 'contain' }} />
                 )}
                 <div style={{ fontFamily: S.cm, fontSize: 24, fontWeight: 500, color: S.white, letterSpacing: '0.14em', textTransform: 'uppercase' }}>{settings?.siteName || 'Store'}</div>
               </div>

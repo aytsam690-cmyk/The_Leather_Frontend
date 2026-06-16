@@ -598,7 +598,7 @@ export default function Navbar() {
                                   overflow: 'hidden',
                                 }}>
                                   {p.images?.[0]?.url
-                                    ? <img src={p.images[0].url} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt={p.name} />
+                                    ? <img src={p.images[0].url} loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt={p.name} />
                                     : <Package size={16} style={{ color: '#9E9E9E' }} />}
                                 </div>
                                 <div style={{ minWidth: 0 }}>

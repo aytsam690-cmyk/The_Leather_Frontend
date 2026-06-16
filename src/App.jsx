@@ -1,37 +1,47 @@
-import { useEffect } from 'react';
+import { useEffect, lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import useSettingsStore from './store/settingsStore';
 
-// ─── Customer pages ─────────────────────────────────────────────────────────
+// ─── Always-loaded components (above the fold) ────────────────────────────────
 import Navbar from './components/Navbar';
 import CartDrawer from './components/CartDrawer';
 import Home from './pages/Home';
-import Products from './pages/Products';
-import ProductDetail from './pages/ProductDetail';
-import Checkout from './pages/Checkout';
-import Account from './pages/Account';
-import Login from './pages/Login';
-import Register from './pages/Register';
-import ForgotPassword from './pages/ForgotPassword';
-import ResetPassword from './pages/ResetPassword';
-import About from './pages/About';
-import TrackOrder from './pages/TrackOrder';
 import ProtectedRoute from './components/ProtectedRoute';
 
-// ─── Admin pages ────────────────────────────────────────────────────────────
-import AdminLayout from './admin/AdminLayout';
-import AdminProtectedRoute from './admin/components/AdminProtectedRoute';
-import AdminLogin from './admin/pages/AdminLogin';
-import Dashboard from './admin/pages/Dashboard';
-import AdminProducts from './admin/pages/Products';
-import AdminOrders from './admin/pages/Orders';
-import AdminCustomers from './admin/pages/Customers';
-import AdminCategories from './admin/pages/Categories';
-import AdminCoupons from './admin/pages/Coupons';
-import AdminBanners from './admin/pages/Banners';
-import AdminSettings from './admin/pages/Settings';
-import AdminReviews from './admin/pages/Reviews';
+// ─── Lazy-loaded customer pages ──────────────────────────────────────────────
+const Products = lazy(() => import('./pages/Products'));
+const ProductDetail = lazy(() => import('./pages/ProductDetail'));
+const Checkout = lazy(() => import('./pages/Checkout'));
+const Account = lazy(() => import('./pages/Account'));
+const Login = lazy(() => import('./pages/Login'));
+const Register = lazy(() => import('./pages/Register'));
+const ForgotPassword = lazy(() => import('./pages/ForgotPassword'));
+const ResetPassword = lazy(() => import('./pages/ResetPassword'));
+const About = lazy(() => import('./pages/About'));
+const TrackOrder = lazy(() => import('./pages/TrackOrder'));
+
+// ─── Lazy-loaded admin pages (never loaded for regular visitors) ─────────────
+const AdminLayout = lazy(() => import('./admin/AdminLayout'));
+const AdminProtectedRoute = lazy(() => import('./admin/components/AdminProtectedRoute'));
+const AdminLogin = lazy(() => import('./admin/pages/AdminLogin'));
+const Dashboard = lazy(() => import('./admin/pages/Dashboard'));
+const AdminProducts = lazy(() => import('./admin/pages/Products'));
+const AdminOrders = lazy(() => import('./admin/pages/Orders'));
+const AdminCustomers = lazy(() => import('./admin/pages/Customers'));
+const AdminCategories = lazy(() => import('./admin/pages/Categories'));
+const AdminCoupons = lazy(() => import('./admin/pages/Coupons'));
+const AdminBanners = lazy(() => import('./admin/pages/Banners'));
+const AdminSettings = lazy(() => import('./admin/pages/Settings'));
+const AdminReviews = lazy(() => import('./admin/pages/Reviews'));
+
+// ─── Loading spinner ─────────────────────────────────────────────────────────
+const PageLoader = () => (
+  <div style={{ minHeight: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+    <div style={{ width: 32, height: 32, border: '3px solid #E8E8E4', borderTopColor: '#111111', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
+    <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+  </div>
+);
 
 // ─── Page transition wrapper ───────────────────────────────────────────────
 const pageVariants = {
@@ -87,30 +97,32 @@ function App() {
 
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/admin/login" element={<AdminLogin />} />
-        <Route path="/admin" element={<AdminProtectedRoute />}>
-          <Route element={<AdminLayout />}>
-            <Route index element={<Navigate to="dashboard" replace />} />
-            <Route path="dashboard"  element={<Dashboard />} />
-            <Route path="products"   element={<AdminProducts />} />
-            <Route path="orders"     element={<AdminOrders />} />
-            <Route path="customers"  element={<AdminCustomers />} />
-            <Route path="categories" element={<AdminCategories />} />
-            <Route path="coupons"    element={<AdminCoupons />} />
-            <Route path="banners"    element={<AdminBanners />} />
-            <Route path="settings"   element={<AdminSettings />} />
-            <Route path="reviews"    element={<AdminReviews />} />
+      <Suspense fallback={<PageLoader />}>
+        <Routes>
+          <Route path="/admin/login" element={<AdminLogin />} />
+          <Route path="/admin" element={<AdminProtectedRoute />}>
+            <Route element={<AdminLayout />}>
+              <Route index element={<Navigate to="dashboard" replace />} />
+              <Route path="dashboard"  element={<Dashboard />} />
+              <Route path="products"   element={<AdminProducts />} />
+              <Route path="orders"     element={<AdminOrders />} />
+              <Route path="customers"  element={<AdminCustomers />} />
+              <Route path="categories" element={<AdminCategories />} />
+              <Route path="coupons"    element={<AdminCoupons />} />
+              <Route path="banners"    element={<AdminBanners />} />
+              <Route path="settings"   element={<AdminSettings />} />
+              <Route path="reviews"    element={<AdminReviews />} />
+            </Route>
           </Route>
-        </Route>
-        <Route path="/*" element={
-          <div style={{ minHeight: '100vh', background: '#FFFFFF', color: '#111111', fontFamily: "'DM Sans', sans-serif" }}>
-            <Navbar />
-            <CartDrawer />
-            <CustomerRoutes />
-          </div>
-        } />
-      </Routes>
+          <Route path="/*" element={
+            <div style={{ minHeight: '100vh', background: '#FFFFFF', color: '#111111', fontFamily: "'DM Sans', sans-serif" }}>
+              <Navbar />
+              <CartDrawer />
+              <CustomerRoutes />
+            </div>
+          } />
+        </Routes>
+      </Suspense>
     </BrowserRouter>
   );
 }
