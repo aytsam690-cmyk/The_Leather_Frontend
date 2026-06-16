@@ -1,4 +1,4 @@
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import useSettingsStore from '../store/settingsStore';
@@ -43,8 +43,6 @@ const fadeUp = {
 };
 
 export default function About() {
-  const { scrollYProgress } = useScroll();
-  const y = useTransform(scrollYProgress, [0, 1], ['0%', '20%']);
   const { settings } = useSettingsStore();
   const siteName = settings?.siteName || 'Luxe Store';
 
