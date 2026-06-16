@@ -465,30 +465,6 @@ export default function Products() {
             }}
           />
 
-          {/* Mobile Filter Button */}
-          <button
-            onClick={() => setMobileFiltersOpen(true)}
-            className="lg:hidden"
-            style={{
-              display: 'flex', alignItems: 'center', gap: 8,
-              border: '1px solid #E8E8E4', borderRadius: 2,
-              padding: '10px 16px', background: '#FFFFFF',
-              fontFamily: "'DM Sans', sans-serif", fontSize: 12,
-              fontWeight: 500, textTransform: 'uppercase',
-              letterSpacing: '0.06em', color: '#111111',
-              cursor: 'pointer', minHeight: 44, marginBottom: 16,
-            }}
-          >
-            <SlidersHorizontal size={15} />
-            Filters
-            {activeFiltersCount > 0 && (
-              <span style={{
-                background: '#111111', color: '#FFFFFF', fontSize: 10,
-                fontWeight: 700, borderRadius: '50%', width: 20, height: 20,
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-              }}>{activeFiltersCount}</span>
-            )}
-          </button>
 
           {/* ── Main Content ─────────────────────────────────────────────── */}
           <div style={{ flex: 1, minWidth: 0 }}>
