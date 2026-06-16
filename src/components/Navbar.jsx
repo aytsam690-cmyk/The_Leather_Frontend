@@ -273,7 +273,7 @@ export default function Navbar() {
           boxShadow: scrolled ? '0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04)' : 'none',
         }}
       >
-        <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 24px' }}>
+        <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 16px' }} className="navbar-container">
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 72 }}>
 
             {/* Logo */}
@@ -283,12 +283,13 @@ export default function Navbar() {
               )}
               <span style={{
                 fontFamily: "'Cormorant Garamond', serif",
-                fontSize: 28,
+                fontSize: 'clamp(18px, 4vw, 28px)',
                 fontWeight: 600,
                 color: '#111111',
-                letterSpacing: '0.12em',
+                letterSpacing: 'clamp(0.04em, 1vw, 0.12em)',
                 textTransform: 'uppercase',
                 lineHeight: 1,
+                whiteSpace: 'nowrap',
               }}>
                 {settings?.siteName || 'LUXE STORE'}
               </span>
@@ -666,9 +667,11 @@ export default function Navbar() {
                 </AnimatePresence>
               </button>
 
-              {/* User */}
+              {/* User — hidden on mobile, shown in mobile menu */}
               {token ? (
-                <UserMenu user={user} logout={logout} />
+                <span className="navbar-user-menu">
+                  <UserMenu user={user} logout={logout} />
+                </span>
               ) : (
                 <Link
                   to="/login"
@@ -753,6 +756,7 @@ export default function Navbar() {
                 <Link
                   key={link.path}
                   to={link.path}
+                  onClick={() => setMobileOpen(false)}
                   style={{
                     fontFamily: "'Cormorant Garamond', serif",
                     fontSize: 'clamp(24px, 6vw, 36px)',
@@ -770,9 +774,10 @@ export default function Navbar() {
                   {link.label}
                 </Link>
               ))}
-              {!token && (
+              {!token ? (
                 <Link
                   to="/login"
+                  onClick={() => setMobileOpen(false)}
                   style={{
                     marginTop: 24,
                     display: 'block',
@@ -795,6 +800,51 @@ export default function Navbar() {
                 >
                   Login / Register
                 </Link>
+              ) : (
+                <div style={{ marginTop: 24, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12, width: '100%' }}>
+                  <Link
+                    to="/account"
+                    onClick={() => setMobileOpen(false)}
+                    style={{
+                      display: 'block',
+                      padding: '12px 32px',
+                      border: '1px solid #111111',
+                      borderRadius: 2,
+                      textAlign: 'center',
+                      fontFamily: "'DM Sans', sans-serif",
+                      fontSize: 13,
+                      fontWeight: 500,
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.08em',
+                      color: '#FFFFFF',
+                      textDecoration: 'none',
+                      background: '#111111',
+                      minWidth: 180,
+                    }}
+                  >
+                    <User size={14} style={{ display: 'inline', marginRight: 6, verticalAlign: 'middle' }} />
+                    My Account
+                  </Link>
+                  <button
+                    onClick={() => { logout(); setMobileOpen(false); }}
+                    style={{
+                      padding: '10px 32px',
+                      border: '1px solid #E8E8E4',
+                      borderRadius: 2,
+                      fontFamily: "'DM Sans', sans-serif",
+                      fontSize: 13,
+                      fontWeight: 500,
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.08em',
+                      color: '#9B2226',
+                      background: 'transparent',
+                      cursor: 'pointer',
+                      minWidth: 180,
+                    }}
+                  >
+                    Logout
+                  </button>
+                </div>
               )}
             </motion.div>
           )}
@@ -802,17 +852,25 @@ export default function Navbar() {
 
         {/* Responsive styles */}
         <style>{`
+          .navbar-container {
+            padding: 0 16px;
+          }
+          @media (min-width: 768px) {
+            .navbar-container {
+              padding: 0 24px;
+            }
+          }
           @media (min-width: 1024px) {
             .navbar-desktop-links { display: flex !important; }
             .navbar-hamburger { display: none !important; }
             .navbar-login-btn { display: flex !important; }
+            .navbar-user-menu { display: block !important; }
           }
           @media (max-width: 1023px) {
             .navbar-desktop-links { display: none !important; }
             .navbar-hamburger { display: flex !important; }
-          }
-          @media (min-width: 640px) {
-            .navbar-login-btn { display: flex !important; }
+            .navbar-login-btn { display: none !important; }
+            .navbar-user-menu { display: none !important; }
           }
         `}</style>
       </motion.nav>
