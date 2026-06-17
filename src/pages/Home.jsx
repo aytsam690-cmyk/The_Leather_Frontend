@@ -515,7 +515,7 @@ export default function Home() {
               <p style={{ fontFamily: S.dm, fontSize: 11, fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.12em', color: S.gold, marginBottom: 12 }}>
                 Curated Picks
               </p>
-              <h2 style={{ fontFamily: S.cm, fontSize: 'clamp(28px, 5vw, 40px)', fontWeight: 500, color: S.black, lineHeight: 1.1, margin: 0 }}>
+              <h2 style={{ fontFamily: S.cm, fontSize: 'clamp(28px, 5vw, 40px)', fontWeight: 500, color: S.gold, lineHeight: 1.1, margin: 0 }}>
                 Featured Products
               </h2>
             </div>
@@ -557,7 +557,7 @@ export default function Home() {
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
             transition={{ duration: 0.45 }} style={{ textAlign: 'center', marginBottom: 40 }}>
             <p style={{ fontFamily: S.dm, fontSize: 11, fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.12em', color: S.gold, marginBottom: 12 }}>Our Promise</p>
-            <h2 style={{ fontFamily: S.cm, fontSize: 'clamp(28px, 5vw, 40px)', fontWeight: 500, color: S.black, lineHeight: 1.1, margin: 0 }}>Why Shop With Us</h2>
+            <h2 style={{ fontFamily: S.cm, fontSize: 'clamp(28px, 5vw, 40px)', fontWeight: 500, color: S.gold, lineHeight: 1.1, margin: 0 }}>Why Shop With Us</h2>
             <p style={{ fontFamily: S.dm, fontSize: 15, color: S.secondary, fontWeight: 300, maxWidth: 480, margin: '14px auto 0' }}>
               We're committed to providing the best shopping experience with every order.
             </p>
