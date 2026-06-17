@@ -165,7 +165,15 @@ function StepIndicator({ step }) {
 function OrderSidebar({ items, appliedCoupon }) {
   const { formatPrice } = useCurrency();
   const subtotal = items.reduce((s, i) => s + i.price * i.qty, 0);
-  const discount = appliedCoupon?.discountAmount || 0;
+  const discount = (() => {
+    if (!appliedCoupon) return 0;
+    if (appliedCoupon.type === 'percentage') {
+      let d = (subtotal * appliedCoupon.value) / 100;
+      if (appliedCoupon.maxDiscount && d > appliedCoupon.maxDiscount) d = appliedCoupon.maxDiscount;
+      return Math.min(d, subtotal);
+    }
+    return Math.min(appliedCoupon.value || 0, subtotal);
+  })();
   const shippingCost = (subtotal - discount) >= 50 ? 0 : 8.99;
   const total = subtotal - discount + shippingCost;
 
@@ -352,7 +360,15 @@ function ReviewOrder({ shipping, onBack, onNext }) {
   const { items, updateQty, appliedCoupon } = useCartStore();
   const { formatPrice } = useCurrency();
   const subtotal = items.reduce((s, i) => s + i.price * i.qty, 0);
-  const discount = appliedCoupon?.discountAmount || 0;
+  const discount = (() => {
+    if (!appliedCoupon) return 0;
+    if (appliedCoupon.type === 'percentage') {
+      let d = (subtotal * appliedCoupon.value) / 100;
+      if (appliedCoupon.maxDiscount && d > appliedCoupon.maxDiscount) d = appliedCoupon.maxDiscount;
+      return Math.min(d, subtotal);
+    }
+    return Math.min(appliedCoupon.value || 0, subtotal);
+  })();
   const shipping_cost = (subtotal - discount) >= 50 ? 0 : 8.99;
   const total = subtotal - discount + shipping_cost;
 
@@ -471,7 +487,15 @@ function ConfirmOrder({ onBack, onPlace, loading }) {
   const { items, appliedCoupon } = useCartStore();
   const { formatPrice } = useCurrency();
   const subtotal = items.reduce((s, i) => s + i.price * i.qty, 0);
-  const discount = appliedCoupon?.discountAmount || 0;
+  const discount = (() => {
+    if (!appliedCoupon) return 0;
+    if (appliedCoupon.type === 'percentage') {
+      let d = (subtotal * appliedCoupon.value) / 100;
+      if (appliedCoupon.maxDiscount && d > appliedCoupon.maxDiscount) d = appliedCoupon.maxDiscount;
+      return Math.min(d, subtotal);
+    }
+    return Math.min(appliedCoupon.value || 0, subtotal);
+  })();
   const shipping_cost = (subtotal - discount) >= 50 ? 0 : 8.99;
   const total = subtotal - discount + shipping_cost;
 
@@ -701,7 +725,15 @@ export default function Checkout() {
     setLoading(true);
     try {
       const subtotal = items.reduce((sum, i) => sum + i.price * (i.qty || i.quantity || 1), 0);
-      const discount = appliedCoupon?.discountAmount || 0;
+      const discount = (() => {
+        if (!appliedCoupon) return 0;
+        if (appliedCoupon.type === 'percentage') {
+          let d = (subtotal * appliedCoupon.value) / 100;
+          if (appliedCoupon.maxDiscount && d > appliedCoupon.maxDiscount) d = appliedCoupon.maxDiscount;
+          return Math.min(d, subtotal);
+        }
+        return Math.min(appliedCoupon.value || 0, subtotal);
+      })();
       const shippingCost = (subtotal - discount) >= 50 ? 0 : 8.99;
       const orderData = {
         items: items.map(i => ({ product: i._id || i.id, quantity: i.qty || i.quantity || 1, price: i.price })),

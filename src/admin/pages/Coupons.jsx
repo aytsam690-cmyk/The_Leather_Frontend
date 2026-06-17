@@ -34,18 +34,21 @@ function isExpired(dateStr) {
 }
 
 const EMPTY_FORM = {
-  code:'', type:'percentage', value:'', minOrder:'', limit:'', perCustomer:'',
+  code:'', type:'percentage', value:'', minOrder:'', maxDiscount:'', limit:'',
   validFrom: new Date().toISOString().split('T')[0],
-  validUntil:'', categories:[], description:'', active:true,
+  validUntil:'', active:true,
 };
 
 // ─── Coupon Form Modal ────────────────────────────────────────────────────────
 function CouponModal({ initial, onSave, onClose }) {
   const [form, setForm] = useState(initial ? {
     code: initial.code, type: initial.type, value: initial.value,
-    minOrder: initial.minOrder, limit: initial.limit || '', perCustomer: '',
-    validFrom: new Date().toISOString().split('T')[0],
-    validUntil: initial.validUntil, categories: [], description: '', active: initial.active,
+    minOrder: initial.minOrderAmount || initial.minOrder || '',
+    maxDiscount: initial.maxDiscount || '',
+    limit: initial.limit || '',
+    validFrom: initial.validFrom ? new Date(initial.validFrom).toISOString().split('T')[0] : new Date().toISOString().split('T')[0],
+    validUntil: initial.validUntil ? new Date(initial.validUntil).toISOString().split('T')[0] : '',
+    active: initial.active,
   } : { ...EMPTY_FORM });
 
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
@@ -82,7 +85,7 @@ function CouponModal({ initial, onSave, onClose }) {
         <div>
           <label className="block text-xs font-semibold text-[#6B6B6B] mb-2">Discount Type</label>
           <div className="flex gap-2">
-            {[['percentage','% Off'],['fixed','Fixed Amount'],['shipping','Free Shipping']].map(([v, l]) => (
+            {[['percentage','% Off'],['fixed','Fixed Amount']].map(([v, l]) => (
               <label key={v} className={`flex items-center gap-2 px-3 py-2 rounded-sm border-2 cursor-pointer text-sm transition-all ${form.type===v ? 'text-white' : 'text-[#6B6B6B] border-[#D0D0CA] hover:border-[#C9A96E]'}`}
                 style={form.type===v ? { background: CORAL, borderColor: CORAL } : {}}>
                 <input type="radio" className="hidden" checked={form.type===v} onChange={() => set('type', v)} />
@@ -108,16 +111,18 @@ function CouponModal({ initial, onSave, onClose }) {
           </div>
         </div>
 
-        {/* Limits */}
-        <div className="grid grid-cols-2 gap-3">
+        {/* Max Discount Cap (percentage only) */}
+        {form.type === 'percentage' && (
           <div>
-            <label className="block text-xs font-semibold text-[#6B6B6B] mb-1.5">Usage Limit (blank = unlimited)</label>
-            <input type="number" className={cls} value={form.limit} onChange={e => set('limit', e.target.value)} placeholder="Unlimited" />
+            <label className="block text-xs font-semibold text-[#6B6B6B] mb-1.5">Max Discount Cap ($) — optional</label>
+            <input type="number" className={cls} value={form.maxDiscount} onChange={e => set('maxDiscount', e.target.value)} placeholder="No cap" />
           </div>
-          <div>
-            <label className="block text-xs font-semibold text-[#6B6B6B] mb-1.5">Per Customer Limit</label>
-            <input type="number" className={cls} value={form.perCustomer} onChange={e => set('perCustomer', e.target.value)} placeholder="1" />
-          </div>
+        )}
+
+        {/* Usage Limit */}
+        <div>
+          <label className="block text-xs font-semibold text-[#6B6B6B] mb-1.5">Usage Limit (blank = unlimited)</label>
+          <input type="number" className={cls} value={form.limit} onChange={e => set('limit', e.target.value)} placeholder="Unlimited" />
         </div>
 
         {/* Dates */}
@@ -130,26 +135,6 @@ function CouponModal({ initial, onSave, onClose }) {
             <label className="block text-xs font-semibold text-[#6B6B6B] mb-1.5">Valid Until</label>
             <input type="date" className={cls} value={form.validUntil} onChange={e => set('validUntil', e.target.value)} />
           </div>
-        </div>
-
-        {/* Categories */}
-        <div>
-          <label className="block text-xs font-semibold text-[#6B6B6B] mb-2">Applicable Categories (blank = all)</label>
-          <div className="flex flex-wrap gap-2">
-            {CATS.map(cat => (
-              <label key={cat} className={`flex items-center gap-1.5 px-3 py-1.5 rounded-sm border text-xs cursor-pointer transition-all ${form.categories.includes(cat) ? 'text-white border-transparent' : 'text-[#6B6B6B] border-[#D0D0CA] hover:border-[#C9A96E]'}`}
-                style={form.categories.includes(cat) ? { background: CORAL } : {}}>
-                <input type="checkbox" className="hidden" checked={form.categories.includes(cat)} onChange={() => toggleCat(cat)} />
-                {cat}
-              </label>
-            ))}
-          </div>
-        </div>
-
-        {/* Description */}
-        <div>
-          <label className="block text-xs font-semibold text-[#6B6B6B] mb-1.5">Terms / Description</label>
-          <textarea rows={2} className={`${cls} resize-none`} value={form.description} onChange={e => set('description', e.target.value)} placeholder="Optional terms…" />
         </div>
 
         {/* Active toggle */}
@@ -183,7 +168,7 @@ export default function Coupons() {
     apiGetCoupons()
       .then(data => {
         const items = Array.isArray(data) ? data : [];
-        setCoupons(items.map(c => ({ ...c, id: c._id, active: c.isActive !== false, used: c.usedCount || 0, limit: c.usageLimit })));
+        setCoupons(items.map(c => ({ ...c, id: c._id, active: c.isActive !== false, used: c.usedCount || 0, limit: c.usageLimit, minOrder: c.minOrderAmount || 0 })));
       })
       .catch(() => setCoupons([]));
   };
@@ -201,8 +186,10 @@ export default function Coupons() {
     try {
       const payload = {
         code: form.code?.toUpperCase(), type: form.type, value: Number(form.value),
-        minOrderAmount: Number(form.minOrder) || 0, usageLimit: form.limit ? Number(form.limit) : null,
-        validFrom: form.validFrom, validUntil: form.validUntil, isActive: form.active, description: form.description,
+        minOrderAmount: Number(form.minOrder) || 0,
+        maxDiscount: form.maxDiscount ? Number(form.maxDiscount) : null,
+        usageLimit: form.limit ? Number(form.limit) : null,
+        validFrom: form.validFrom, validUntil: form.validUntil, isActive: form.active,
       };
       if (editCoupon) {
         await apiUpdateCoupon(editCoupon.id || editCoupon._id, payload);

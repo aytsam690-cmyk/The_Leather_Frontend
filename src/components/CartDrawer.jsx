@@ -113,7 +113,15 @@ export default function CartDrawer() {
   const [couponLoading, setCouponLoading] = useState(false);
 
   const subtotal = items.reduce((s, i) => s + i.price * i.qty, 0);
-  const discount = appliedCoupon?.discountAmount || 0;
+  const discount = (() => {
+    if (!appliedCoupon) return 0;
+    if (appliedCoupon.type === 'percentage') {
+      let d = (subtotal * appliedCoupon.value) / 100;
+      if (appliedCoupon.maxDiscount && d > appliedCoupon.maxDiscount) d = appliedCoupon.maxDiscount;
+      return Math.min(d, subtotal);
+    }
+    return Math.min(appliedCoupon.value || 0, subtotal);
+  })();
   const shippingCost = (subtotal - discount) >= 50 ? 0 : 8.99;
   const total = subtotal - discount + shippingCost;
   const count = items.reduce((s, i) => s + i.qty, 0);
@@ -123,9 +131,9 @@ export default function CartDrawer() {
     setCouponLoading(true);
     setCouponMsg({ type: '', text: '' });
     try {
-      const res = await validateCoupon({ code: couponCode.trim(), subtotal });
-      applyCoupon({ code: couponCode.trim(), discountAmount: res.discountAmount });
-      setCouponMsg({ type: 'success', text: `✓ Coupon applied — ${symbol}${res.discountAmount} off` });
+      const res = await validateCoupon({ code: couponCode.trim(), orderAmount: subtotal });
+      applyCoupon({ code: res.code || couponCode.trim(), type: res.type, value: res.value, maxDiscount: res.maxDiscount });
+      setCouponMsg({ type: 'success', text: `✓ Coupon applied successfully!` });
       setCouponCode('');
     } catch (err) {
       setCouponMsg({ type: 'error', text: err.response?.data?.message || 'Invalid or expired code' });

@@ -38,7 +38,7 @@ const useCartStore = create(
         });
       },
 
-      appliedCoupon: null, // { code, discountAmount }
+      appliedCoupon: null, // { code, type, value, maxDiscount }
 
       applyCoupon: (coupon) => set({ appliedCoupon: coupon }),
       removeCoupon: () => set({ appliedCoupon: null }),
