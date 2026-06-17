@@ -1,6 +1,19 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
+// Clear stale coupon shape from localStorage (old shape had discountAmount, new shape has type+value)
+try {
+  const raw = localStorage.getItem('cart-storage');
+  if (raw) {
+    const parsed = JSON.parse(raw);
+    const coupon = parsed?.state?.appliedCoupon;
+    if (coupon && ('discountAmount' in coupon) && !('type' in coupon)) {
+      parsed.state.appliedCoupon = null;
+      localStorage.setItem('cart-storage', JSON.stringify(parsed));
+    }
+  }
+} catch (_) {}
+
 const useCartStore = create(
   persist(
     (set, get) => ({
