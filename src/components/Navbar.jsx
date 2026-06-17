@@ -181,6 +181,7 @@ function UserMenu({ user, logout }) {
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [mobileCatOpen, setMobileCatOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
@@ -773,6 +774,73 @@ export default function Navbar() {
                   {link.label}
                 </Link>
               ))}
+
+              {/* ── Mobile Categories Accordion ── */}
+              {categories.length > 0 && (
+                <div style={{ width: '100%', maxWidth: 320 }}>
+                  <button
+                    onClick={() => setMobileCatOpen(!mobileCatOpen)}
+                    style={{
+                      width: '100%',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: 8,
+                      fontFamily: "'Cormorant Garamond', serif",
+                      fontSize: 'clamp(24px, 6vw, 36px)',
+                      fontWeight: 600,
+                      color: '#F5F0E8',
+                      background: 'none',
+                      border: 'none',
+                      cursor: 'pointer',
+                      padding: '8px 0',
+                      letterSpacing: '0.04em',
+                      transition: 'color 0.2s ease',
+                    }}
+                    onMouseEnter={e => { e.currentTarget.style.color = '#A89880'; }}
+                    onMouseLeave={e => { e.currentTarget.style.color = '#F5F0E8'; }}
+                  >
+                    Categories
+                    <motion.div animate={{ rotate: mobileCatOpen ? 180 : 0 }} transition={{ duration: 0.2 }}>
+                      <ChevronDown size={20} />
+                    </motion.div>
+                  </button>
+                  <AnimatePresence>
+                    {mobileCatOpen && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.25 }}
+                        style={{ overflow: 'hidden' }}
+                      >
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: 6, paddingTop: 8, paddingBottom: 12 }}>
+                          {categories.map(cat => (
+                            <Link
+                              key={cat.name}
+                              to={`/products?category=${encodeURIComponent(cat.name)}`}
+                              onClick={() => { setMobileCatOpen(false); setMobileOpen(false); }}
+                              style={{
+                                fontFamily: "'DM Sans', sans-serif",
+                                fontSize: 15,
+                                color: '#C9A96E',
+                                textDecoration: 'none',
+                                padding: '6px 0',
+                                textAlign: 'center',
+                                transition: 'color 0.2s ease',
+                              }}
+                              onMouseEnter={e => { e.currentTarget.style.color = '#F5F0E8'; }}
+                              onMouseLeave={e => { e.currentTarget.style.color = '#C9A96E'; }}
+                            >
+                              {cat.name}
+                            </Link>
+                          ))}
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              )}
               {!token ? (
                 <Link
                   to="/login"
