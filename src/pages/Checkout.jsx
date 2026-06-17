@@ -49,7 +49,7 @@ function DSInput({ label, name, value, onChange, error, type = 'text', required,
     <div>
       <label style={{
         fontFamily: "'DM Sans', sans-serif", fontSize: 10, fontWeight: 500,
-        textTransform: 'uppercase', letterSpacing: '0.08em', color: '#6B6B6B',
+        textTransform: 'uppercase', letterSpacing: '0.08em', color: '#6B6055',
         display: 'block', marginBottom: 6,
       }}>
         {label}{required && ' *'}
@@ -62,19 +62,19 @@ function DSInput({ label, name, value, onChange, error, type = 'text', required,
         rows={rows}
         style={{
           width: '100%', boxSizing: 'border-box',
-          background: '#FFFFFF', border: error ? '1px solid #9B2226' : '1px solid #E8E8E4',
+          background: '#1C1C17', border: error ? '1px solid #C0392B' : '1px solid #2C2C26',
           borderRadius: 2, padding: '12px 16px',
           fontFamily: "'DM Sans', sans-serif", fontSize: 14,
-          color: '#111111', outline: 'none',
+          color: '#F5F0E8', outline: 'none',
           transition: 'all 0.2s ease',
           resize: Tag === 'textarea' ? 'none' : undefined,
           height: Tag === 'textarea' ? 96 : undefined,
         }}
-        onFocus={e => { e.target.style.borderColor = '#111111'; e.target.style.boxShadow = '0 0 0 3px rgba(17,17,17,0.06)'; }}
-        onBlur={e => { e.target.style.borderColor = error ? '#9B2226' : '#E8E8E4'; e.target.style.boxShadow = 'none'; }}
+        onFocus={e => { e.target.style.borderColor = '#C9A96E'; e.target.style.boxShadow = '0 0 0 3px rgba(201,169,110,0.12)'; }}
+        onBlur={e => { e.target.style.borderColor = error ? '#C0392B' : '#2C2C26'; e.target.style.boxShadow = 'none'; }}
         placeholder={label}
       />
-      {error && <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 11, color: '#9B2226', marginTop: 4 }}>{error}</p>}
+      {error && <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 11, color: '#C0392B', marginTop: 4 }}>{error}</p>}
     </div>
   );
 }
@@ -84,7 +84,7 @@ function DSSelect({ label, name, value, onChange, error, required, options = [] 
     <div>
       <label style={{
         fontFamily: "'DM Sans', sans-serif", fontSize: 10, fontWeight: 500,
-        textTransform: 'uppercase', letterSpacing: '0.08em', color: '#6B6B6B',
+        textTransform: 'uppercase', letterSpacing: '0.08em', color: '#6B6055',
         display: 'block', marginBottom: 6,
       }}>
         {label}{required && ' *'}
@@ -95,21 +95,21 @@ function DSSelect({ label, name, value, onChange, error, required, options = [] 
         onChange={onChange}
         style={{
           width: '100%', boxSizing: 'border-box',
-          background: '#FFFFFF', border: error ? '1px solid #9B2226' : '1px solid #E8E8E4',
+          background: '#1C1C17', border: error ? '1px solid #C0392B' : '1px solid #2C2C26',
           borderRadius: 2, padding: '12px 16px',
           fontFamily: "'DM Sans', sans-serif", fontSize: 14,
-          color: value ? '#111111' : '#9E9E9E',
+          color: value ? '#F5F0E8' : '#6B6055',
           outline: 'none', cursor: 'pointer',
           appearance: 'none',
           transition: 'border-color 0.2s',
         }}
-        onFocus={e => { e.target.style.borderColor = '#111111'; }}
-        onBlur={e => { e.target.style.borderColor = error ? '#9B2226' : '#E8E8E4'; }}
+        onFocus={e => { e.target.style.borderColor = '#C9A96E'; }}
+        onBlur={e => { e.target.style.borderColor = error ? '#C0392B' : '#2C2C26'; }}
       >
         <option value="">Select {label}</option>
         {options.map(o => <option key={o} value={o}>{o}</option>)}
       </select>
-      {error && <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 11, color: '#9B2226', marginTop: 4 }}>{error}</p>}
+      {error && <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 11, color: '#C0392B', marginTop: 4 }}>{error}</p>}
     </div>
   );
 }
@@ -130,9 +130,9 @@ function StepIndicator({ step }) {
                 width: 32, height: 32, borderRadius: 2,
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 fontFamily: "'DM Sans', sans-serif", fontSize: 12, fontWeight: 500,
-                border: isComplete ? '1px solid #111111' : isActive ? '1px solid #111111' : '1px solid #E8E8E4',
-                background: isComplete ? '#111111' : isActive ? '#FFFFFF' : 'transparent',
-                color: isComplete ? '#FFFFFF' : isActive ? '#111111' : '#9E9E9E',
+                border: isComplete ? '1px solid #C9A96E' : isActive ? '1px solid #C9A96E' : '1px solid #2C2C26',
+                background: isComplete ? '#C9A96E' : isActive ? 'transparent' : 'transparent',
+                color: isComplete ? '#0D0D0B' : isActive ? '#F5F0E8' : '#6B6055',
                 transition: 'all 0.3s ease',
               }}>
                 {isComplete ? <Check size={14} /> : idx}
@@ -141,7 +141,7 @@ function StepIndicator({ step }) {
                 position: 'absolute', top: 36,
                 fontFamily: "'DM Sans', sans-serif", fontSize: 10,
                 textTransform: 'uppercase', letterSpacing: '0.08em',
-                color: isActive ? '#111111' : '#9E9E9E',
+                color: isActive ? '#F5F0E8' : '#6B6055',
                 whiteSpace: 'nowrap',
               }}>
                 {label}
@@ -150,7 +150,7 @@ function StepIndicator({ step }) {
             {i < steps.length - 1 && (
               <div style={{
                 flex: 1, height: 1, margin: '0 8px', marginBottom: 0,
-                background: isComplete ? '#111111' : '#E8E8E4',
+                background: isComplete ? '#C9A96E' : '#2C2C26',
                 width: 60, transition: 'background 0.4s ease',
               }} />
             )}
@@ -179,34 +179,34 @@ function OrderSidebar({ items, appliedCoupon }) {
 
   return (
     <div style={{
-      background: '#FFFFFF', border: '1px solid #E8E8E4',
+      background: '#141410', border: '1px solid #2C2C26',
       borderRadius: 2, padding: 24,
       position: 'sticky', top: 96,
     }}>
-      <h3 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 20, fontWeight: 500, color: '#111111', margin: '0 0 20px' }}>
+      <h3 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 20, fontWeight: 500, color: '#F5F0E8', margin: '0 0 20px' }}>
         Order Summary
       </h3>
 
       {/* Items */}
-      <div style={{ borderTop: '1px solid #E8E8E4' }}>
+      <div style={{ borderTop: '1px solid #2C2C26' }}>
         {items.map(item => (
-          <div key={item.key} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '14px 0', borderBottom: '1px solid #E8E8E4' }}>
-            <div style={{ width: 56, height: 56, flexShrink: 0, border: '1px solid #E8E8E4', borderRadius: 2, overflow: 'hidden', background: '#F8F8F6' }}>
+          <div key={item.key} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '14px 0', borderBottom: '1px solid #2C2C26' }}>
+            <div style={{ width: 56, height: 56, flexShrink: 0, border: '1px solid #2C2C26', borderRadius: 2, overflow: 'hidden', background: '#1C1C17' }}>
               {item.images?.[0]?.url ? (
                 <img src={item.images[0].url} alt={item.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               ) : (
-                <div style={{ width: '100%', height: '100%', background: item.bg || '#E8E8E4' }} />
+                <div style={{ width: '100%', height: '100%', background: item.bg || '#1C1C17' }} />
               )}
             </div>
             <div style={{ flex: 1, minWidth: 0 }}>
-              <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: '#111111', margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+              <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: '#F5F0E8', margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                 {item.name}
               </p>
-              <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 11, color: '#9E9E9E', margin: '2px 0 0' }}>
+              <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 11, color: '#6B6055', margin: '2px 0 0' }}>
                 Qty: {item.qty}{item.variant?.size && ` · ${item.variant.size}`}
               </p>
             </div>
-            <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, fontWeight: 500, color: '#111111', flexShrink: 0, marginLeft: 'auto' }}>
+            <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, fontWeight: 500, color: '#F5F0E8', flexShrink: 0, marginLeft: 'auto' }}>
               {formatPrice(item.price * item.qty)}
             </p>
           </div>
@@ -214,37 +214,37 @@ function OrderSidebar({ items, appliedCoupon }) {
       </div>
 
       {/* Divider */}
-      <div style={{ borderTop: '1px solid #E8E8E4', margin: '16px 0' }} />
+      <div style={{ borderTop: '1px solid #2C2C26', margin: '16px 0' }} />
 
       {/* Summary rows */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
         {[
-          { label: 'Subtotal', value: formatPrice(subtotal), color: '#111111' },
-          ...(discount > 0 ? [{ label: `Discount (${appliedCoupon.code})`, value: `−${formatPrice(discount)}`, color: '#2D6A4F' }] : []),
-          { label: 'Shipping', value: shippingCost === 0 ? 'Free' : formatPrice(shippingCost), color: shippingCost === 0 ? '#2D6A4F' : '#111111' },
+          { label: 'Subtotal', value: formatPrice(subtotal), color: '#F5F0E8' },
+          ...(discount > 0 ? [{ label: `Discount (${appliedCoupon.code})`, value: `−${formatPrice(discount)}`, color: '#C9A96E' }] : []),
+          { label: 'Shipping', value: shippingCost === 0 ? 'Free' : formatPrice(shippingCost), color: shippingCost === 0 ? '#C9A96E' : '#F5F0E8' },
         ].map(row => (
           <div key={row.label} style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: '#9E9E9E', textTransform: 'uppercase', letterSpacing: '0.04em' }}>{row.label}</span>
+            <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: '#6B6055', textTransform: 'uppercase', letterSpacing: '0.04em' }}>{row.label}</span>
             <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, fontWeight: 500, color: row.color }}>{row.value}</span>
           </div>
         ))}
       </div>
 
       {/* Total */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid #E8E8E4', marginTop: 16, paddingTop: 16 }}>
-        <span style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 22, fontWeight: 500, color: '#111111' }}>Total</span>
-        <span style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 22, fontWeight: 500, color: '#111111' }}>{formatPrice(total)}</span>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid #2C2C26', marginTop: 16, paddingTop: 16 }}>
+        <span style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 22, fontWeight: 500, color: '#A89880' }}>Total</span>
+        <span style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 22, fontWeight: 500, color: '#F5F0E8' }}>{formatPrice(total)}</span>
       </div>
 
       {/* COD badge */}
       <div style={{
-        marginTop: 20, background: '#F8F8F6', border: '1px solid #E8E8E4',
+        marginTop: 20, background: '#1C1C17', border: '1px solid #2C2C26',
         borderRadius: 2, padding: 16, display: 'flex', alignItems: 'center', gap: 12,
       }}>
         <ShieldCheck size={20} style={{ color: '#C9A96E', flexShrink: 0 }} />
         <div>
-          <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, fontWeight: 500, color: '#111111', margin: 0 }}>Cash on Delivery</p>
-          <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 11, color: '#9E9E9E', margin: '2px 0 0' }}>Pay when delivered</p>
+          <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, fontWeight: 500, color: '#F5F0E8', margin: 0 }}>Cash on Delivery</p>
+          <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 11, color: '#6B6055', margin: '2px 0 0' }}>Pay when delivered</p>
         </div>
       </div>
     </div>
@@ -279,8 +279,8 @@ function ShippingForm({ data, setData, onNext }) {
   const PROVINCES = ['Punjab', 'Sindh', 'KPK', 'Balochistan', 'Gilgit-Baltistan', 'AJK', 'ICT'];
 
   return (
-    <div style={{ background: '#FFFFFF', border: '1px solid #E8E8E4', borderRadius: 2, padding: 32, marginBottom: 16 }}>
-      <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 24, fontWeight: 500, color: '#111111', margin: '0 0 24px' }}>
+    <div style={{ background: '#141410', border: '1px solid #2C2C26', borderRadius: 2, padding: 32, marginBottom: 16 }}>
+      <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 24, fontWeight: 500, color: '#F5F0E8', margin: '0 0 24px' }}>
         Shipping Information
       </h2>
 
@@ -321,15 +321,15 @@ function ShippingForm({ data, setData, onNext }) {
             onClick={() => setSaveAddress(v => !v)}
             style={{
               width: 16, height: 16, flexShrink: 0, borderRadius: 2,
-              border: saveAddress ? '1px solid #111111' : '1px solid #E8E8E4',
-              background: saveAddress ? '#111111' : 'transparent',
+              border: saveAddress ? '1px solid #C9A96E' : '1px solid #2C2C26',
+              background: saveAddress ? '#C9A96E' : 'transparent',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               transition: 'all 0.15s ease', cursor: 'pointer',
             }}
           >
-            {saveAddress && <span style={{ color: '#FFFFFF', fontSize: 10, lineHeight: 1 }}>✓</span>}
+            {saveAddress && <span style={{ color: '#0D0D0B', fontSize: 10, lineHeight: 1 }}>✓</span>}
           </div>
-          <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: '#6B6B6B' }}>
+          <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: '#A89880' }}>
             Save this address for future orders
           </span>
         </label>
@@ -339,15 +339,15 @@ function ShippingForm({ data, setData, onNext }) {
         onClick={handleNext}
         style={{
           marginTop: 24, width: '100%', padding: '16px 0',
-          background: '#111111', border: 'none', borderRadius: 2,
-          color: '#FFFFFF', fontFamily: "'DM Sans', sans-serif",
+          background: '#F5F0E8', border: 'none', borderRadius: 2,
+          color: '#0D0D0B', fontFamily: "'DM Sans', sans-serif",
           fontSize: 13, fontWeight: 500, textTransform: 'uppercase',
           letterSpacing: '0.04em', cursor: 'pointer',
           display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
           transition: 'background 0.2s ease',
         }}
-        onMouseEnter={e => { e.currentTarget.style.background = '#333333'; }}
-        onMouseLeave={e => { e.currentTarget.style.background = '#111111'; }}
+        onMouseEnter={e => { e.currentTarget.style.background = '#C9A96E'; }}
+        onMouseLeave={e => { e.currentTarget.style.background = '#F5F0E8'; }}
       >
         Continue <ArrowRight size={16} />
       </button>
@@ -377,9 +377,9 @@ function ReviewOrder({ shipping, onBack, onNext }) {
       {/* Summary cards */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: 16, marginBottom: 16 }}>
         {/* Shipping card */}
-        <div style={{ background: '#F8F8F6', border: '1px solid #E8E8E4', borderRadius: 2, padding: 20 }}>
+        <div style={{ background: '#1C1C17', border: '1px solid #2C2C26', borderRadius: 2, padding: 20 }}>
           <MapPin size={18} style={{ color: '#C9A96E', marginBottom: 12 }} />
-          <label style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 10, fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#6B6B6B', display: 'block', marginBottom: 6 }}>
+          <label style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 10, fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#6B6055', display: 'block', marginBottom: 6 }}>
             Shipping To
           </label>
           <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: '#111111', lineHeight: 1.6, margin: 0 }}>
@@ -399,46 +399,46 @@ function ReviewOrder({ shipping, onBack, onNext }) {
         </div>
 
         {/* Payment card */}
-        <div style={{ background: '#F8F8F6', border: '1px solid #E8E8E4', borderRadius: 2, padding: 20 }}>
+        <div style={{ background: '#1C1C17', border: '1px solid #2C2C26', borderRadius: 2, padding: 20 }}>
           <ShieldCheck size={18} style={{ color: '#C9A96E', marginBottom: 12 }} />
-          <label style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 10, fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#6B6B6B', display: 'block', marginBottom: 6 }}>
+          <label style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 10, fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#6B6055', display: 'block', marginBottom: 6 }}>
             Payment Method
           </label>
-          <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: '#111111', lineHeight: 1.6, margin: 0 }}>
+          <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: '#F5F0E8', lineHeight: 1.6, margin: 0 }}>
             Cash on Delivery<br />
-            <span style={{ fontSize: 12, color: '#9E9E9E' }}>Pay when your order arrives</span>
+            <span style={{ fontSize: 12, color: '#6B6055' }}>Pay when your order arrives</span>
           </p>
         </div>
       </div>
 
       {/* Items */}
-      <div style={{ background: '#FFFFFF', border: '1px solid #E8E8E4', borderRadius: 2, padding: 24, marginBottom: 16 }}>
-        <h3 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 20, fontWeight: 500, color: '#111111', margin: '0 0 16px' }}>
+      <div style={{ background: '#141410', border: '1px solid #2C2C26', borderRadius: 2, padding: 24, marginBottom: 16 }}>
+        <h3 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 20, fontWeight: 500, color: '#F5F0E8', margin: '0 0 16px' }}>
           Items
         </h3>
-        <div style={{ borderTop: '1px solid #E8E8E4' }}>
+        <div style={{ borderTop: '1px solid #2C2C26' }}>
           {items.map(item => (
-            <div key={item.key} style={{ display: 'flex', gap: 16, padding: '16px 0', borderBottom: '1px solid #E8E8E4', alignItems: 'center' }}>
-              <div style={{ width: 64, height: 64, flexShrink: 0, border: '1px solid #E8E8E4', borderRadius: 2, overflow: 'hidden', background: '#F8F8F6' }}>
+            <div key={item.key} style={{ display: 'flex', gap: 16, padding: '16px 0', borderBottom: '1px solid #2C2C26', alignItems: 'center' }}>
+              <div style={{ width: 64, height: 64, flexShrink: 0, border: '1px solid #2C2C26', borderRadius: 2, overflow: 'hidden', background: '#1C1C17' }}>
                 {item.images?.[0]?.url ? (
                   <img src={item.images[0].url} alt={item.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                 ) : (
-                  <div style={{ width: '100%', height: '100%', background: item.bg || '#E8E8E4' }} />
+                  <div style={{ width: '100%', height: '100%', background: item.bg || '#1C1C17' }} />
                 )}
               </div>
               <div style={{ flex: 1 }}>
-                <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: '#111111', margin: 0 }}>{item.name}</p>
+                <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: '#F5F0E8', margin: 0 }}>{item.name}</p>
                 {item.variant && (
-                  <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 11, color: '#9E9E9E', margin: '2px 0 0' }}>
+                  <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 11, color: '#6B6055', margin: '2px 0 0' }}>
                     {item.variant.size && `Size: ${item.variant.size}`}
                     {item.variant.color && ` · Color: ${item.variant.color}`}
                   </p>
                 )}
-                <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: '#9E9E9E', margin: '4px 0 0' }}>
+                <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: '#6B6055', margin: '4px 0 0' }}>
                   Qty: {item.qty}
                 </p>
               </div>
-              <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, fontWeight: 500, color: '#111111', flexShrink: 0, marginLeft: 'auto' }}>
+              <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, fontWeight: 500, color: '#F5F0E8', flexShrink: 0, marginLeft: 'auto' }}>
                 {formatPrice(item.price * item.qty)}
               </p>
             </div>
@@ -453,12 +453,12 @@ function ReviewOrder({ shipping, onBack, onNext }) {
           style={{
             display: 'flex', alignItems: 'center', gap: 8,
             padding: '14px 24px', borderRadius: 2,
-            border: '1px solid #111111', background: 'transparent',
+            border: '1px solid #2C2C26', background: 'transparent',
             fontFamily: "'DM Sans', sans-serif", fontSize: 13, fontWeight: 500,
-            color: '#111111', cursor: 'pointer', transition: 'all 0.2s ease',
+            color: '#A89880', cursor: 'pointer', transition: 'all 0.2s ease',
           }}
-          onMouseEnter={e => { e.currentTarget.style.background = '#111111'; e.currentTarget.style.color = '#FFFFFF'; }}
-          onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#111111'; }}
+          onMouseEnter={e => { e.currentTarget.style.background = '#1C1C17'; e.currentTarget.style.color = '#F5F0E8'; }}
+          onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#A89880'; }}
         >
           <ArrowLeft size={15} /> Back
         </button>
@@ -467,13 +467,13 @@ function ReviewOrder({ shipping, onBack, onNext }) {
           style={{
             flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
             padding: '14px 0', borderRadius: 2,
-            background: '#111111', border: 'none',
+            background: '#C9A96E', border: 'none',
             fontFamily: "'DM Sans', sans-serif", fontSize: 13, fontWeight: 500,
-            color: '#FFFFFF', cursor: 'pointer', transition: 'background 0.2s ease',
+            color: '#0D0D0B', cursor: 'pointer', transition: 'background 0.2s ease',
             textTransform: 'uppercase', letterSpacing: '0.04em',
           }}
-          onMouseEnter={e => { e.currentTarget.style.background = '#333333'; }}
-          onMouseLeave={e => { e.currentTarget.style.background = '#111111'; }}
+          onMouseEnter={e => { e.currentTarget.style.background = '#A07840'; }}
+          onMouseLeave={e => { e.currentTarget.style.background = '#C9A96E'; }}
         >
           Proceed to Confirm <ArrowRight size={15} />
         </button>
@@ -500,23 +500,23 @@ function ConfirmOrder({ onBack, onPlace, loading }) {
   const total = subtotal - discount + shipping_cost;
 
   return (
-    <div style={{ background: '#FFFFFF', border: '1px solid #E8E8E4', borderRadius: 2, padding: 32 }}>
-      <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 24, fontWeight: 500, color: '#111111', margin: '0 0 24px' }}>
+    <div style={{ background: '#141410', border: '1px solid #2C2C26', borderRadius: 2, padding: 32 }}>
+      <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 24, fontWeight: 500, color: '#F5F0E8', margin: '0 0 24px' }}>
         Payment &amp; Confirmation
       </h2>
 
       {/* COD card */}
       <div style={{
-        background: '#F8F8F6', border: '1px solid #E8E8E4',
+        background: '#1C1C17', border: '1px solid #2C2C26',
         borderRadius: 2, padding: 24, marginBottom: 20,
         display: 'flex', flexDirection: 'column', alignItems: 'center',
         textAlign: 'center',
       }}>
         <ShieldCheck size={40} style={{ color: '#C9A96E', marginBottom: 12 }} />
-        <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 24, fontWeight: 500, color: '#111111', margin: '0 0 8px' }}>
+        <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 24, fontWeight: 500, color: '#F5F0E8', margin: '0 0 8px' }}>
           Cash on Delivery
         </p>
-        <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: '#6B6B6B', lineHeight: 1.6, margin: '0 0 16px', maxWidth: 300 }}>
+        <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: '#A89880', lineHeight: 1.6, margin: '0 0 16px', maxWidth: 300 }}>
           Safe &amp; trusted. Pay with cash when your order arrives at your doorstep.
         </p>
         <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
@@ -524,8 +524,8 @@ function ConfirmOrder({ onBack, onPlace, loading }) {
             <span key={t} style={{
               fontFamily: "'DM Sans', sans-serif", fontSize: 11,
               textTransform: 'uppercase', letterSpacing: '0.06em',
-              color: '#6B6B6B', padding: '4px 12px',
-              border: '1px solid #E8E8E4', borderRadius: 2,
+              color: '#A89880', padding: '4px 12px',
+              border: '1px solid #2C2C26', borderRadius: 2,
             }}>
               {t}
             </span>
@@ -535,14 +535,14 @@ function ConfirmOrder({ onBack, onPlace, loading }) {
 
       {/* Total */}
       <div style={{
-        background: '#F8F8F6', border: '1px solid #E8E8E4', borderRadius: 2,
+        background: '#1C1C17', border: '1px solid #2C2C26', borderRadius: 2,
         padding: '16px 20px', marginBottom: 20,
         display: 'flex', justifyContent: 'space-between', alignItems: 'center',
       }}>
-        <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#9E9E9E' }}>
+        <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#6B6055' }}>
           Order Total
         </span>
-        <span style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 24, fontWeight: 500, color: '#111111' }}>
+        <span style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 24, fontWeight: 500, color: '#F5F0E8' }}>
           {formatPrice(total)}
         </span>
       </div>
@@ -554,12 +554,12 @@ function ConfirmOrder({ onBack, onPlace, loading }) {
           style={{
             display: 'flex', alignItems: 'center', gap: 8,
             padding: '14px 24px', borderRadius: 2,
-            border: '1px solid #111111', background: 'transparent',
+            border: '1px solid #2C2C26', background: 'transparent',
             fontFamily: "'DM Sans', sans-serif", fontSize: 13, fontWeight: 500,
-            color: '#111111', cursor: 'pointer', transition: 'all 0.2s ease',
+            color: '#A89880', cursor: 'pointer', transition: 'all 0.2s ease',
           }}
-          onMouseEnter={e => { e.currentTarget.style.background = '#111111'; e.currentTarget.style.color = '#FFFFFF'; }}
-          onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#111111'; }}
+          onMouseEnter={e => { e.currentTarget.style.background = '#1C1C17'; e.currentTarget.style.color = '#F5F0E8'; e.currentTarget.style.borderColor = '#3D3D34'; }}
+          onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#A89880'; e.currentTarget.style.borderColor = '#2C2C26'; }}
         >
           <ArrowLeft size={15} /> Back
         </button>
@@ -569,18 +569,18 @@ function ConfirmOrder({ onBack, onPlace, loading }) {
           style={{
             flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
             padding: '14px 0', borderRadius: 2,
-            background: loading ? '#9E9E9E' : '#111111', border: 'none',
+            background: loading ? '#3D3D34' : '#C9A96E', border: 'none',
             fontFamily: "'DM Sans', sans-serif", fontSize: 13, fontWeight: 500,
-            color: '#FFFFFF', cursor: loading ? 'not-allowed' : 'pointer',
+            color: '#0D0D0B', cursor: loading ? 'not-allowed' : 'pointer',
             transition: 'background 0.2s ease',
             textTransform: 'uppercase', letterSpacing: '0.04em',
           }}
-          onMouseEnter={e => { if (!loading) e.currentTarget.style.background = '#333333'; }}
-          onMouseLeave={e => { if (!loading) e.currentTarget.style.background = '#111111'; }}
+          onMouseEnter={e => { if (!loading) e.currentTarget.style.background = '#A07840'; }}
+          onMouseLeave={e => { if (!loading) e.currentTarget.style.background = '#C9A96E'; }}
         >
           {loading ? (
             <>
-              <div style={{ width: 16, height: 16, border: '2px solid rgba(255,255,255,0.3)', borderTopColor: '#FFFFFF', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
+              <div style={{ width: 16, height: 16, border: '2px solid rgba(0,0,0,0.3)', borderTopColor: '#000', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
               Placing Order…
               <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
             </>
@@ -601,7 +601,7 @@ function SuccessState({ orderNumber, shipping }) {
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.45, ease: 'easeOut' }}
-      style={{ minHeight: '100vh', background: '#FFFFFF', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '48px 24px', position: 'relative' }}
+      style={{ minHeight: '100vh', background: '#0D0D0B', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '48px 24px', position: 'relative' }}
     >
       <Confetti />
 
@@ -609,13 +609,13 @@ function SuccessState({ orderNumber, shipping }) {
         {/* Animated checkmark */}
         <div style={{
           width: 80, height: 80, borderRadius: 2,
-          background: '#F8F8F6', border: '1px solid #E8E8E4',
+          background: '#1C1C17', border: '1px solid #2C2C26',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
         }}>
           <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
             <motion.path
               d="M6 16 L13 23 L26 9"
-              stroke="#111111"
+              stroke="#C9A96E"
               strokeWidth="2.5"
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -627,27 +627,27 @@ function SuccessState({ orderNumber, shipping }) {
         </div>
 
         {/* Heading */}
-        <h1 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 44, fontWeight: 500, color: '#111111', margin: '32px 0 0' }}>
+        <h1 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 44, fontWeight: 500, color: '#F5F0E8', margin: '32px 0 0' }}>
           Order Confirmed
         </h1>
-        <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 16, color: '#6B6B6B', fontWeight: 300, margin: '8px 0 0' }}>
+        <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 16, color: '#A89880', fontWeight: 300, margin: '8px 0 0' }}>
           Thank you{shipping?.fullName ? `, ${shipping.fullName.split(' ')[0]}` : ''}!
         </p>
 
         {/* Order number */}
         <div style={{ marginTop: 24 }}>
-          <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, textTransform: 'uppercase', letterSpacing: '0.1em', color: '#9E9E9E', margin: '0 0 8px' }}>
+          <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, textTransform: 'uppercase', letterSpacing: '0.1em', color: '#6B6055', margin: '0 0 8px' }}>
             Order Number
           </p>
           <div style={{
             display: 'inline-block',
-            fontFamily: "'Cormorant Garamond', serif", fontSize: 28, fontWeight: 500, color: '#111111',
-            background: '#F8F8F6', border: '1px solid #E8E8E4', borderRadius: 2,
+            fontFamily: "'Cormorant Garamond', serif", fontSize: 28, fontWeight: 500, color: '#F5F0E8',
+            background: '#141410', border: '1px solid #2C2C26', borderRadius: 2,
             padding: '12px 32px',
           }}>
             {orderNumber}
           </div>
-          <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: '#9E9E9E', margin: '12px 0 0' }}>
+          <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: '#6B6055', margin: '12px 0 0' }}>
             Save this to track your order
           </p>
         </div>
@@ -658,13 +658,13 @@ function SuccessState({ orderNumber, shipping }) {
             onClick={() => navigate(`/track-order?orderNumber=${orderNumber}`)}
             style={{
               padding: '12px 28px', borderRadius: 2,
-              background: '#111111', border: 'none', color: '#FFFFFF',
+              background: '#F5F0E8', border: 'none', color: '#0D0D0B',
               fontFamily: "'DM Sans', sans-serif", fontSize: 13, fontWeight: 500,
               textTransform: 'uppercase', letterSpacing: '0.04em',
               cursor: 'pointer', transition: 'background 0.2s ease',
             }}
-            onMouseEnter={e => { e.currentTarget.style.background = '#333333'; }}
-            onMouseLeave={e => { e.currentTarget.style.background = '#111111'; }}
+            onMouseEnter={e => { e.currentTarget.style.background = '#C9A96E'; }}
+            onMouseLeave={e => { e.currentTarget.style.background = '#F5F0E8'; }}
           >
             Track My Order →
           </button>
@@ -672,15 +672,15 @@ function SuccessState({ orderNumber, shipping }) {
             to="/products"
             style={{
               padding: '12px 28px', borderRadius: 2,
-              background: 'transparent', border: '1px solid #111111', color: '#111111',
+              background: 'transparent', border: '1px solid #3D3D34', color: '#A89880',
               fontFamily: "'DM Sans', sans-serif", fontSize: 13, fontWeight: 500,
               textTransform: 'uppercase', letterSpacing: '0.04em',
               cursor: 'pointer', textDecoration: 'none',
               transition: 'all 0.2s ease',
               display: 'inline-block',
             }}
-            onMouseEnter={e => { e.currentTarget.style.background = '#111111'; e.currentTarget.style.color = '#FFFFFF'; }}
-            onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#111111'; }}
+            onMouseEnter={e => { e.currentTarget.style.background = '#F5F0E8'; e.currentTarget.style.color = '#0D0D0B'; e.currentTarget.style.borderColor = '#F5F0E8'; }}
+            onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#A89880'; e.currentTarget.style.borderColor = '#3D3D34'; }}
           >
             Continue Shopping
           </Link>
@@ -704,12 +704,12 @@ export default function Checkout() {
   // ── Empty cart redirect ──
   if (items.length === 0 && !orderNumber) {
     return (
-      <div style={{ minHeight: '100vh', background: '#F8F8F6', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: 16 }}>
-        <Package size={48} style={{ color: '#E8E8E4' }} strokeWidth={1} />
-        <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: '#9E9E9E' }}>Your cart is empty.</p>
+      <div style={{ minHeight: '100vh', background: '#0D0D0B', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: 16 }}>
+        <Package size={48} style={{ color: '#2C2C26' }} strokeWidth={1} />
+        <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: '#6B6055' }}>Your cart is empty.</p>
         <Link to="/products" style={{
           padding: '12px 28px', borderRadius: 2,
-          background: '#111111', border: 'none', color: '#FFFFFF',
+          background: '#F5F0E8', border: 'none', color: '#0D0D0B',
           fontFamily: "'DM Sans', sans-serif", fontSize: 13, fontWeight: 500,
           textTransform: 'uppercase', letterSpacing: '0.04em',
           textDecoration: 'none',
@@ -759,7 +759,7 @@ export default function Checkout() {
   if (orderNumber) return <SuccessState orderNumber={orderNumber} shipping={shipping} />;
 
   return (
-    <div style={{ minHeight: '100vh', background: '#F8F8F6', paddingTop: 96, paddingBottom: 64 }}>
+    <div style={{ minHeight: '100vh', background: '#0D0D0B', paddingTop: 96, paddingBottom: 64 }}>
       <div style={{ maxWidth: 1024, margin: '0 auto', padding: '0 24px' }}>
         {/* Step progress */}
         <StepIndicator step={step} />

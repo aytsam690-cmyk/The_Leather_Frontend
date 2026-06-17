@@ -57,8 +57,8 @@ function Gallery({ images }) {
           style={{
             position: 'relative',
             aspectRatio: '1/1',
-            background: '#F8F8F6',
-            border: '1px solid #E8E8E4',
+            background: '#1C1C17',
+            border: '1px solid #2C2C26',
             borderRadius: 2,
             overflow: 'hidden',
             cursor: 'zoom-in',
@@ -109,18 +109,18 @@ function Gallery({ images }) {
               style={{
                 width: 64, height: 64, flexShrink: 0,
                 borderRadius: 2, overflow: 'hidden',
-                border: i === active ? '2px solid #111111' : '2px solid transparent',
-                cursor: 'pointer', background: '#F8F8F6',
+                border: i === active ? '2px solid #C9A96E' : '2px solid transparent',
+                cursor: 'pointer', background: '#1C1C17',
                 transition: 'border-color 0.2s ease',
                 padding: 0,
               }}
-              onMouseEnter={e => { if (i !== active) e.currentTarget.style.borderColor = '#D0D0CA'; }}
+              onMouseEnter={e => { if (i !== active) e.currentTarget.style.borderColor = '#3D3D34'; }}
               onMouseLeave={e => { if (i !== active) e.currentTarget.style.borderColor = 'transparent'; }}
             >
               {img.url ? (
                 <img src={img.url} alt={img.alt || 'thumb'} loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               ) : (
-                <div style={{ width: '100%', height: '100%', background: img.bg || '#E8E8E4' }} />
+                <div style={{ width: '100%', height: '100%', background: img.bg || '#2C2C26' }} />
               )}
             </button>
           ))}
@@ -147,7 +147,7 @@ function Gallery({ images }) {
               {images[active]?.url ? (
                 <img src={images[active].url} alt="zoom" style={{ maxHeight: '88vh', maxWidth: '88vw', objectFit: 'contain' }} />
               ) : (
-                <div style={{ width: 600, height: 600, maxWidth: '90vw', maxHeight: '90vh', background: images[active]?.bg || '#F8F8F6', borderRadius: 2 }} />
+                <div style={{ width: 600, height: 600, maxWidth: '90vw', maxHeight: '90vh', background: images[active]?.bg || '#1C1C17', borderRadius: 2 }} />
               )}
             </div>
 
@@ -247,7 +247,7 @@ function Tabs({ product, reviews, onReviewSubmit }) {
   const avgRating = reviews.length ? (reviews.reduce((s, r) => s + r.rating, 0) / reviews.length).toFixed(1) : (product.ratings?.average || 0).toFixed(1);
 
   return (
-    <div style={{ marginTop: 64, borderTop: '1px solid #E8E8E4' }}>
+    <div style={{ marginTop: 64, borderTop: '1px solid #2C2C26' }}>
       {/* Tab bar */}
       <div className="pd-tab-bar" style={{ display: 'flex', overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
         {TABS.map(t => (
@@ -263,12 +263,12 @@ function Tabs({ product, reviews, onReviewSubmit }) {
               cursor: 'pointer',
               background: 'transparent',
               border: 'none',
-              borderBottom: tab === t ? '2px solid #111111' : '2px solid transparent',
-              color: tab === t ? '#111111' : '#9E9E9E',
+              borderBottom: tab === t ? '2px solid #C9A96E' : '2px solid transparent',
+              color: tab === t ? '#F5F0E8' : '#6B6055',
               transition: 'all 0.2s ease',
             }}
-            onMouseEnter={e => { if (tab !== t) e.currentTarget.style.color = '#6B6B6B'; }}
-            onMouseLeave={e => { if (tab !== t) e.currentTarget.style.color = '#9E9E9E'; }}
+            onMouseEnter={e => { if (tab !== t) e.currentTarget.style.color = '#A89880'; }}
+            onMouseLeave={e => { if (tab !== t) e.currentTarget.style.color = '#6B6055'; }}
           >
             {t === 'reviews' ? `Reviews (${reviews.length})` : t.charAt(0).toUpperCase() + t.slice(1)}
           </button>
@@ -290,7 +290,7 @@ function Tabs({ product, reviews, onReviewSubmit }) {
             <p style={{
               fontFamily: "'DM Sans', sans-serif",
               fontSize: 14,
-              color: '#6B6B6B',
+              color: '#A89880',
               lineHeight: 1.8,
               maxWidth: 680,
             }}>
@@ -307,11 +307,11 @@ function Tabs({ product, reviews, onReviewSubmit }) {
                   justifyContent: 'space-between',
                   alignItems: 'center',
                   padding: '12px 16px',
-                  background: i % 2 === 0 ? '#F8F8F6' : '#FFFFFF',
-                  border: '1px solid #E8E8E4',
+                  background: i % 2 === 0 ? '#1C1C17' : '#141410',
+                  border: '1px solid #2C2C26',
                 }}>
-                  <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: '#9E9E9E' }}>{k}</span>
-                  <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, fontWeight: 500, color: '#111111' }}>{v}</span>
+                  <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: '#6B6055' }}>{k}</span>
+                  <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, fontWeight: 500, color: '#F5F0E8' }}>{v}</span>
                 </div>
               ))}
             </div>
@@ -327,16 +327,16 @@ function Tabs({ product, reviews, onReviewSubmit }) {
                   gap: 24,
                   alignItems: 'center',
                   paddingBottom: 32,
-                  borderBottom: '1px solid #E8E8E4',
+                  borderBottom: '1px solid #2C2C26',
                   flexWrap: 'wrap',
                 }}>
                   {/* Left: big score */}
                   <div style={{ textAlign: 'center' }}>
-                    <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(48px, 10vw, 64px)', fontWeight: 500, color: '#111111', lineHeight: 1 }}>
+                    <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(48px, 10vw, 64px)', fontWeight: 500, color: '#F5F0E8', lineHeight: 1 }}>
                       {avgRating}
                     </div>
                     <StarDisplay rating={parseFloat(avgRating)} size={16} />
-                    <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: '#9E9E9E', marginTop: 6 }}>
+                    <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: '#6B6055', marginTop: 6 }}>
                       Based on {reviews.length} reviews
                     </p>
                   </div>
@@ -344,8 +344,8 @@ function Tabs({ product, reviews, onReviewSubmit }) {
                   <div style={{ flex: 1, minWidth: 200, display: 'flex', flexDirection: 'column', gap: 8 }}>
                     {ratingDist.map(({ star, count }) => (
                       <div key={star} style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                        <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: '#9E9E9E', width: 16, textAlign: 'right' }}>{star}</span>
-                        <div style={{ flex: 1, height: 6, background: '#F8F8F6', border: '1px solid #E8E8E4', borderRadius: 9999, overflow: 'hidden' }}>
+                        <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: '#6B6055', width: 16, textAlign: 'right' }}>{star}</span>
+                        <div style={{ flex: 1, height: 6, background: '#1C1C17', border: '1px solid #2C2C26', borderRadius: 9999, overflow: 'hidden' }}>
                           <div style={{
                             height: '100%',
                             width: reviews.length ? `${(count / reviews.length) * 100}%` : '0%',
@@ -354,7 +354,7 @@ function Tabs({ product, reviews, onReviewSubmit }) {
                             transition: 'width 0.6s ease',
                           }} />
                         </div>
-                        <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 11, color: '#9E9E9E', width: 16 }}>{count}</span>
+                        <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 11, color: '#6B6055', width: 16 }}>{count}</span>
                       </div>
                     ))}
                   </div>
@@ -364,36 +364,36 @@ function Tabs({ product, reviews, onReviewSubmit }) {
               {/* Review list */}
               <div>
                 {reviews.length === 0 ? (
-                  <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: '#9E9E9E', padding: '32px 0' }}>
+                  <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: '#6B6055', padding: '32px 0' }}>
                     No reviews yet. Be the first to review this product!
                   </p>
                 ) : (
                   reviews.map((r, idx) => (
-                    <div key={r.id || r._id || idx} style={{ paddingTop: 32, paddingBottom: 32, borderBottom: '1px solid #E8E8E4' }}>
+                    <div key={r.id || r._id || idx} style={{ paddingTop: 32, paddingBottom: 32, borderBottom: '1px solid #2C2C26' }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
                         <div style={{
                           width: 40, height: 40, borderRadius: 2,
-                          background: '#F8F8F6', border: '1px solid #E8E8E4',
+                          background: '#1C1C17', border: '1px solid #2C2C26',
                           fontFamily: "'DM Sans', sans-serif", fontWeight: 500,
-                          color: '#111111', fontSize: 14,
+                          color: '#F5F0E8', fontSize: 14,
                           display: 'flex', alignItems: 'center', justifyContent: 'center',
                           flexShrink: 0,
                         }}>
                           {(r.user?.name || r.name || 'A')[0].toUpperCase()}
                         </div>
                         <div>
-                          <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, fontWeight: 500, color: '#111111', margin: 0 }}>
+                          <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, fontWeight: 500, color: '#F5F0E8', margin: 0 }}>
                             {r.user?.name || r.name || 'Anonymous'}
                           </p>
                         </div>
-                        <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: '#9E9E9E', marginLeft: 'auto' }}>
+                        <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: '#6B6055', marginLeft: 'auto' }}>
                           {r.date || new Date(r.createdAt).toLocaleDateString()}
                         </p>
                       </div>
                       <div style={{ marginTop: 10 }}>
                         <StarDisplay rating={r.rating} size={13} />
                       </div>
-                      <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: '#6B6B6B', lineHeight: 1.7, marginTop: 12 }}>
+                      <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: '#A89880', lineHeight: 1.7, marginTop: 12 }}>
                         {r.comment}
                       </p>
                     </div>
@@ -402,14 +402,14 @@ function Tabs({ product, reviews, onReviewSubmit }) {
               </div>
 
               {/* Write Review Form */}
-              <div style={{ marginTop: 48, borderTop: '1px solid #E8E8E4', paddingTop: 40 }}>
-                <h3 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 28, fontWeight: 500, color: '#111111', marginBottom: 32 }}>
+              <div style={{ marginTop: 48, borderTop: '1px solid #2C2C26', paddingTop: 40 }}>
+                <h3 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 28, fontWeight: 500, color: '#F5F0E8', marginBottom: 32 }}>
                   Write a Review
                 </h3>
 
                 {/* Star selector */}
                 <div style={{ marginBottom: 24 }}>
-                  <label style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 10, fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#6B6B6B', display: 'block', marginBottom: 8 }}>
+                  <label style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 10, fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#6B6055', display: 'block', marginBottom: 8 }}>
                     Your Rating
                   </label>
                   <StarInput value={reviewForm.rating} onChange={r => setReviewForm(f => ({ ...f, rating: r }))} />
@@ -417,7 +417,7 @@ function Tabs({ product, reviews, onReviewSubmit }) {
 
                 {/* Comment */}
                 <div style={{ marginBottom: 16 }}>
-                  <label style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 10, fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#6B6B6B', display: 'block', marginBottom: 6 }}>
+                  <label style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 10, fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#6B6055', display: 'block', marginBottom: 6 }}>
                     Your Review
                   </label>
                   <textarea
@@ -427,21 +427,21 @@ function Tabs({ product, reviews, onReviewSubmit }) {
                     rows={4}
                     style={{
                       width: '100%', boxSizing: 'border-box',
-                      background: '#FFFFFF', border: '1px solid #E8E8E4',
+                      background: '#1C1C17', border: '1px solid #2C2C26',
                       borderRadius: 2, padding: '12px 16px',
                       fontFamily: "'DM Sans', sans-serif", fontSize: 14,
-                      color: '#111111', outline: 'none', resize: 'vertical',
+                      color: '#F5F0E8', outline: 'none', resize: 'vertical',
                       transition: 'border-color 0.2s',
                     }}
-                    onFocus={e => { e.target.style.borderColor = '#111111'; }}
-                    onBlur={e => { e.target.style.borderColor = '#E8E8E4'; }}
+                    onFocus={e => { e.target.style.borderColor = '#C9A96E'; }}
+                    onBlur={e => { e.target.style.borderColor = '#2C2C26'; }}
                   />
                 </div>
 
                 {reviewMsg.text && (
                   <p style={{
                     fontFamily: "'DM Sans', sans-serif", fontSize: 13, marginBottom: 16,
-                    color: reviewMsg.type === 'error' ? '#9B2226' : '#2D6A4F',
+                    color: reviewMsg.type === 'error' ? '#C0392B' : '#2D6A4F',
                   }}>
                     {reviewMsg.text}
                   </p>
@@ -451,16 +451,16 @@ function Tabs({ product, reviews, onReviewSubmit }) {
                   onClick={handleSubmitReview}
                   disabled={isSubmitting}
                   style={{
-                    background: isSubmitting ? '#9E9E9E' : '#111111',
+                    background: isSubmitting ? '#3D3D34' : '#F5F0E8',
                     border: 'none', borderRadius: 2,
-                    color: '#FFFFFF', padding: '12px 28px',
+                    color: '#0D0D0B', padding: '12px 28px',
                     fontFamily: "'DM Sans', sans-serif", fontSize: 13, fontWeight: 500,
                     textTransform: 'uppercase', letterSpacing: '0.06em',
                     cursor: isSubmitting ? 'not-allowed' : 'pointer',
                     transition: 'background 0.2s',
                   }}
-                  onMouseEnter={e => { if (!isSubmitting) e.currentTarget.style.background = '#333333'; }}
-                  onMouseLeave={e => { if (!isSubmitting) e.currentTarget.style.background = '#111111'; }}
+                  onMouseEnter={e => { if (!isSubmitting) e.currentTarget.style.background = '#C9A96E'; }}
+                  onMouseLeave={e => { if (!isSubmitting) e.currentTarget.style.background = '#F5F0E8'; }}
                 >
                   {isSubmitting ? 'Submitting…' : 'Submit Review'}
                 </button>
@@ -539,10 +539,10 @@ export default function ProductDetail() {
   // ── Loading state ──
   if (loading || !product) {
     return (
-      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#FFFFFF' }}>
+      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#0D0D0B' }}>
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16 }}>
-          <div style={{ width: 40, height: 40, border: '2px solid #E8E8E4', borderTopColor: '#111111', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
-          <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: '#9E9E9E' }}>Loading product…</p>
+          <div style={{ width: 40, height: 40, border: '2px solid #2C2C26', borderTopColor: '#C9A96E', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
+          <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: '#6B6055' }}>Loading product…</p>
           <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
         </div>
       </div>
@@ -564,7 +564,7 @@ export default function ProductDetail() {
   const relatedSlides = Math.ceil(relatedProducts.length / ITEMS_PER_SLIDE);
 
   return (
-    <div style={{ background: '#FFFFFF', minHeight: '100vh', paddingTop: 96 }}>
+    <div style={{ background: '#0D0D0B', minHeight: '100vh', paddingTop: 96 }}>
       <Helmet>
         <title>{product.name} | {settings?.siteName || 'Store'}</title>
         <meta name="description" content={product.description?.slice(0, 150) + '...'} />
@@ -580,17 +580,17 @@ export default function ProductDetail() {
               <Link to={item.to} style={{
                 fontFamily: "'DM Sans', sans-serif", fontSize: 12,
                 textTransform: 'uppercase', letterSpacing: '0.06em',
-                color: '#9E9E9E', textDecoration: 'none', transition: 'color 0.2s',
+                color: '#6B6055', textDecoration: 'none', transition: 'color 0.2s',
               }}
-                onMouseEnter={e => { e.currentTarget.style.color = '#111111'; }}
-                onMouseLeave={e => { e.currentTarget.style.color = '#9E9E9E'; }}
+                onMouseEnter={e => { e.currentTarget.style.color = '#F5F0E8'; }}
+                onMouseLeave={e => { e.currentTarget.style.color = '#6B6055'; }}
               >
                 {item.label}
               </Link>
-              <span style={{ color: '#E8E8E4', fontFamily: "'DM Sans', sans-serif" }}>/</span>
+              <span style={{ color: '#2C2C26', fontFamily: "'DM Sans', sans-serif" }}>/</span>
             </span>
           ))}
-          <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#111111', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '50vw' }}>
+          <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#F5F0E8', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '50vw' }}>
             {product.name}
           </span>
         </div>
@@ -603,36 +603,36 @@ export default function ProductDetail() {
           {/* RIGHT: Product info */}
           <div>
             {/* Category / Brand */}
-            <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.1em', color: '#9E9E9E', marginBottom: 12 }}>
+            <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.1em', color: '#6B6055', marginBottom: 12 }}>
               {product.brand}
             </p>
 
             {/* Name */}
-            <h1 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(24px, 5vw, 40px)', fontWeight: 500, color: '#111111', lineHeight: 1.15, margin: 0 }}>
+            <h1 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(24px, 5vw, 40px)', fontWeight: 500, color: '#F5F0E8', lineHeight: 1.15, margin: 0 }}>
               {product.name}
             </h1>
 
             {/* Rating */}
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginTop: 14 }}>
               <StarDisplay rating={product.ratings.average} size={15} />
-              <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: '#9E9E9E', cursor: 'pointer', textDecoration: 'underline', textUnderlineOffset: 2 }}>
+              <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: '#6B6055', cursor: 'pointer', textDecoration: 'underline', textUnderlineOffset: 2 }}>
                 ({product.ratings.count.toLocaleString()} reviews)
               </span>
             </div>
 
             {/* Price block */}
-            <div style={{ borderTop: '1px solid #E8E8E4', borderBottom: '1px solid #E8E8E4', padding: '20px 0', marginTop: 20, display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
-              <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 28, fontWeight: 600, color: discountPct ? '#E53935' : '#111111' }}>
+            <div style={{ borderTop: '1px solid #2C2C26', borderBottom: '1px solid #2C2C26', padding: '20px 0', marginTop: 20, display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
+              <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 28, fontWeight: 600, color: discountPct ? '#C9A96E' : '#F5F0E8' }}>
                 {formatPrice(product.price)}
               </span>
               {product.comparePrice > product.price && (
                 <>
-                  <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 18, color: '#9E9E9E', textDecoration: 'line-through' }}>
+                  <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 18, color: '#6B6055', textDecoration: 'line-through' }}>
                     {formatPrice(product.comparePrice)}
                   </span>
                   <span style={{
                     fontFamily: "'DM Sans', sans-serif", fontSize: 12, fontWeight: 700,
-                    color: '#FFFFFF', background: '#E53935',
+                    color: '#0D0D0B', background: '#C9A96E',
                     padding: '3px 10px', borderRadius: 2,
                   }}>
                     {discountPct}% OFF
@@ -644,7 +644,7 @@ export default function ProductDetail() {
             {/* Colors */}
             {product.colors.length > 0 && (
               <div style={{ marginTop: 24 }}>
-                <label style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 10, fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#6B6B6B', display: 'block', marginBottom: 10 }}>
+                <label style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 10, fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#6B6055', display: 'block', marginBottom: 10 }}>
                   Colour: {product.colors[selectedColor]}
                 </label>
                 <div style={{ display: 'flex', gap: 10 }}>
@@ -657,7 +657,7 @@ export default function ProductDetail() {
                         background: c,
                         border: '2px solid transparent',
                         cursor: 'pointer',
-                        outline: selectedColor === i ? '2px solid #111111' : 'none',
+                        outline: selectedColor === i ? '2px solid #C9A96E' : 'none',
                         outlineOffset: 3,
                         transition: 'transform 0.15s ease',
                         minWidth: 44, minHeight: 44,
@@ -673,7 +673,7 @@ export default function ProductDetail() {
             {/* Sizes */}
             {product.sizes.length > 0 && (
               <div style={{ marginTop: 20 }}>
-                <label style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 10, fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#6B6B6B', display: 'block', marginBottom: 10 }}>
+                <label style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 10, fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#6B6055', display: 'block', marginBottom: 10 }}>
                   Size:
                 </label>
                 <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
@@ -682,17 +682,17 @@ export default function ProductDetail() {
                       key={s}
                       onClick={() => setSelectedSize(s)}
                       style={{
-                        border: selectedSize === s ? '1px solid #111111' : '1px solid #E8E8E4',
+                        border: selectedSize === s ? '1px solid #C9A96E' : '1px solid #2C2C26',
                         borderRadius: 2,
                         padding: '10px 16px', minHeight: 44,
                         fontFamily: "'DM Sans', sans-serif", fontSize: 13,
-                        background: selectedSize === s ? '#111111' : 'transparent',
-                        color: selectedSize === s ? '#FFFFFF' : '#6B6B6B',
+                        background: selectedSize === s ? '#C9A96E' : 'transparent',
+                        color: selectedSize === s ? '#0D0D0B' : '#A89880',
                         cursor: 'pointer',
                         transition: 'all 0.15s ease',
                       }}
-                      onMouseEnter={e => { if (selectedSize !== s) { e.currentTarget.style.borderColor = '#111111'; e.currentTarget.style.color = '#111111'; } }}
-                      onMouseLeave={e => { if (selectedSize !== s) { e.currentTarget.style.borderColor = '#E8E8E4'; e.currentTarget.style.color = '#6B6B6B'; } }}
+                      onMouseEnter={e => { if (selectedSize !== s) { e.currentTarget.style.borderColor = '#3D3D34'; e.currentTarget.style.color = '#F5F0E8'; } }}
+                      onMouseLeave={e => { if (selectedSize !== s) { e.currentTarget.style.borderColor = '#2C2C26'; e.currentTarget.style.color = '#A89880'; } }}
                     >
                       {s}
                     </button>
@@ -703,26 +703,26 @@ export default function ProductDetail() {
 
             {/* Quantity */}
             <div style={{ marginTop: 20 }}>
-              <label style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 10, fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#6B6B6B', display: 'block', marginBottom: 10 }}>
+              <label style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 10, fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#6B6055', display: 'block', marginBottom: 10 }}>
                 Quantity:
               </label>
-              <div style={{ display: 'flex', alignItems: 'center', border: '1px solid #E8E8E4', borderRadius: 2, width: 'fit-content' }}>
+              <div style={{ display: 'flex', alignItems: 'center', border: '1px solid #2C2C26', borderRadius: 2, width: 'fit-content' }}>
                 <button
                   onClick={() => setQty(q => Math.max(1, q - 1))}
-                  style={{ width: 44, height: 44, background: 'transparent', border: 'none', cursor: 'pointer', color: '#6B6B6B', fontSize: 18, display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.15s' }}
-                  onMouseEnter={e => { e.currentTarget.style.color = '#111111'; e.currentTarget.style.background = '#F8F8F6'; }}
-                  onMouseLeave={e => { e.currentTarget.style.color = '#6B6B6B'; e.currentTarget.style.background = 'transparent'; }}
+                  style={{ width: 44, height: 44, background: 'transparent', border: 'none', cursor: 'pointer', color: '#A89880', fontSize: 18, display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.15s' }}
+                  onMouseEnter={e => { e.currentTarget.style.color = '#F5F0E8'; e.currentTarget.style.background = '#1C1C17'; }}
+                  onMouseLeave={e => { e.currentTarget.style.color = '#A89880'; e.currentTarget.style.background = 'transparent'; }}
                 >
                   −
                 </button>
-                <span style={{ width: 48, textAlign: 'center', fontFamily: "'DM Sans', sans-serif", fontWeight: 500, color: '#111111', fontSize: 15, borderLeft: '1px solid #E8E8E4', borderRight: '1px solid #E8E8E4' }}>
+                <span style={{ width: 48, textAlign: 'center', fontFamily: "'DM Sans', sans-serif", fontWeight: 500, color: '#F5F0E8', fontSize: 15, borderLeft: '1px solid #2C2C26', borderRight: '1px solid #2C2C26' }}>
                   {qty}
                 </span>
                 <button
                   onClick={() => setQty(q => Math.min(product.stock, q + 1))}
-                  style={{ width: 44, height: 44, background: 'transparent', border: 'none', cursor: 'pointer', color: '#6B6B6B', fontSize: 18, display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.15s' }}
-                  onMouseEnter={e => { e.currentTarget.style.color = '#111111'; e.currentTarget.style.background = '#F8F8F6'; }}
-                  onMouseLeave={e => { e.currentTarget.style.color = '#6B6B6B'; e.currentTarget.style.background = 'transparent'; }}
+                  style={{ width: 44, height: 44, background: 'transparent', border: 'none', cursor: 'pointer', color: '#A89880', fontSize: 18, display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.15s' }}
+                  onMouseEnter={e => { e.currentTarget.style.color = '#F5F0E8'; e.currentTarget.style.background = '#1C1C17'; }}
+                  onMouseLeave={e => { e.currentTarget.style.color = '#A89880'; e.currentTarget.style.background = 'transparent'; }}
                 >
                   +
                 </button>
@@ -733,7 +733,7 @@ export default function ProductDetail() {
             <p style={{
               fontFamily: "'DM Sans', sans-serif", fontSize: 12,
               textTransform: 'uppercase', letterSpacing: '0.06em',
-              color: product.stock > 0 ? '#2D6A4F' : '#9B2226',
+              color: product.stock > 0 ? '#2D6A4F' : '#C0392B',
               marginTop: 12,
             }}>
               {product.stock > 0 ? `● In Stock (${product.stock} left)` : '● Out of Stock'}
@@ -766,16 +766,16 @@ export default function ProductDetail() {
                     disabled={product.stock === 0}
                     style={{
                       width: '100%', padding: '16px 0', borderRadius: 2,
-                      background: product.stock === 0 ? '#9E9E9E' : '#111111',
-                      border: 'none', color: '#FFFFFF',
+                      background: product.stock === 0 ? '#3D3D34' : '#F5F0E8',
+                      border: 'none', color: '#0D0D0B',
                       fontFamily: "'DM Sans', sans-serif", fontSize: 13, fontWeight: 500,
                       textTransform: 'uppercase', letterSpacing: '0.06em',
                       cursor: product.stock === 0 ? 'not-allowed' : 'pointer',
                       display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
                       transition: 'background 0.2s ease',
                     }}
-                    onMouseEnter={e => { if (product.stock > 0) e.currentTarget.style.background = '#333333'; }}
-                    onMouseLeave={e => { if (product.stock > 0) e.currentTarget.style.background = '#111111'; }}
+                    onMouseEnter={e => { if (product.stock > 0) e.currentTarget.style.background = '#C9A96E'; }}
+                    onMouseLeave={e => { if (product.stock > 0) e.currentTarget.style.background = '#F5F0E8'; }}
                   >
                     <ShoppingCart size={16} /> Add to Cart
                   </motion.button>
@@ -786,12 +786,11 @@ export default function ProductDetail() {
               <div style={{ display: 'flex', gap: 12, marginTop: 12 }}>
                 <button style={{
                   width: 44, height: 44, borderRadius: 2,
-                  border: '1px solid #E8E8E4', background: 'transparent',
-                  color: '#6B6B6B', cursor: 'pointer',
+                  border: '1px solid #2C2C26', background: 'transparent',
+                  color: '#A89880', cursor: 'pointer',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   transition: 'all 0.2s ease', flexShrink: 0,
                 }}
-                  onMouseEnter={e => { e.currentTarget.style.borderColor = '#111111'; e.currentTarget.style.color = '#111111'; }}
                   onMouseLeave={e => { e.currentTarget.style.borderColor = '#E8E8E4'; e.currentTarget.style.color = '#6B6B6B'; }}
                 >
                   <Share2 size={15} />
@@ -800,15 +799,15 @@ export default function ProductDetail() {
             </div>
 
             {/* Highlights */}
-            <div style={{ borderTop: '1px solid #E8E8E4', marginTop: 24, paddingTop: 24, display: 'flex', flexDirection: 'column', gap: 12 }}>
+            <div style={{ borderTop: '1px solid #2C2C26', marginTop: 24, paddingTop: 24, display: 'flex', flexDirection: 'column', gap: 12 }}>
               {[
                 { icon: <Check size={15} />, text: 'Free Delivery All Over Pakistan' },
                 { icon: <Truck size={15} />, text: 'Cash on delivery available nationwide' },
                 { icon: <Shield size={15} />, text: '100% authentic, sourced from brand' },
               ].map((item, i) => (
                 <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                  <span style={{ color: '#111111', flexShrink: 0 }}>{item.icon}</span>
-                  <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: '#6B6B6B' }}>{item.text}</span>
+                  <span style={{ color: '#C9A96E', flexShrink: 0 }}>{item.icon}</span>
+                  <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: '#A89880' }}>{item.text}</span>
                 </div>
               ))}
             </div>
@@ -820,13 +819,13 @@ export default function ProductDetail() {
 
         {/* Related Products */}
         {relatedProducts.length > 0 && (
-          <div style={{ marginTop: 80, background: '#F8F8F6', marginLeft: -16, marginRight: -16, padding: '48px 16px' }}>
+          <div style={{ marginTop: 80, background: '#141410', marginLeft: -16, marginRight: -16, padding: '48px 16px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 32 }}>
               <div>
                 <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 11, fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.12em', color: '#C9A96E', marginBottom: 8 }}>
                   You May Also Like
                 </p>
-                <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 32, fontWeight: 500, color: '#111111', margin: 0 }}>
+                <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 32, fontWeight: 500, color: '#F5F0E8', margin: 0 }}>
                   Related Products
                 </h2>
               </div>
@@ -834,18 +833,18 @@ export default function ProductDetail() {
                 <button
                   onClick={() => setRelatedPage(p => Math.max(0, p - 1))}
                   disabled={relatedPage === 0}
-                  style={{ width: 44, height: 44, border: '1px solid #E8E8E4', borderRadius: 2, background: '#FFFFFF', color: '#6B6B6B', cursor: relatedPage === 0 ? 'not-allowed' : 'pointer', opacity: relatedPage === 0 ? 0.35 : 1, display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.15s' }}
-                  onMouseEnter={e => { if (relatedPage > 0) { e.currentTarget.style.borderColor = '#111111'; e.currentTarget.style.color = '#111111'; } }}
-                  onMouseLeave={e => { e.currentTarget.style.borderColor = '#E8E8E4'; e.currentTarget.style.color = '#6B6B6B'; }}
+                  style={{ width: 44, height: 44, border: '1px solid #2C2C26', borderRadius: 2, background: '#1C1C17', color: '#A89880', cursor: relatedPage === 0 ? 'not-allowed' : 'pointer', opacity: relatedPage === 0 ? 0.35 : 1, display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.15s' }}
+                  onMouseEnter={e => { if (relatedPage > 0) { e.currentTarget.style.borderColor = '#C9A96E'; e.currentTarget.style.color = '#C9A96E'; } }}
+                  onMouseLeave={e => { e.currentTarget.style.borderColor = '#2C2C26'; e.currentTarget.style.color = '#A89880'; }}
                 >
                   <ChevronLeft size={16} />
                 </button>
                 <button
                   onClick={() => setRelatedPage(p => Math.min(relatedSlides - 1, p + 1))}
                   disabled={relatedPage >= relatedSlides - 1}
-                  style={{ width: 44, height: 44, border: '1px solid #E8E8E4', borderRadius: 2, background: '#FFFFFF', color: '#6B6B6B', cursor: relatedPage >= relatedSlides - 1 ? 'not-allowed' : 'pointer', opacity: relatedPage >= relatedSlides - 1 ? 0.35 : 1, display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.15s' }}
-                  onMouseEnter={e => { if (relatedPage < relatedSlides - 1) { e.currentTarget.style.borderColor = '#111111'; e.currentTarget.style.color = '#111111'; } }}
-                  onMouseLeave={e => { e.currentTarget.style.borderColor = '#E8E8E4'; e.currentTarget.style.color = '#6B6B6B'; }}
+                  style={{ width: 44, height: 44, border: '1px solid #2C2C26', borderRadius: 2, background: '#1C1C17', color: '#A89880', cursor: relatedPage >= relatedSlides - 1 ? 'not-allowed' : 'pointer', opacity: relatedPage >= relatedSlides - 1 ? 0.35 : 1, display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.15s' }}
+                  onMouseEnter={e => { if (relatedPage < relatedSlides - 1) { e.currentTarget.style.borderColor = '#C9A96E'; e.currentTarget.style.color = '#C9A96E'; } }}
+                  onMouseLeave={e => { e.currentTarget.style.borderColor = '#2C2C26'; e.currentTarget.style.color = '#A89880'; }}
                 >
                   <ChevronRight size={16} />
                 </button>

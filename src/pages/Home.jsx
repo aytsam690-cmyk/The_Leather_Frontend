@@ -12,15 +12,16 @@ import ProductCard from '../components/ProductCard';
 const S = {
   dm: "'DM Sans', sans-serif",
   cm: "'Cormorant Garamond', serif",
-  black: '#111111', white: '#FFFFFF', surface: '#F8F8F6',
-  muted: '#9E9E9E', secondary: '#6B6B6B', gold: '#C9A96E',
-  border: '#E8E8E4', dark2: '#1A1A1A',
+  black: '#0D0D0B', white: '#F5F0E8', surface: '#141410',
+  muted: '#6B6055', secondary: '#A89880', gold: '#C9A96E',
+  border: '#2C2C26', dark2: '#1C1C17',
+  cream: '#F5F0E8', trueBlack: '#0D0D0B',
 };
 
 const GRADIENTS = [
-  'linear-gradient(135deg,#667eea,#764ba2)', 'linear-gradient(135deg,#f093fb,#f5576c)',
-  'linear-gradient(135deg,#4facfe,#00f2fe)', 'linear-gradient(135deg,#43e97b,#38f9d7)',
-  'linear-gradient(135deg,#fa709a,#fee140)', 'linear-gradient(135deg,#a18cd1,#fbc2eb)',
+  'linear-gradient(135deg,#2C2418,#4A3A28)', 'linear-gradient(135deg,#1C1810,#3A2E1C)',
+  'linear-gradient(135deg,#261E14,#4A3828)', 'linear-gradient(135deg,#1E1A10,#38300E)',
+  'linear-gradient(135deg,#2A2016,#4A3820)', 'linear-gradient(135deg,#1C1814,#3A2E24)',
 ];
 
 // ─── Countdown ────────────────────────────────────────────────────────────────
@@ -54,7 +55,7 @@ function Countdown({ endDate }) {
   return (
     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 12 }}>
       {segs.map(({ label, val }) => (
-        <div key={label} style={{ background: S.dark2, border: '1px solid #333333', borderRadius: 2, padding: 'clamp(12px, 3vw, 20px) clamp(8px, 2vw, 12px)', textAlign: 'center' }}>
+        <div key={label} style={{ background: '#1C1C17', border: '1px solid #2C2C26', borderRadius: 2, padding: 'clamp(12px, 3vw, 20px) clamp(8px, 2vw, 12px)', textAlign: 'center' }}>
           <div style={{ fontFamily: S.cm, fontSize: 'clamp(24px, 6vw, 44px)', fontWeight: 500, color: S.white, lineHeight: 1 }}>{val}</div>
           <div style={{ fontFamily: S.dm, fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'rgba(255,255,255,0.4)', marginTop: 8 }}>{label}</div>
         </div>
@@ -201,7 +202,7 @@ export default function Home() {
   };
 
   return (
-    <div style={{ background: S.white, minHeight: '100vh' }}>
+    <div style={{ background: '#0D0D0B', minHeight: '100vh' }}>
       <Helmet>
         <title>{settings?.siteName || 'Store'} — Premium Products</title>
         <meta name="description" content={`Discover premium products curated just for you at ${settings?.siteName || 'our store'}. Quality you can feel, style you can trust.`} />
@@ -431,15 +432,15 @@ export default function Home() {
           PROMO STRIP
       ═══════════════════════════════════════════════════════════════════════ */}
       {promoBanners.length > 0 && (
-        <div style={{ background: S.gold, padding: '14px 0', overflow: 'hidden' }}>
+        <div style={{ background: '#1C1C17', borderTop: '1px solid #2C2C26', borderBottom: '1px solid #2C2C26', padding: '14px 0', overflow: 'hidden' }}>
           <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 24px', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 8 }}>
             {promoBanners.map(pb => (
               <div key={pb._id || pb.id} style={{ display: 'flex', alignItems: 'center', gap: 12, textAlign: 'center' }}>
-                <h3 style={{ fontFamily: S.dm, fontWeight: 600, fontSize: 14, color: S.white, margin: 0 }}>{pb.title}</h3>
-                {pb.subtitle && <span style={{ fontFamily: S.dm, fontSize: 13, color: 'rgba(255,255,255,0.8)' }}>— {pb.subtitle}</span>}
+                <h3 style={{ fontFamily: S.dm, fontWeight: 600, fontSize: 14, color: '#F5F0E8', margin: 0 }}>{pb.title}</h3>
+                {pb.subtitle && <span style={{ fontFamily: S.dm, fontSize: 13, color: '#A89880' }}>— {pb.subtitle}</span>}
                 {pb.btn && pb.link && (
                   <Link to={pb.link} style={{
-                    padding: '5px 14px', background: S.white, color: S.black, borderRadius: 2,
+                    padding: '5px 14px', background: '#F5F0E8', color: '#0D0D0B', borderRadius: 2,
                     fontFamily: S.dm, fontSize: 11, fontWeight: 600, textDecoration: 'none',
                     textTransform: 'uppercase', letterSpacing: '0.04em',
                   }}>{pb.btn}</Link>
@@ -454,7 +455,7 @@ export default function Home() {
           CATEGORIES — bigger images, tighter layout
       ═══════════════════════════════════════════════════════════════════════ */}
       {categories.length > 0 && (
-        <section style={{ padding: 'clamp(48px, 8vw, 64px) 0', background: S.surface }}>
+        <section style={{ padding: 'clamp(48px, 8vw, 64px) 0', background: '#141410' }}>
           <div className="home-container" style={{ maxWidth: 1280, margin: '0 auto', padding: '0 16px' }}>
             <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.45 }}>
               <p style={{ fontFamily: S.dm, fontSize: 11, fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.12em', color: S.gold, marginBottom: 12 }}>
@@ -475,11 +476,11 @@ export default function Home() {
                   transition={{ delay: i * 0.06, duration: 0.4 }} style={{ flexShrink: 0, width: 'clamp(150px, 40vw, 200px)' }}>
                   <Link to={`/products?category=${encodeURIComponent(cat.name)}`} style={{ textDecoration: 'none', display: 'block' }}>
                     <div className="cat-card" style={{
-                      background: S.white, border: `1px solid ${S.border}`, borderRadius: 2,
+                      background: '#1C1C17', border: '1px solid #2C2C26', borderRadius: 2,
                       overflow: 'hidden', transition: 'all 0.25s ease', cursor: 'pointer',
                     }}
-                      onMouseEnter={e => { e.currentTarget.style.borderColor = S.black; e.currentTarget.style.boxShadow = '0 4px 16px rgba(0,0,0,0.06)'; }}
-                      onMouseLeave={e => { e.currentTarget.style.borderColor = S.border; e.currentTarget.style.boxShadow = 'none'; }}
+                      onMouseEnter={e => { e.currentTarget.style.borderColor = '#3D3D34'; e.currentTarget.style.boxShadow = '0 4px 20px rgba(0,0,0,0.4)'; }}
+                      onMouseLeave={e => { e.currentTarget.style.borderColor = '#2C2C26'; e.currentTarget.style.boxShadow = 'none'; }}
                     >
                       <div style={{ width: '100%', height: 140, overflow: 'hidden' }}>
                         {cat.image ? (
@@ -490,8 +491,8 @@ export default function Home() {
                         )}
                       </div>
                       <div style={{ padding: '14px 16px', textAlign: 'center' }}>
-                        <p style={{ fontFamily: S.dm, fontSize: 13, fontWeight: 500, color: S.black, margin: 0 }}>{cat.name}</p>
-                        <p style={{ fontFamily: S.dm, fontSize: 11, color: S.muted, margin: '3px 0 0' }}>{cat.count} Products</p>
+                        <p style={{ fontFamily: S.dm, fontSize: 13, fontWeight: 500, color: '#F5F0E8', margin: 0 }}>{cat.name}</p>
+                        <p style={{ fontFamily: S.dm, fontSize: 11, color: '#6B6055', margin: '3px 0 0' }}>{cat.count} Products</p>
                       </div>
                     </div>
                   </Link>
@@ -506,7 +507,7 @@ export default function Home() {
       {/* ══════════════════════════════════════════════════════════════════════
           FEATURED PRODUCTS
       ═══════════════════════════════════════════════════════════════════════ */}
-      <section style={{ padding: 'clamp(48px, 8vw, 64px) 0', background: S.white }}>
+      <section style={{ padding: 'clamp(48px, 8vw, 64px) 0', background: '#0D0D0B' }}>
         <div className="home-container" style={{ maxWidth: 1280, margin: '0 auto', padding: '0 16px' }}>
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
             transition={{ duration: 0.45 }} className="featured-header" style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 32 }}>
@@ -536,9 +537,9 @@ export default function Home() {
             </motion.div>
           ) : (
             <div style={{ textAlign: 'center', padding: '48px 0' }}>
-              <p style={{ fontFamily: S.dm, fontSize: 15, color: S.muted, marginBottom: 20 }}>No featured products yet.</p>
+              <p style={{ fontFamily: S.dm, fontSize: 15, color: '#6B6055', marginBottom: 20 }}>No featured products yet.</p>
               <Link to="/products" style={{
-                display: 'inline-block', padding: '12px 28px', background: S.black, color: S.white,
+                display: 'inline-block', padding: '12px 28px', background: '#F5F0E8', color: '#0D0D0B',
                 borderRadius: 2, fontFamily: S.dm, fontSize: 13, fontWeight: 500, textDecoration: 'none',
                 textTransform: 'uppercase', letterSpacing: '0.06em',
               }}>Browse All Products</Link>
@@ -551,7 +552,7 @@ export default function Home() {
       {/* ══════════════════════════════════════════════════════════════════════
           WHY CHOOSE US — tighter
       ═══════════════════════════════════════════════════════════════════════ */}
-      <section style={{ padding: 'clamp(48px, 8vw, 64px) 0', background: S.surface }}>
+      <section style={{ padding: 'clamp(48px, 8vw, 64px) 0', background: '#141410' }}>
         <div className="home-container" style={{ maxWidth: 1280, margin: '0 auto', padding: '0 16px' }}>
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
             transition={{ duration: 0.45 }} style={{ textAlign: 'center', marginBottom: 40 }}>
@@ -572,18 +573,18 @@ export default function Home() {
               <motion.div key={card.title} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }} transition={{ delay: i * 0.08, duration: 0.45 }}>
                 <div style={{
-                  background: S.white, border: `1px solid ${S.border}`, borderRadius: 2,
-                  padding: 'clamp(16px, 3vw, 28px)', height: '100%', boxSizing: 'border-box', transition: 'box-shadow 0.25s ease',
+                  background: '#1C1C17', border: '1px solid #2C2C26', borderRadius: 2,
+                  padding: 'clamp(16px, 3vw, 28px)', height: '100%', boxSizing: 'border-box', transition: 'box-shadow 0.25s ease, border-color 0.25s ease',
                 }}
-                  onMouseEnter={e => { e.currentTarget.style.boxShadow = '0 4px 16px rgba(0,0,0,0.04)'; }}
-                  onMouseLeave={e => { e.currentTarget.style.boxShadow = 'none'; }}>
+                  onMouseEnter={e => { e.currentTarget.style.boxShadow = '0 4px 20px rgba(0,0,0,0.35)'; e.currentTarget.style.borderColor = '#3D3D34'; }}
+                  onMouseLeave={e => { e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.borderColor = '#2C2C26'; }}>
                   <div style={{
-                    width: 44, height: 44, background: S.surface, border: `1px solid ${S.border}`,
+                    width: 44, height: 44, background: '#222219', border: '1px solid #3D3D34',
                     borderRadius: 2, display: 'flex', alignItems: 'center', justifyContent: 'center',
                     fontSize: 20, marginBottom: 20,
                   }}>{card.icon}</div>
-                  <h3 style={{ fontFamily: S.dm, fontSize: 14, fontWeight: 500, color: S.black, margin: '0 0 8px' }}>{card.title}</h3>
-                  <p style={{ fontFamily: S.dm, fontSize: 13, color: S.secondary, lineHeight: 1.65, fontWeight: 300, margin: 0 }}>{card.desc}</p>
+                  <h3 style={{ fontFamily: S.dm, fontSize: 14, fontWeight: 500, color: '#F5F0E8', margin: '0 0 8px' }}>{card.title}</h3>
+                  <p style={{ fontFamily: S.dm, fontSize: 13, color: '#A89880', lineHeight: 1.65, fontWeight: 300, margin: 0 }}>{card.desc}</p>
                 </div>
               </motion.div>
             ))}
@@ -641,7 +642,7 @@ export default function Home() {
       {/* ══════════════════════════════════════════════════════════════════════
           FOOTER
       ═══════════════════════════════════════════════════════════════════════ */}
-      <footer style={{ background: S.black, borderTop: '1px solid #333333' }}>
+      <footer style={{ background: '#0A0A08', borderTop: '1px solid #2C2C26' }}>
         <div className="home-container" style={{ maxWidth: 1280, margin: '0 auto', padding: '48px 16px' }}>
           <div className="footer-grid" style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr', gap: 32 }}>
             <div>
@@ -649,21 +650,21 @@ export default function Home() {
                 {settings?.logo && (
                   <img src={settings.logo} alt={settings.siteName || 'Store Logo'} loading="lazy" style={{ maxHeight: '32px', maxWidth: '140px', width: 'auto', height: 'auto', objectFit: 'contain' }} />
                 )}
-                <div style={{ fontFamily: S.cm, fontSize: 24, fontWeight: 500, color: S.white, letterSpacing: '0.14em', textTransform: 'uppercase' }}>{settings?.siteName || 'Store'}</div>
+                <div style={{ fontFamily: S.cm, fontSize: 24, fontWeight: 500, color: '#F5F0E8', letterSpacing: '0.14em', textTransform: 'uppercase' }}>{settings?.siteName || 'Store'}</div>
               </div>
-              <p style={{ fontFamily: S.dm, fontSize: 12, color: 'rgba(255,255,255,0.4)', fontWeight: 300, marginTop: 8, lineHeight: 1.7 }}>
+              <p style={{ fontFamily: S.dm, fontSize: 12, color: '#6B6055', fontWeight: 300, marginTop: 8, lineHeight: 1.7 }}>
                 Premium products curated for those who appreciate quality and craftsmanship.
               </p>
               <div style={{ display: 'flex', gap: 8, marginTop: 20 }}>
                 {['𝕏', 'f', 'in', '📷'].map(s => (
                   <button key={s} style={{
-                    width: 36, height: 36, minWidth: 44, minHeight: 44, border: '1px solid #333333', borderRadius: 2,
+                    width: 36, height: 36, minWidth: 44, minHeight: 44, border: '1px solid #2C2C26', borderRadius: 2,
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    color: 'rgba(255,255,255,0.5)', background: 'transparent', cursor: 'pointer',
+                    color: '#6B6055', background: 'transparent', cursor: 'pointer',
                     fontSize: 13, fontFamily: S.dm, transition: 'all 0.2s',
                   }}
-                    onMouseEnter={e => { e.currentTarget.style.borderColor = S.gold; e.currentTarget.style.color = S.gold; }}
-                    onMouseLeave={e => { e.currentTarget.style.borderColor = '#333333'; e.currentTarget.style.color = 'rgba(255,255,255,0.5)'; }}
+                    onMouseEnter={e => { e.currentTarget.style.borderColor = '#C9A96E'; e.currentTarget.style.color = '#C9A96E'; }}
+                    onMouseLeave={e => { e.currentTarget.style.borderColor = '#2C2C26'; e.currentTarget.style.color = '#6B6055'; }}
                   >{s}</button>
                 ))}
               </div>
@@ -674,19 +675,19 @@ export default function Home() {
               { title: 'Account', links: ['My Profile', 'My Orders', 'Login / Register'], to: '/account' },
             ].map(col => (
               <div key={col.title}>
-                <h4 style={{ fontFamily: S.dm, fontSize: 11, fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.1em', color: S.white, marginBottom: 16 }}>{col.title}</h4>
+                <h4 style={{ fontFamily: S.dm, fontSize: 11, fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.1em', color: '#A89880', marginBottom: 16 }}>{col.title}</h4>
                 {col.links.map(link => (
-                  <Link key={link} to={col.to} style={{ fontFamily: S.dm, fontSize: 13, color: 'rgba(255,255,255,0.5)', textDecoration: 'none', display: 'block', lineHeight: 2.2, transition: 'color 0.2s' }}
-                    onMouseEnter={e => { e.currentTarget.style.color = S.white; }}
-                    onMouseLeave={e => { e.currentTarget.style.color = 'rgba(255,255,255,0.5)'; }}
+                  <Link key={link} to={col.to} style={{ fontFamily: S.dm, fontSize: 13, color: '#6B6055', textDecoration: 'none', display: 'block', lineHeight: 2.2, transition: 'color 0.2s' }}
+                    onMouseEnter={e => { e.currentTarget.style.color = '#F5F0E8'; }}
+                    onMouseLeave={e => { e.currentTarget.style.color = '#6B6055'; }}
                   >{link}</Link>
                 ))}
               </div>
             ))}
           </div>
-          <div style={{ borderTop: '1px solid #222222', marginTop: 36, paddingTop: 20, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 8 }}>
-            <span style={{ fontFamily: S.dm, fontSize: 12, color: 'rgba(255,255,255,0.35)' }}>© {new Date().getFullYear()} {settings?.siteName || 'Store'}. All rights reserved.</span>
-            <span style={{ fontFamily: S.dm, fontSize: 12, color: 'rgba(255,255,255,0.35)' }}>Made with ❤️ in Pakistan</span>
+          <div style={{ borderTop: '1px solid #2C2C26', marginTop: 36, paddingTop: 20, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 8 }}>
+            <span style={{ fontFamily: S.dm, fontSize: 12, color: '#4A4A3F' }}>© {new Date().getFullYear()} {settings?.siteName || 'Store'}. All rights reserved.</span>
+            <span style={{ fontFamily: S.dm, fontSize: 12, color: '#4A4A3F' }}>Made with ❤️ in Pakistan</span>
           </div>
         </div>
       </footer>
@@ -717,7 +718,7 @@ export default function Home() {
         }
         .hero-cta-btn:hover {
           background: #C9A96E !important;
-          color: #FFFFFF !important;
+          color: #0D0D0B !important;
         }
 
         @media (max-width: 1024px) {

@@ -5,30 +5,30 @@
 
 /* ─── Design Tokens (Tailwind v4 theme) ────────────────────────────────────── */
 @theme {
-  /* Colors */
-  --color-bg-surface: #F8F8F6;
-  --color-bg-dark: #111111;
-  --color-bg-dark-2: #1A1A1A;
-  --color-text-primary: #111111;
-  --color-text-secondary: #6B6B6B;
-  --color-text-muted: #9E9E9E;
-  --color-text-gold: #C9A96E;
-  --color-accent-gold: #C9A96E;
-  --color-accent-gold-light: #E8D5B0;
-  --color-accent-gold-dark: #A07840;
-  --color-border-light: #E8E8E4;
-  --color-border-medium: #D0D0CA;
-  --color-border-dark: #333333;
+  /* Colors - Dark Leather Premium Theme */
+  --color-bg-surface: #0F0E0C;
+  --color-bg-dark: #0A0A09;
+  --color-bg-dark-2: #161513;
+  --color-text-primary: #EAE6DF;
+  --color-text-secondary: #A39D94;
+  --color-text-muted: #6E6A64;
+  --color-text-gold: #D4AF37;
+  --color-accent-gold: #D4AF37;
+  --color-accent-gold-light: #F0D57D;
+  --color-accent-gold-dark: #A6892E;
+  --color-border-light: #2A2825;
+  --color-border-medium: #3E3B37;
+  --color-border-dark: #1F1D1A;
 
   /* Fonts */
   --font-dm: 'DM Sans', sans-serif;
   --font-cormorant: 'Cormorant Garamond', serif;
 
   /* Shadows */
-  --shadow-card: 0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04);
-  --shadow-card-hover: 0 4px 12px rgba(0,0,0,0.10), 0 8px 32px rgba(0,0,0,0.06);
-  --shadow-nav: 0 1px 0 #E8E8E4;
-  --shadow-dropdown: 0 8px 32px rgba(0,0,0,0.12);
+  --shadow-card: 0 1px 3px rgba(0,0,0,0.4), 0 4px 16px rgba(0,0,0,0.3);
+  --shadow-card-hover: 0 4px 12px rgba(0,0,0,0.5), 0 8px 32px rgba(0,0,0,0.4);
+  --shadow-nav: 0 1px 0 #2A2825;
+  --shadow-dropdown: 0 8px 32px rgba(0,0,0,0.6);
 }
 
 /* ─── Base ──────────────────────────────────────────────────────────────────── */
@@ -43,9 +43,9 @@ html {
 html, body {
   margin: 0;
   padding: 0;
-  background-color: #FFFFFF;
+  background-color: #0F0E0C;
   font-family: 'DM Sans', sans-serif;
-  color: #111111;
+  color: #EAE6DF;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
   -webkit-tap-highlight-color: transparent;
@@ -59,9 +59,9 @@ img { max-width: 100%; height: auto; }
 
 /* ─── Custom Scrollbar ──────────────────────────────────────────────────────── */
 ::-webkit-scrollbar { width: 6px; height: 6px; }
-::-webkit-scrollbar-track { background: #F8F8F6; }
-::-webkit-scrollbar-thumb { background: #D0D0CA; border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: #111111; }
+::-webkit-scrollbar-track { background: #0F0E0C; }
+::-webkit-scrollbar-thumb { background: #3E3B37; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #D4AF37; }
 
 /* ─── Cursor blink (kept for typewriter) ───────────────────────────────────── */
 @keyframes blink {

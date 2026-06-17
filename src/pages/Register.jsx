@@ -31,14 +31,14 @@ function LabelInput({ label, name, value, onChange, error, type = 'text', icon: 
   return (
     <div>
       <label
-        className="block mb-1.5 uppercase text-[#6B6B6B] font-medium tracking-[0.08em]"
+        className="block mb-1.5 uppercase text-[#6B6055] font-medium tracking-[0.08em]"
         style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '10px' }}
       >
         {label}
       </label>
       <div className="relative">
         {Icon && (
-          <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#9E9E9E] pointer-events-none">
+          <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#6B6055] pointer-events-none">
             <Icon size={16} />
           </div>
         )}
@@ -50,13 +50,13 @@ function LabelInput({ label, name, value, onChange, error, type = 'text', icon: 
           onFocus={() => setFocused(true)}
           onBlur={() => setFocused(false)}
           autoComplete="off"
-          className="w-full bg-white border border-[#E8E8E4] rounded-sm py-3 text-sm text-[#111111] placeholder:text-[#9E9E9E] focus:border-[#111111] focus:outline-none transition-all"
+          className="w-full bg-[#1C1C17] border border-[#2C2C26] rounded-sm py-3 text-sm text-[#F5F0E8] placeholder:text-[#6B6055] focus:outline-none transition-all"
           style={{
             fontFamily: "'DM Sans', sans-serif",
-            borderColor: error ? '#9B2226' : focused ? '#111111' : '#E8E8E4',
+            borderColor: error ? '#C0392B' : focused ? '#C9A96E' : '#2C2C26',
             paddingLeft: Icon ? '44px' : '16px',
             paddingRight: isPassword ? '44px' : '16px',
-            boxShadow: focused && !error ? '0 0 0 3px rgba(17,17,17,0.06)' : 'none',
+            boxShadow: focused && !error ? '0 0 0 3px rgba(201,169,110,0.12)' : 'none',
           }}
           placeholder={label}
         />
@@ -64,7 +64,7 @@ function LabelInput({ label, name, value, onChange, error, type = 'text', icon: 
           <button
             type="button"
             onClick={() => setShowPass((s) => !s)}
-            className="absolute right-4 top-1/2 -translate-y-1/2 text-[#9E9E9E] hover:text-[#111111] transition-colors"
+            className="absolute right-4 top-1/2 -translate-y-1/2 text-[#6B6055] hover:text-[#F5F0E8] transition-colors"
             style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, display: 'flex' }}
           >
             {showPass ? <EyeOff size={16} /> : <Eye size={16} />}
@@ -72,7 +72,7 @@ function LabelInput({ label, name, value, onChange, error, type = 'text', icon: 
         )}
       </div>
       {error && (
-        <p className="mt-1" style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '11px', color: '#9B2226' }}>
+        <p className="mt-1" style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '11px', color: '#C0392B' }}>
           {error}
         </p>
       )}
@@ -132,12 +132,12 @@ export default function Register() {
   const strength = getPasswordStrength(form.password);
 
   return (
-    <div className="min-h-screen bg-[#F8F8F6] flex items-center justify-center px-4 py-12">
+    <div className="min-h-screen bg-[#0D0D0B] flex items-center justify-center px-4 py-12">
       <motion.div
         initial={{ opacity: 0, scale: 0.97 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.4 }}
-        className="bg-white border border-[#E8E8E4] rounded-sm p-6 sm:p-10 lg:p-14 w-full max-w-md shadow-card"
+        className="bg-[#141410] border border-[#2C2C26] rounded-sm p-6 sm:p-10 lg:p-14 w-full max-w-md"
       >
         <div className="flex flex-col items-center">
           <Link to="/" className="flex flex-col items-center no-underline">
@@ -145,17 +145,17 @@ export default function Register() {
               {settings?.logo && (
                 <img src={settings.logo} alt={settings.siteName || 'Store Logo'} style={{ maxHeight: '40px', maxWidth: '140px', width: 'auto', height: 'auto', objectFit: 'contain' }} />
               )}
-              <span className="font-cormorant text-[28px] font-medium text-[#111111] tracking-[0.12em] uppercase text-center leading-none">
+              <span className="font-cormorant text-[28px] font-medium text-[#F5F0E8] tracking-[0.12em] uppercase text-center leading-none">
                 {settings?.siteName || 'LUXE STORE'}
               </span>
             </div>
           </Link>
         </div>
 
-        <h1 className="mt-8 font-cormorant text-[32px] font-medium text-[#111111] text-center leading-none">
+        <h1 className="mt-8 font-cormorant text-[32px] font-medium text-[#F5F0E8] text-center leading-none">
           Create Account
         </h1>
-        <p className="mt-2 font-dm text-[13px] text-[#6B6B6B] text-center font-light">
+        <p className="mt-2 font-dm text-[13px] text-[#A89880] text-center font-light">
           Join thousands of happy customers
         </p>
 
@@ -165,7 +165,7 @@ export default function Register() {
               initial={{ opacity: 0, y: -6 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0 }}
-              className="mt-6 bg-[#FFF1F2] border border-[#FECDD3] rounded-sm p-3.5 font-dm text-[12px] text-[#9B2226] text-center"
+              className="mt-6 border rounded-sm p-3.5 font-dm text-[12px] text-[#C0392B] text-center" style={{ background: 'rgba(192,57,43,0.12)', borderColor: '#C0392B' }}
             >
               {apiError}
             </motion.div>
@@ -187,7 +187,7 @@ export default function Register() {
                       key={i}
                       className="flex-1 h-full rounded-full transition-colors duration-300"
                       style={{
-                        backgroundColor: i <= (strength.width === '25%' ? 1 : strength.width === '50%' ? 2 : strength.width === '75%' ? 3 : strength.width === '100%' ? 4 : 0) ? strength.color : '#E8E8E4'
+                        backgroundColor: i <= (strength.width === '25%' ? 1 : strength.width === '50%' ? 2 : strength.width === '75%' ? 3 : strength.width === '100%' ? 4 : 0) ? strength.color : '#2C2C26'
                       }}
                     />
                   ))}
@@ -207,19 +207,19 @@ export default function Register() {
                 onClick={() => { setTermsAccepted(!termsAccepted); if (errors.terms) setErrors((p) => ({ ...p, terms: '' })); }}
                 className="w-4 h-4 mt-0.5 rounded-sm flex items-center justify-center transition-all cursor-pointer flex-shrink-0"
                 style={{
-                  border: `1px solid ${errors.terms ? '#9B2226' : termsAccepted ? '#111111' : '#E8E8E4'}`,
-                  background: termsAccepted ? '#111111' : 'transparent',
+                  border: `1px solid ${errors.terms ? '#C0392B' : termsAccepted ? '#C9A96E' : '#2C2C26'}`,
+                  background: termsAccepted ? '#C9A96E' : 'transparent',
                 }}
               >
-                {termsAccepted && <Check size={10} color="#fff" strokeWidth={3} />}
+                {termsAccepted && <Check size={10} color="#0D0D0B" strokeWidth={3} />}
               </div>
-              <span className="font-dm text-[12px] text-[#6B6B6B] leading-relaxed">
+              <span className="font-dm text-[12px] text-[#A89880] leading-relaxed">
                 I agree to the{' '}
-                <span className="text-[#111111] underline underline-offset-4 hover:text-[#C9A96E] transition-colors">
+                <span className="text-[#C9A96E] underline underline-offset-4 hover:text-[#F5F0E8] transition-colors">
                   Terms & Conditions
                 </span>{' '}
                 and{' '}
-                <span className="text-[#111111] underline underline-offset-4 hover:text-[#C9A96E] transition-colors">
+                <span className="text-[#C9A96E] underline underline-offset-4 hover:text-[#F5F0E8] transition-colors">
                   Privacy Policy
                 </span>
               </span>
@@ -234,22 +234,22 @@ export default function Register() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full mt-8 bg-[#111111] hover:bg-[#333333] text-white border border-[#111111] rounded-sm px-8 py-3.5 font-dm font-medium text-sm uppercase tracking-[0.04em] transition-colors"
+            className="w-full mt-8 bg-[#F5F0E8] hover:bg-[#C9A96E] text-[#0D0D0B] border border-[#F5F0E8] rounded-sm px-8 py-3.5 font-dm font-medium text-sm uppercase tracking-[0.04em] transition-colors"
             style={{ cursor: loading ? 'not-allowed' : 'pointer' }}
           >
             {loading ? (
-              <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin mx-auto" />
+              <div className="w-4 h-4 border-2 border-[#0D0D0B]/30 border-t-[#0D0D0B] rounded-full animate-spin mx-auto" />
             ) : (
               'Create Account →'
             )}
           </button>
         </form>
 
-        <p className="mt-6 text-center font-dm text-[13px] text-[#6B6B6B]">
+        <p className="mt-6 text-center font-dm text-[13px] text-[#A89880]">
           Already have an account?{' '}
           <Link
             to="/login"
-            className="text-[#111111] font-medium hover:text-[#C9A96E] cursor-pointer underline underline-offset-4 transition-colors"
+            className="text-[#C9A96E] font-medium hover:text-[#F5F0E8] cursor-pointer underline underline-offset-4 transition-colors"
           >
             Sign in
           </Link>

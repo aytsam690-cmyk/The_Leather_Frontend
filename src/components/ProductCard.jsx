@@ -10,7 +10,7 @@ function Stars({ rating }) {
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
       {[1, 2, 3, 4, 5].map((s) => (
-        <span key={s} style={{ fontSize: 11, color: s <= Math.round(rating) ? '#C9A96E' : '#E8E8E4' }}>
+        <span key={s} style={{ fontSize: 11, color: s <= Math.round(rating) ? '#C9A96E' : '#3D3D34' }}>
           {s <= Math.round(rating) ? '★' : '☆'}
         </span>
       ))}
@@ -50,25 +50,25 @@ export default function ProductCard({ product }) {
         className="group"
         style={{
           position: 'relative',
-          background: '#FFFFFF',
-          border: '1px solid #E8E8E4',
+          background: '#141410',
+          border: '1px solid #2C2C26',
           borderRadius: 2,
           overflow: 'hidden',
           cursor: 'pointer',
-          boxShadow: '0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04)',
+          boxShadow: '0 1px 3px rgba(0,0,0,0.25), 0 4px 16px rgba(0,0,0,0.20)',
           transition: 'box-shadow 0.25s ease, border-color 0.25s ease',
         }}
         onMouseEnter={e => {
-          e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.10), 0 8px 32px rgba(0,0,0,0.06)';
-          e.currentTarget.style.borderColor = '#D0D0CA';
+          e.currentTarget.style.boxShadow = '0 4px 16px rgba(0,0,0,0.35), 0 8px 40px rgba(0,0,0,0.25)';
+          e.currentTarget.style.borderColor = '#3D3D34';
         }}
         onMouseLeave={e => {
-          e.currentTarget.style.boxShadow = '0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04)';
-          e.currentTarget.style.borderColor = '#E8E8E4';
+          e.currentTarget.style.boxShadow = '0 1px 3px rgba(0,0,0,0.25), 0 4px 16px rgba(0,0,0,0.20)';
+          e.currentTarget.style.borderColor = '#2C2C26';
         }}
       >
         {/* ── Image area ─────────────────────────────────────────────────── */}
-        <div style={{ position: 'relative', aspectRatio: '3/4', overflow: 'hidden', background: '#F8F8F6' }}>
+        <div style={{ position: 'relative', aspectRatio: '3/4', overflow: 'hidden', background: '#1C1C17' }}>
 
           {/* Product image */}
           {imageUrl ? (
@@ -89,7 +89,7 @@ export default function ProductCard({ product }) {
             <div style={{
               width: '100%',
               height: '100%',
-              background: product.bg || 'linear-gradient(135deg,#F8F8F6,#E8E8E4)',
+              background: product.bg || 'linear-gradient(135deg,#1C1C17,#2C2C26)',
             }} />
           )}
 
@@ -97,8 +97,8 @@ export default function ProductCard({ product }) {
           <div style={{ position: 'absolute', top: 8, left: 8, display: 'flex', flexDirection: 'column', gap: 4, zIndex: 2 }} className="pc-badges">
             {discountPct && (
               <span className="pc-badge-discount" style={{
-                background: '#E53935',
-                color: '#FFFFFF',
+                background: '#8C3A2E',
+                color: '#F5F0E8',
                 fontFamily: "'DM Sans', sans-serif",
                 fontWeight: 700,
                 letterSpacing: '0.02em',
@@ -109,9 +109,9 @@ export default function ProductCard({ product }) {
             )}
             {!discountPct && product.isNew && (
               <span className="pc-badge-new" style={{
-                background: '#FFFFFF',
-                color: '#111111',
-                border: '1px solid #E8E8E4',
+                background: '#222219',
+                color: '#A89880',
+                border: '1px solid #3D3D34',
                 fontFamily: "'DM Sans', sans-serif",
                 fontWeight: 600,
                 textTransform: 'uppercase',
@@ -138,8 +138,8 @@ export default function ProductCard({ product }) {
               fontFamily: "'DM Sans', sans-serif",
               fontWeight: 500,
               textTransform: 'uppercase',
-              color: '#FFFFFF',
-              background: clicked ? '#333333' : '#111111',
+              color: '#F5F0E8',
+              background: clicked ? '#2C2C26' : '#1C1C17',
               cursor: 'pointer',
               transform: 'translateY(100%)',
               transition: 'transform 0.3s ease-out, background 0.2s ease',
@@ -168,7 +168,7 @@ export default function ProductCard({ product }) {
               fontFamily: "'DM Sans', sans-serif",
               textTransform: 'uppercase',
               letterSpacing: '0.10em',
-              color: '#9E9E9E',
+              color: '#6B6055',
               marginBottom: 4,
             }}>
               {category}
@@ -179,7 +179,7 @@ export default function ProductCard({ product }) {
           <h3 className="pc-name" style={{
             fontFamily: "'DM Sans', sans-serif",
             fontWeight: 400,
-            color: '#111111',
+            color: '#F5F0E8',
             lineHeight: 1.35,
             display: '-webkit-box',
             WebkitLineClamp: 2,
@@ -191,16 +191,16 @@ export default function ProductCard({ product }) {
 
           {/* Price row */}
           <div style={{ display: 'flex', alignItems: 'baseline', gap: 4, flexWrap: 'wrap', marginBottom: 6 }} className="pc-price-row">
-            <span className="pc-price" style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 600, color: discountPct ? '#E53935' : '#111111' }}>
+            <span className="pc-price" style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 600, color: discountPct ? '#C9A96E' : '#F5F0E8' }}>
               {formatPrice(product.price)}
             </span>
             {product.comparePrice && product.comparePrice > product.price && (
-              <span className="pc-compare" style={{ fontFamily: "'DM Sans', sans-serif", color: '#9E9E9E', textDecoration: 'line-through' }}>
+              <span className="pc-compare" style={{ fontFamily: "'DM Sans', sans-serif", color: '#6B6055', textDecoration: 'line-through' }}>
                 {formatPrice(product.comparePrice)}
               </span>
             )}
             {discountPct && (
-              <span className="pc-discount-text" style={{ fontFamily: "'DM Sans', sans-serif", color: '#2D6A4F', fontWeight: 600 }}>
+              <span className="pc-discount-text" style={{ fontFamily: "'DM Sans', sans-serif", color: '#C9A96E', fontWeight: 600 }}>
                 {discountPct}% off
               </span>
             )}
@@ -209,7 +209,7 @@ export default function ProductCard({ product }) {
           {/* Star row */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
             <Stars rating={product.ratings?.average || product.rating || 0} />
-            <span className="pc-review-count" style={{ fontFamily: "'DM Sans', sans-serif", color: '#9E9E9E' }}>
+            <span className="pc-review-count" style={{ fontFamily: "'DM Sans', sans-serif", color: '#6B6055' }}>
               ({(product.ratings?.count || product.reviews || 0).toLocaleString()})
             </span>
           </div>

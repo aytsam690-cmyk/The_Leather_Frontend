@@ -31,9 +31,9 @@ const iconBtnStyle = {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  border: '1px solid #E8E8E4',
+  border: '1px solid #2C2C26',
   borderRadius: 2,
-  color: '#6B6B6B',
+  color: '#A89880',
   background: 'transparent',
   cursor: 'pointer',
   transition: 'all 0.2s ease',
@@ -57,27 +57,27 @@ function UserMenu({ user, logout }) {
           width: 40,
           height: 40,
           borderRadius: 2,
-          border: '1px solid #E8E8E4',
-          background: '#F8F8F6',
+          border: '1px solid #2C2C26',
+          background: '#1C1C17',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           cursor: 'pointer',
           transition: 'all 0.2s ease',
-          color: '#111111',
+          color: '#F5F0E8',
           fontFamily: "'DM Sans', sans-serif",
           fontWeight: 600,
           fontSize: 14,
         }}
         onMouseEnter={e => {
-          e.currentTarget.style.borderColor = '#111111';
-          e.currentTarget.style.background = '#111111';
-          e.currentTarget.style.color = '#FFFFFF';
+          e.currentTarget.style.borderColor = '#C9A96E';
+          e.currentTarget.style.background = '#C9A96E';
+          e.currentTarget.style.color = '#0D0D0B';
         }}
         onMouseLeave={e => {
-          e.currentTarget.style.borderColor = '#E8E8E4';
-          e.currentTarget.style.background = '#F8F8F6';
-          e.currentTarget.style.color = '#111111';
+          e.currentTarget.style.borderColor = '#2C2C26';
+          e.currentTarget.style.background = '#1C1C17';
+          e.currentTarget.style.color = '#F5F0E8';
         }}
       >
         {user?.name?.[0]?.toUpperCase() || 'U'}
@@ -102,11 +102,11 @@ function UserMenu({ user, logout }) {
           >
             <div
               style={{
-                background: '#FFFFFF',
-                border: '1px solid #E8E8E4',
+                background: '#141410',
+                border: '1px solid #2C2C26',
                 borderRadius: 2,
                 overflow: 'hidden',
-                boxShadow: '0 4px 12px rgba(0,0,0,0.10), 0 8px 32px rgba(0,0,0,0.06)',
+                boxShadow: '0 8px 40px rgba(0,0,0,0.5)',
               }}
             >
               <Link
@@ -118,13 +118,13 @@ function UserMenu({ user, logout }) {
                   gap: 8,
                   padding: '12px 16px',
                   fontSize: 13,
-                  color: '#6B6B6B',
+                  color: '#A89880',
                   textDecoration: 'none',
                   fontFamily: "'DM Sans', sans-serif",
                   transition: 'all 0.2s ease',
                 }}
-                onMouseEnter={e => { e.currentTarget.style.color = '#111111'; e.currentTarget.style.background = '#F8F8F6'; }}
-                onMouseLeave={e => { e.currentTarget.style.color = '#6B6B6B'; e.currentTarget.style.background = 'transparent'; }}
+                onMouseEnter={e => { e.currentTarget.style.color = '#F5F0E8'; e.currentTarget.style.background = '#1C1C17'; }}
+                onMouseLeave={e => { e.currentTarget.style.color = '#A89880'; e.currentTarget.style.background = 'transparent'; }}
               >
                 <User size={14} /> My Profile
               </Link>
@@ -137,17 +137,17 @@ function UserMenu({ user, logout }) {
                   gap: 8,
                   padding: '12px 16px',
                   fontSize: 13,
-                  color: '#6B6B6B',
+                  color: '#A89880',
                   textDecoration: 'none',
                   fontFamily: "'DM Sans', sans-serif",
                   transition: 'all 0.2s ease',
                 }}
-                onMouseEnter={e => { e.currentTarget.style.color = '#111111'; e.currentTarget.style.background = '#F8F8F6'; }}
-                onMouseLeave={e => { e.currentTarget.style.color = '#6B6B6B'; e.currentTarget.style.background = 'transparent'; }}
+                onMouseEnter={e => { e.currentTarget.style.color = '#F5F0E8'; e.currentTarget.style.background = '#1C1C17'; }}
+                onMouseLeave={e => { e.currentTarget.style.color = '#A89880'; e.currentTarget.style.background = 'transparent'; }}
               >
                 <Package size={14} /> My Orders
               </Link>
-              <hr style={{ borderColor: '#E8E8E4', margin: 0 }} />
+              <hr style={{ borderColor: '#2C2C26', margin: 0 }} />
               <button
                 onClick={() => { logout(); setOpen(false); }}
                 style={{
@@ -157,7 +157,7 @@ function UserMenu({ user, logout }) {
                   gap: 8,
                   padding: '12px 16px',
                   fontSize: 13,
-                  color: '#9E9E9E',
+                  color: '#A89880',
                   background: 'transparent',
                   border: 'none',
                   cursor: 'pointer',
@@ -165,8 +165,8 @@ function UserMenu({ user, logout }) {
                   transition: 'all 0.2s ease',
                   textAlign: 'left',
                 }}
-                onMouseEnter={e => { e.currentTarget.style.color = '#111111'; e.currentTarget.style.background = '#F8F8F6'; }}
-                onMouseLeave={e => { e.currentTarget.style.color = '#9E9E9E'; e.currentTarget.style.background = 'transparent'; }}
+                onMouseEnter={e => { e.currentTarget.style.color = '#F5F0E8'; e.currentTarget.style.background = '#1C1C17'; }}
+                onMouseLeave={e => { e.currentTarget.style.color = '#A89880'; e.currentTarget.style.background = 'transparent'; }}
               >
                 <X size={14} /> Logout
               </button>
@@ -267,10 +267,10 @@ export default function Navbar() {
           left: 0,
           right: 0,
           zIndex: 50,
-          background: '#FFFFFF',
-          borderBottom: '1px solid #E8E8E4',
+          background: '#0D0D0B',
+          borderBottom: '1px solid #2C2C26',
           transition: 'box-shadow 0.3s ease',
-          boxShadow: scrolled ? '0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04)' : 'none',
+          boxShadow: scrolled ? '0 1px 3px rgba(0,0,0,0.4), 0 4px 16px rgba(0,0,0,0.3)' : 'none',
         }}
       >
         <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 16px' }} className="navbar-container">
@@ -285,7 +285,7 @@ export default function Navbar() {
                 fontFamily: "'Cormorant Garamond', serif",
                 fontSize: 'clamp(18px, 4vw, 28px)',
                 fontWeight: 600,
-                color: '#111111',
+                color: '#F5F0E8',
                 letterSpacing: 'clamp(0.04em, 1vw, 0.12em)',
                 textTransform: 'uppercase',
                 lineHeight: 1,
@@ -307,7 +307,7 @@ export default function Navbar() {
                       fontFamily: "'DM Sans', sans-serif",
                       fontSize: 13,
                       fontWeight: 400,
-                      color: isActive ? '#111111' : '#6B6B6B',
+                      color: isActive ? '#F5F0E8' : '#A89880',
                       letterSpacing: '0.04em',
                       textTransform: 'uppercase',
                       textDecoration: 'none',
@@ -315,8 +315,8 @@ export default function Navbar() {
                       borderBottom: isActive ? '1px solid #C9A96E' : '1px solid transparent',
                       transition: 'all 0.2s ease',
                     }}
-                    onMouseEnter={e => { if (!isActive) e.currentTarget.style.color = '#111111'; }}
-                    onMouseLeave={e => { if (!isActive) e.currentTarget.style.color = '#6B6B6B'; }}
+                    onMouseEnter={e => { if (!isActive) e.currentTarget.style.color = '#F5F0E8'; }}
+                    onMouseLeave={e => { if (!isActive) e.currentTarget.style.color = '#A89880'; }}
                   >
                     {link.label}
                   </Link>
@@ -337,7 +337,7 @@ export default function Navbar() {
                     fontFamily: "'DM Sans', sans-serif",
                     fontSize: 13,
                     fontWeight: 400,
-                    color: '#6B6B6B',
+                    color: '#A89880',
                     letterSpacing: '0.04em',
                     textTransform: 'uppercase',
                     background: 'transparent',
@@ -347,8 +347,8 @@ export default function Navbar() {
                     padding: '6px 14px',
                     transition: 'all 0.2s ease',
                   }}
-                  onMouseEnter={e => { e.currentTarget.style.color = '#111111'; }}
-                  onMouseLeave={e => { e.currentTarget.style.color = '#6B6B6B'; }}
+                  onMouseEnter={e => { e.currentTarget.style.color = '#F5F0E8'; }}
+                  onMouseLeave={e => { e.currentTarget.style.color = '#A89880'; }}
                 >
                   Categories
                   <motion.div animate={{ rotate: megaMenu ? 180 : 0 }} transition={{ duration: 0.2 }}>
@@ -370,11 +370,11 @@ export default function Navbar() {
                         transform: 'translateX(-50%)',
                         marginTop: 8,
                         width: Math.min(480, window.innerWidth - 48),
-                        background: '#FFFFFF',
-                        border: '1px solid #E8E8E4',
+                        background: '#141410',
+                        border: '1px solid #2C2C26',
                         borderRadius: 2,
                         padding: 24,
-                        boxShadow: '0 4px 12px rgba(0,0,0,0.10), 0 8px 32px rgba(0,0,0,0.06)',
+                        boxShadow: '0 8px 40px rgba(0,0,0,0.5)',
                         zIndex: 100,
                       }}
                     >
@@ -395,7 +395,7 @@ export default function Navbar() {
                                 display: 'block',
                                 transition: 'color 0.2s ease',
                               }}
-                              onMouseEnter={e => { e.currentTarget.style.color = '#111111'; }}
+                              onMouseEnter={e => { e.currentTarget.style.color = '#F5F0E8'; }}
                               onMouseLeave={e => { e.currentTarget.style.color = '#C9A96E'; }}
                               onClick={() => setMegaMenu(false)}
                             >
@@ -410,13 +410,13 @@ export default function Navbar() {
                                       onClick={() => setMegaMenu(false)}
                                       style={{
                                         fontSize: 13,
-                                        color: '#6B6B6B',
+                                        color: '#A89880',
                                         textDecoration: 'none',
                                         fontFamily: "'DM Sans', sans-serif",
                                         transition: 'color 0.2s ease',
                                       }}
-                                      onMouseEnter={e => { e.currentTarget.style.color = '#111111'; }}
-                                      onMouseLeave={e => { e.currentTarget.style.color = '#6B6B6B'; }}
+                                      onMouseEnter={e => { e.currentTarget.style.color = '#F5F0E8'; }}
+                                      onMouseLeave={e => { e.currentTarget.style.color = '#A89880'; }}
                                     >
                                       {s}
                                     </Link>
@@ -452,13 +452,13 @@ export default function Navbar() {
                       style={{
                         position: 'absolute',
                         right: 44,
-                        background: '#F8F8F6',
-                        color: '#111111',
+                        background: '#1C1C17',
+                        color: '#F5F0E8',
                         fontSize: 13,
                         borderRadius: 2,
                         padding: '6px 12px',
                         outline: 'none',
-                        border: '1px solid #E8E8E4',
+                        border: '1px solid #2C2C26',
                         fontFamily: "'DM Sans', sans-serif",
                       }}
                       onKeyDown={(e) => {
@@ -483,11 +483,11 @@ export default function Navbar() {
                     right: 0,
                     marginTop: 8,
                     width: '100%', maxWidth: 320, right: 0,
-                    background: '#FFFFFF',
-                    border: '1px solid #E8E8E4',
+                    background: '#141410',
+                    border: '1px solid #2C2C26',
                     borderRadius: 2,
                     padding: 8,
-                    boxShadow: '0 4px 12px rgba(0,0,0,0.10), 0 8px 32px rgba(0,0,0,0.06)',
+                    boxShadow: '0 8px 40px rgba(0,0,0,0.5)',
                     zIndex: 50,
                   }}>
                     {!searchQuery.trim() ? (
@@ -510,16 +510,16 @@ export default function Navbar() {
                               gap: 8,
                               padding: '6px 8px',
                               borderRadius: 2,
-                              color: '#6B6B6B',
+                              color: '#A89880',
                               fontSize: 13,
                               textDecoration: 'none',
                               fontFamily: "'DM Sans', sans-serif",
                               transition: 'all 0.2s ease',
                             }}
-                            onMouseEnter={e => { e.currentTarget.style.background = '#F8F8F6'; e.currentTarget.style.color = '#111111'; }}
-                            onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#6B6B6B'; }}
+                            onMouseEnter={e => { e.currentTarget.style.background = '#1C1C17'; e.currentTarget.style.color = '#F5F0E8'; }}
+                            onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#A89880'; }}
                           >
-                            <Search size={14} style={{ color: '#9E9E9E' }} />
+                            <Search size={14} style={{ color: '#6B6055' }} />
                             {rs}
                           </Link>
                         ))}
@@ -545,14 +545,14 @@ export default function Navbar() {
                                   display: 'block',
                                   padding: '6px 12px',
                                   fontSize: 13,
-                                  color: '#6B6B6B',
+                                  color: '#A89880',
                                   textDecoration: 'none',
                                   borderRadius: 2,
                                   fontFamily: "'DM Sans', sans-serif",
                                   transition: 'all 0.2s ease',
                                 }}
-                                onMouseEnter={e => { e.currentTarget.style.background = '#F8F8F6'; e.currentTarget.style.color = '#111111'; }}
-                                onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#6B6B6B'; }}
+                                onMouseEnter={e => { e.currentTarget.style.background = '#1C1C17'; e.currentTarget.style.color = '#F5F0E8'; }}
+                                onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#A89880'; }}
                               >
                                 {c.name}
                               </Link>
@@ -583,7 +583,7 @@ export default function Navbar() {
                                   textDecoration: 'none',
                                   transition: 'all 0.2s ease',
                                 }}
-                                onMouseEnter={e => { e.currentTarget.style.background = '#F8F8F6'; }}
+                                onMouseEnter={e => { e.currentTarget.style.background = '#1C1C17'; }}
                                 onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; }}
                               >
                                 <div style={{
@@ -591,8 +591,8 @@ export default function Navbar() {
                                   height: 32,
                                   borderRadius: 2,
                                   flexShrink: 0,
-                                  background: '#F8F8F6',
-                                  border: '1px solid #E8E8E4',
+                                  background: '#1C1C17',
+                                  border: '1px solid #2C2C26',
                                   display: 'flex',
                                   alignItems: 'center',
                                   justifyContent: 'center',
@@ -600,17 +600,17 @@ export default function Navbar() {
                                 }}>
                                   {p.images?.[0]?.url
                                     ? <img src={p.images[0].url} loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt={p.name} />
-                                    : <Package size={16} style={{ color: '#9E9E9E' }} />}
+                                    : <Package size={16} style={{ color: '#6B6055' }} />}
                                 </div>
                                 <div style={{ minWidth: 0 }}>
-                                  <p style={{ color: '#111111', fontSize: 12, fontWeight: 500, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', fontFamily: "'DM Sans', sans-serif" }}>{p.name}</p>
-                                  <p style={{ color: '#9E9E9E', fontSize: 10, fontFamily: "'DM Sans', sans-serif" }}>${p.price}</p>
+                                  <p style={{ color: '#F5F0E8', fontSize: 12, fontWeight: 500, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', fontFamily: "'DM Sans', sans-serif" }}>{p.name}</p>
+                                  <p style={{ color: '#6B6055', fontSize: 10, fontFamily: "'DM Sans', sans-serif" }}>${p.price}</p>
                                 </div>
                               </Link>
                             ))}
                           </div>
                         ) : (
-                          <div style={{ padding: 16, textAlign: 'center', color: '#9E9E9E', fontSize: 13, fontFamily: "'DM Sans', sans-serif" }}>No results found</div>
+                          <div style={{ padding: 16, textAlign: 'center', color: '#6B6055', fontSize: 13, fontFamily: "'DM Sans', sans-serif" }}>No results found</div>
                         )}
                       </>
                     )}
@@ -622,8 +622,8 @@ export default function Navbar() {
                   onClick={() => setSearchOpen(!searchOpen)}
                   style={iconBtnStyle}
                   className="navbar-search-toggle"
-                  onMouseEnter={e => { e.currentTarget.style.borderColor = '#111111'; e.currentTarget.style.color = '#111111'; }}
-                  onMouseLeave={e => { e.currentTarget.style.borderColor = '#E8E8E4'; e.currentTarget.style.color = '#6B6B6B'; }}
+                  onMouseEnter={e => { e.currentTarget.style.borderColor = '#C9A96E'; e.currentTarget.style.color = '#F5F0E8'; }}
+                  onMouseLeave={e => { e.currentTarget.style.borderColor = '#2C2C26'; e.currentTarget.style.color = '#A89880'; }}
                 >
                   <Search size={18} />
                 </button>
@@ -634,8 +634,8 @@ export default function Navbar() {
               <button
                 onClick={openCart}
                 style={iconBtnStyle}
-                onMouseEnter={e => { e.currentTarget.style.borderColor = '#111111'; e.currentTarget.style.color = '#111111'; }}
-                onMouseLeave={e => { e.currentTarget.style.borderColor = '#E8E8E4'; e.currentTarget.style.color = '#6B6B6B'; }}
+                onMouseEnter={e => { e.currentTarget.style.borderColor = '#C9A96E'; e.currentTarget.style.color = '#F5F0E8'; }}
+                onMouseLeave={e => { e.currentTarget.style.borderColor = '#2C2C26'; e.currentTarget.style.color = '#A89880'; }}
               >
                 <ShoppingCart size={18} />
                 <AnimatePresence>
@@ -651,8 +651,8 @@ export default function Navbar() {
                         right: 0,
                         width: 16,
                         height: 16,
-                        background: '#111111',
-                        color: '#FFFFFF',
+                        background: '#C9A96E',
+                        color: '#0D0D0B',
                         fontSize: 10,
                         fontWeight: 700,
                         borderRadius: '50%',
@@ -681,9 +681,9 @@ export default function Navbar() {
                     alignItems: 'center',
                     gap: 6,
                     padding: '8px 16px',
-                    border: '1px solid #111111',
+                    border: '1px solid #3D3D34',
                     borderRadius: 2,
-                    color: '#111111',
+                    color: '#F5F0E8',
                     fontSize: 12,
                     fontWeight: 500,
                     textTransform: 'uppercase',
@@ -694,8 +694,8 @@ export default function Navbar() {
                     background: 'transparent',
                   }}
                   className="navbar-login-btn"
-                  onMouseEnter={e => { e.currentTarget.style.background = '#111111'; e.currentTarget.style.color = '#FFFFFF'; }}
-                  onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#111111'; }}
+                  onMouseEnter={e => { e.currentTarget.style.background = '#F5F0E8'; e.currentTarget.style.color = '#0D0D0B'; }}
+                  onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#F5F0E8'; }}
                 >
                   <User size={15} />
                   Login
@@ -707,8 +707,8 @@ export default function Navbar() {
                 onClick={() => setMobileOpen(!mobileOpen)}
                 style={iconBtnStyle}
                 className="navbar-hamburger"
-                onMouseEnter={e => { e.currentTarget.style.borderColor = '#111111'; e.currentTarget.style.color = '#111111'; }}
-                onMouseLeave={e => { e.currentTarget.style.borderColor = '#E8E8E4'; e.currentTarget.style.color = '#6B6B6B'; }}
+                onMouseEnter={e => { e.currentTarget.style.borderColor = '#C9A96E'; e.currentTarget.style.color = '#F5F0E8'; }}
+                onMouseLeave={e => { e.currentTarget.style.borderColor = '#2C2C26'; e.currentTarget.style.color = '#A89880'; }}
               >
                 <AnimatePresence mode="wait">
                   {mobileOpen ? (
@@ -726,7 +726,7 @@ export default function Navbar() {
           </div>
         </div>
 
-        {/* Mobile Menu — full-screen white overlay */}
+        {/* Mobile Menu — full-screen dark overlay */}
         <AnimatePresence>
           {mobileOpen && (
             <motion.div
@@ -740,7 +740,7 @@ export default function Navbar() {
                 left: 0,
                 right: 0,
                 bottom: 0,
-                background: '#FFFFFF',
+                background: '#0D0D0B',
                 zIndex: 60,
                 display: 'flex',
                 flexDirection: 'column',
@@ -760,15 +760,15 @@ export default function Navbar() {
                     fontFamily: "'Cormorant Garamond', serif",
                     fontSize: 'clamp(24px, 6vw, 36px)',
                     fontWeight: 600,
-                    color: '#111111',
+                    color: '#F5F0E8',
                     textDecoration: 'none',
                     letterSpacing: '0.04em',
                     padding: '8px 0',
                     borderBottom: location.pathname === link.path ? '1px solid #C9A96E' : '1px solid transparent',
                     transition: 'all 0.2s ease',
                   }}
-                  onMouseEnter={e => { e.currentTarget.style.color = '#6B6B6B'; }}
-                  onMouseLeave={e => { e.currentTarget.style.color = '#111111'; }}
+                  onMouseEnter={e => { e.currentTarget.style.color = '#A89880'; }}
+                  onMouseLeave={e => { e.currentTarget.style.color = '#F5F0E8'; }}
                 >
                   {link.label}
                 </Link>
@@ -781,7 +781,7 @@ export default function Navbar() {
                     marginTop: 24,
                     display: 'block',
                     padding: '12px 32px',
-                    border: '1px solid #111111',
+                    border: '1px solid #3D3D34',
                     borderRadius: 2,
                     textAlign: 'center',
                     fontFamily: "'DM Sans', sans-serif",
@@ -789,13 +789,13 @@ export default function Navbar() {
                     fontWeight: 500,
                     textTransform: 'uppercase',
                     letterSpacing: '0.08em',
-                    color: '#111111',
+                    color: '#F5F0E8',
                     textDecoration: 'none',
                     transition: 'all 0.2s ease',
                     background: 'transparent',
                   }}
-                  onMouseEnter={e => { e.currentTarget.style.background = '#111111'; e.currentTarget.style.color = '#FFFFFF'; }}
-                  onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#111111'; }}
+                  onMouseEnter={e => { e.currentTarget.style.background = '#F5F0E8'; e.currentTarget.style.color = '#0D0D0B'; }}
+                  onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#F5F0E8'; }}
                 >
                   Login / Register
                 </Link>
@@ -807,7 +807,7 @@ export default function Navbar() {
                     style={{
                       display: 'block',
                       padding: '12px 32px',
-                      border: '1px solid #111111',
+                      border: '1px solid #F5F0E8',
                       borderRadius: 2,
                       textAlign: 'center',
                       fontFamily: "'DM Sans', sans-serif",
@@ -815,9 +815,9 @@ export default function Navbar() {
                       fontWeight: 500,
                       textTransform: 'uppercase',
                       letterSpacing: '0.08em',
-                      color: '#FFFFFF',
+                      color: '#0D0D0B',
                       textDecoration: 'none',
-                      background: '#111111',
+                      background: '#F5F0E8',
                       minWidth: 180,
                     }}
                   >
@@ -828,14 +828,14 @@ export default function Navbar() {
                     onClick={() => { logout(); setMobileOpen(false); }}
                     style={{
                       padding: '10px 32px',
-                      border: '1px solid #E8E8E4',
+                      border: '1px solid #2C2C26',
                       borderRadius: 2,
                       fontFamily: "'DM Sans', sans-serif",
                       fontSize: 13,
                       fontWeight: 500,
                       textTransform: 'uppercase',
                       letterSpacing: '0.08em',
-                      color: '#9B2226',
+                      color: '#C0392B',
                       background: 'transparent',
                       cursor: 'pointer',
                       minWidth: 180,

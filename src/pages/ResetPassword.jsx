@@ -17,8 +17,8 @@ function getPasswordStrength(pwd) {
     { label: '', color: 'transparent', width: '0%' },
     { label: 'Weak', color: '#9B2226', width: '20%' },
     { label: 'Fair', color: '#C9A96E', width: '40%' },
-    { label: 'Good', color: '#6B6B6B', width: '70%' },
-    { label: 'Strong', color: '#111111', width: '100%' },
+    { label: 'Good', color: '#C9A96E', width: '70%' },
+    { label: 'Strong', color: '#2D6A4F', width: '100%' },
   ];
   return levels[Math.min(score, 4)];
 }
@@ -31,7 +31,7 @@ function PasswordInput({ label, value, onChange, error, name }) {
   return (
     <div>
       <label
-        className="block mb-2 uppercase text-[#6B6B6B] font-medium"
+        className="block mb-2 uppercase text-[#6B6055] font-medium"
         style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '11px', letterSpacing: '0.06em' }}
       >
         {label}
@@ -44,16 +44,17 @@ function PasswordInput({ label, value, onChange, error, name }) {
           onChange={onChange}
           onFocus={() => setFocused(true)}
           onBlur={() => setFocused(false)}
-          className="w-full bg-white border border-[#E8E8E4] rounded-sm px-4 py-3 text-sm text-[#111111] placeholder-[#9E9E9E] focus:border-[#111111] focus:outline-none focus:ring-2 focus:ring-[#111111]/5 transition-all pr-11"
+          className="w-full bg-[#1C1C17] border border-[#2C2C26] rounded-sm px-4 py-3 text-sm text-[#F5F0E8] placeholder-[#6B6055] focus:outline-none transition-all pr-11"
           style={{
             fontFamily: "'DM Sans', sans-serif",
-            borderColor: error ? '#9B2226' : focused ? '#111111' : '#E8E8E4',
+            borderColor: error ? '#C0392B' : focused ? '#C9A96E' : '#2C2C26',
+            boxShadow: focused && !error ? '0 0 0 3px rgba(201,169,110,0.12)' : 'none',
           }}
         />
         <button
           type="button"
           onClick={() => setShow(!show)}
-          className="absolute right-3 top-1/2 -translate-y-1/2 text-[#9E9E9E] hover:text-[#111111] transition-colors"
+          className="absolute right-3 top-1/2 -translate-y-1/2 text-[#6B6055] hover:text-[#F5F0E8] transition-colors"
           style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, display: 'flex' }}
         >
           {show ? <EyeOff size={16} /> : <Eye size={16} />}
@@ -64,7 +65,7 @@ function PasswordInput({ label, value, onChange, error, name }) {
           initial={{ opacity: 0, x: -6 }}
           animate={{ opacity: 1, x: 0 }}
           className="mt-1"
-          style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '11px', color: '#9B2226' }}
+          style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '11px', color: '#C0392B' }}
         >
           {error}
         </motion.p>
@@ -119,7 +120,7 @@ export default function ResetPassword() {
 
   return (
     <div
-      className="min-h-screen flex items-center justify-center bg-[#F8F8F6]"
+      className="min-h-screen flex items-center justify-center bg-[#0D0D0B]"
       style={{ padding: '5rem 1rem 2rem' }}
     >
       <div className="w-full max-w-sm mx-auto">
@@ -136,7 +137,7 @@ export default function ResetPassword() {
                 <img src={settings.logo} alt={settings.siteName || 'Store Logo'} style={{ maxHeight: '40px', maxWidth: '140px', width: 'auto', height: 'auto', objectFit: 'contain' }} />
               )}
               <span
-                className="text-[#111111] uppercase tracking-widest"
+                className="text-[#F5F0E8] uppercase tracking-widest"
                 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: '28px', fontWeight: 600, lineHeight: 1 }}
               >
                 {settings?.siteName || 'LUXE STORE'}
@@ -150,7 +151,7 @@ export default function ResetPassword() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: 0.08 }}
-          className="bg-white border border-[#E8E8E4] rounded-sm p-6 sm:p-10"
+          className="bg-[#141410] border border-[#2C2C26] rounded-sm p-6 sm:p-10"
         >
           <AnimatePresence mode="wait">
             {!success ? (
@@ -164,18 +165,18 @@ export default function ResetPassword() {
                 {/* Header */}
                 <div className="text-center mb-8">
                   <div
-                    className="w-12 h-12 border border-[#E8E8E4] rounded-sm flex items-center justify-center mx-auto mb-5"
+                    className="w-12 h-12 border border-[#2C2C26] rounded-sm flex items-center justify-center mx-auto mb-5"
                   >
-                    <ShieldCheck size={20} style={{ color: '#6B6B6B' }} />
+                    <ShieldCheck size={20} style={{ color: '#6B6055' }} />
                   </div>
                   <h1
-                    className="text-[#111111] mb-2"
+                    className="text-[#F5F0E8] mb-2"
                     style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: '32px', fontWeight: 500 }}
                   >
                     Reset Password
                   </h1>
                   <p
-                    className="text-[#6B6B6B]"
+                    className="text-[#A89880]"
                     style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px' }}
                   >
                     Enter your new password below
@@ -189,8 +190,8 @@ export default function ResetPassword() {
                       initial={{ opacity: 0, y: -6 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0 }}
-                      className="mb-5 px-4 py-3 border border-[#9B2226]/30 bg-[#9B2226]/5 rounded-sm"
-                      style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '13px', color: '#9B2226' }}
+                      className="mb-5 px-4 py-3 border rounded-sm"
+                      style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '13px', color: '#C0392B', borderColor: '#C0392B', background: 'rgba(192,57,43,0.12)' }}
                     >
                       {error}
                     </motion.div>
@@ -213,7 +214,7 @@ export default function ResetPassword() {
                       animate={{ opacity: 1, height: 'auto' }}
                       style={{ marginTop: '-0.5rem' }}
                     >
-                      <div className="h-[3px] rounded-sm bg-[#E8E8E4] overflow-hidden">
+                      <div className="h-[3px] rounded-sm bg-[#2C2C26] overflow-hidden">
                         <motion.div
                           initial={{ width: '0%' }}
                           animate={{ width: strength.width }}
@@ -243,7 +244,7 @@ export default function ResetPassword() {
                   <button
                     type="submit"
                     disabled={loading}
-                    className="w-full mt-2 bg-[#111111] text-white border border-[#111111] text-sm font-medium uppercase tracking-widest px-8 py-3 rounded-sm hover:bg-[#333333] transition-colors flex items-center justify-center gap-2"
+                    className="w-full mt-2 bg-[#F5F0E8] text-[#0D0D0B] border border-[#F5F0E8] text-sm font-medium uppercase tracking-widest px-8 py-3 rounded-sm hover:bg-[#C9A96E] transition-colors flex items-center justify-center gap-2"
                     style={{
                       fontFamily: "'DM Sans', sans-serif",
                       letterSpacing: '0.1em',
@@ -258,8 +259,8 @@ export default function ResetPassword() {
                         style={{
                           width: '1.1rem',
                           height: '1.1rem',
-                          border: '2px solid rgba(255,255,255,0.3)',
-                          borderTopColor: '#fff',
+                          border: '2px solid rgba(13,13,11,0.3)',
+                          borderTopColor: '#0D0D0B',
                           borderRadius: '50%',
                         }}
                       />
@@ -285,32 +286,32 @@ export default function ResetPassword() {
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
                   transition={{ delay: 0.1, type: 'spring', stiffness: 200, damping: 14 }}
-                  className="w-14 h-14 border border-[#E8E8E4] rounded-sm flex items-center justify-center mx-auto mb-5"
+                  className="w-14 h-14 border border-[#2C2C26] rounded-sm flex items-center justify-center mx-auto mb-5"
                 >
                   <CheckCircle size={26} style={{ color: '#2d6a4f' }} />
                 </motion.div>
                 <h2
-                  className="text-[#111111] mb-2"
+                  className="text-[#F5F0E8] mb-2"
                   style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: '28px', fontWeight: 500 }}
                 >
                   Password Reset!
                 </h2>
                 <p
-                  className="text-[#6B6B6B] leading-relaxed mb-5"
+                  className="text-[#A89880] leading-relaxed mb-5"
                   style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px' }}
                 >
                   Your password has been successfully reset. Redirecting to login…
                 </p>
                 {/* Progress bar */}
                 <div
-                  className="h-[2px] bg-[#E8E8E4] overflow-hidden mx-auto"
+                  className="h-[2px] bg-[#2C2C26] overflow-hidden mx-auto"
                   style={{ maxWidth: '10rem', borderRadius: '1px' }}
                 >
                   <motion.div
                     initial={{ width: '0%' }}
                     animate={{ width: '100%' }}
                     transition={{ duration: 3, ease: 'linear' }}
-                    style={{ height: '100%', background: '#111111' }}
+                    style={{ height: '100%', background: '#C9A96E' }}
                   />
                 </div>
               </motion.div>
@@ -331,11 +332,11 @@ export default function ResetPassword() {
             style={{
               fontFamily: "'DM Sans', sans-serif",
               fontSize: '13px',
-              color: '#6B6B6B',
+              color: '#6B6055',
               textDecoration: 'none',
             }}
-            onMouseEnter={(e) => (e.currentTarget.style.color = '#111111')}
-            onMouseLeave={(e) => (e.currentTarget.style.color = '#6B6B6B')}
+            onMouseEnter={(e) => (e.currentTarget.style.color = '#F5F0E8')}
+            onMouseLeave={(e) => (e.currentTarget.style.color = '#6B6055')}
           >
             <ArrowLeft size={13} />
             Back to Login

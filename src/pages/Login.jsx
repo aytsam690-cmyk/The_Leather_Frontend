@@ -14,7 +14,7 @@ function LabelInput({ label, name, value, onChange, error, type = 'text', icon: 
   return (
     <div>
       <label
-        className="block mb-1.5 uppercase text-[#6B6B6B] font-medium tracking-[0.08em]"
+        className="block mb-1.5 uppercase text-[#6B6055] font-medium tracking-[0.08em]"
         style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '10px' }}
       >
         {label}
@@ -33,13 +33,15 @@ function LabelInput({ label, name, value, onChange, error, type = 'text', icon: 
           onFocus={() => setFocused(true)}
           onBlur={() => setFocused(false)}
           autoComplete={isPassword ? 'current-password' : name === 'email' ? 'email' : 'off'}
-          className="w-full bg-white border border-[#E8E8E4] rounded-sm py-3 text-sm text-[#111111] placeholder:text-[#9E9E9E] focus:border-[#111111] focus:outline-none transition-all"
+          className="w-full border rounded-sm py-3 text-sm placeholder:text-[#6B6055] focus:outline-none transition-all"
           style={{
             fontFamily: "'DM Sans', sans-serif",
-            borderColor: error ? '#9B2226' : focused ? '#111111' : '#E8E8E4',
+            background: '#1C1C17',
+            color: '#F5F0E8',
+            borderColor: error ? '#C0392B' : focused ? '#C9A96E' : '#2C2C26',
             paddingLeft: Icon ? '44px' : '16px',
             paddingRight: isPassword ? '44px' : '16px',
-            boxShadow: focused && !error ? '0 0 0 3px rgba(17,17,17,0.06)' : 'none',
+            boxShadow: focused && !error ? '0 0 0 3px rgba(201,169,110,0.12)' : 'none',
           }}
           placeholder={label}
         />
@@ -55,7 +57,7 @@ function LabelInput({ label, name, value, onChange, error, type = 'text', icon: 
         )}
       </div>
       {error && (
-        <p className="mt-1" style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '11px', color: '#9B2226' }}>
+        <p className="mt-1" style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '11px', color: '#C0392B' }}>
           {error}
         </p>
       )}
@@ -108,12 +110,13 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F8F8F6] flex items-center justify-center px-4 py-12">
+    <div className="min-h-screen flex items-center justify-center px-4 py-12" style={{ background: '#0D0D0B' }}>
       <motion.div
         initial={{ opacity: 0, scale: 0.97 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.4 }}
-        className="bg-white border border-[#E8E8E4] rounded-sm p-6 sm:p-10 lg:p-14 w-full max-w-md shadow-card"
+        className="auth-card border rounded-sm p-6 sm:p-10 lg:p-14 w-full max-w-md"
+        style={{ background: '#141410', borderColor: '#2C2C26', boxShadow: '0 8px 40px rgba(0,0,0,0.5)' }}
       >
         <div className="flex flex-col items-center">
           <Link to="/" className="flex flex-col items-center no-underline">
@@ -121,17 +124,17 @@ export default function Login() {
               {settings?.logo && (
                 <img src={settings.logo} alt={settings.siteName || 'Store Logo'} style={{ maxHeight: '40px', maxWidth: '140px', width: 'auto', height: 'auto', objectFit: 'contain' }} />
               )}
-              <span className="font-cormorant text-[28px] font-medium text-[#111111] tracking-[0.12em] uppercase text-center leading-none">
+              <span className="font-cormorant text-[28px] font-medium tracking-[0.12em] uppercase text-center leading-none" style={{ color: '#F5F0E8' }}>
                 {settings?.siteName || 'LUXE STORE'}
               </span>
             </div>
           </Link>
         </div>
 
-        <h1 className="mt-8 font-cormorant text-[32px] font-medium text-[#111111] text-center leading-none">
+        <h1 className="mt-8 font-cormorant text-[32px] font-medium text-center leading-none" style={{ color: '#F5F0E8' }}>
           Welcome Back
         </h1>
-        <p className="mt-2 font-dm text-[13px] text-[#6B6B6B] text-center font-light">
+        <p className="mt-2 font-dm text-[13px] text-center font-light" style={{ color: '#A89880' }}>
           Sign in to your account
         </p>
 
@@ -141,7 +144,8 @@ export default function Login() {
               initial={{ opacity: 0, y: -6 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0 }}
-              className="mt-6 bg-[#FFF1F2] border border-[#FECDD3] rounded-sm p-3.5 font-dm text-[12px] text-[#9B2226] text-center"
+              className="mt-6 border rounded-sm p-3.5 font-dm text-[12px] text-center"
+              style={{ background: 'rgba(192,57,43,0.12)', borderColor: 'rgba(192,57,43,0.3)', color: '#C0392B' }}
             >
               {apiError}
             </motion.div>
@@ -158,19 +162,22 @@ export default function Login() {
                 onClick={() => setRememberMe(!rememberMe)}
                 className="w-4 h-4 rounded-sm flex items-center justify-center transition-all cursor-pointer"
                 style={{
-                  border: `1px solid ${rememberMe ? '#111111' : '#E8E8E4'}`,
-                  background: rememberMe ? '#111111' : 'transparent',
-                }}
+                border: `1px solid ${rememberMe ? '#C9A96E' : '#2C2C26'}`,
+                background: rememberMe ? '#C9A96E' : 'transparent',
+              }}
               >
-                {rememberMe && <Check size={10} color="#fff" strokeWidth={3} />}
+                {rememberMe && <Check size={10} color="#0D0D0B" strokeWidth={3} />}
               </div>
-              <span className="font-dm text-[12px] text-[#6B6B6B]">
+              <span className="font-dm text-[12px]" style={{ color: '#A89880' }}>
                 Remember me
               </span>
             </label>
             <Link
               to="/forgot-password"
-              className="font-dm text-[12px] text-[#C9A96E] hover:text-[#A07840] cursor-pointer no-underline transition-colors"
+              className="font-dm text-[12px] cursor-pointer no-underline transition-colors"
+              style={{ color: '#C9A96E' }}
+              onMouseEnter={e => { e.currentTarget.style.color = '#A89880'; }}
+              onMouseLeave={e => { e.currentTarget.style.color = '#C9A96E'; }}
             >
               Forgot password?
             </Link>
@@ -179,8 +186,13 @@ export default function Login() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full mt-8 bg-[#111111] hover:bg-[#333333] text-white border border-[#111111] rounded-sm px-8 py-3.5 font-dm font-medium text-sm uppercase tracking-[0.04em] transition-colors"
-            style={{ cursor: loading ? 'not-allowed' : 'pointer' }}
+            className="w-full mt-8 border rounded-sm px-8 py-3.5 font-dm font-medium text-sm uppercase tracking-[0.04em] transition-colors"
+            style={{
+              background: '#F5F0E8', color: '#0D0D0B', borderColor: '#F5F0E8',
+              cursor: loading ? 'not-allowed' : 'pointer',
+            }}
+            onMouseEnter={e => { if (!loading) { e.currentTarget.style.background = '#C9A96E'; e.currentTarget.style.borderColor = '#C9A96E'; } }}
+            onMouseLeave={e => { e.currentTarget.style.background = '#F5F0E8'; e.currentTarget.style.borderColor = '#F5F0E8'; }}
           >
             {loading ? (
               <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin mx-auto" />
@@ -191,16 +203,19 @@ export default function Login() {
         </form>
 
         <div className="mt-8 flex items-center gap-4">
-          <div className="flex-1 h-px bg-[#E8E8E4]" />
-          <span className="font-dm text-[11px] uppercase tracking-[0.1em] text-[#9E9E9E]">or</span>
-          <div className="flex-1 h-px bg-[#E8E8E4]" />
+          <div className="flex-1 h-px" style={{ background: '#2C2C26' }} />
+          <span className="font-dm text-[11px] uppercase tracking-[0.1em]" style={{ color: '#6B6055' }}>or</span>
+          <div className="flex-1 h-px" style={{ background: '#2C2C26' }} />
         </div>
 
-        <p className="mt-6 text-center font-dm text-[13px] text-[#6B6B6B]">
+        <p className="mt-6 text-center font-dm text-[13px]" style={{ color: '#A89880' }}>
           Don't have an account?{' '}
           <Link
             to="/register"
-            className="text-[#111111] font-medium hover:text-[#C9A96E] cursor-pointer underline underline-offset-4 transition-colors"
+            className="font-medium cursor-pointer underline underline-offset-4 transition-colors"
+            style={{ color: '#F5F0E8' }}
+            onMouseEnter={e => { e.currentTarget.style.color = '#C9A96E'; }}
+            onMouseLeave={e => { e.currentTarget.style.color = '#F5F0E8'; }}
           >
             Create an account
           </Link>

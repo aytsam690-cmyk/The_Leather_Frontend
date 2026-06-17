@@ -47,7 +47,7 @@ export default function About() {
   const siteName = settings?.siteName || 'Luxe Store';
 
   return (
-    <div style={{ background: '#FFFFFF', minHeight: '100vh' }}>
+    <div style={{ background: '#0D0D0B', minHeight: '100vh' }}>
       <Helmet>
         <title>About Us — {siteName}</title>
         <meta name="description" content={`Learn about ${siteName} — our story, values, and commitment to bringing you premium products with exceptional quality.`} />
@@ -120,7 +120,7 @@ export default function About() {
       </section>
 
       {/* ── Stats strip ───────────────────────────────────────────────────── */}
-      <section style={{ background: '#F8F8F6', borderBottom: '1px solid #E8E8E4' }}>
+      <section style={{ background: '#141410', borderBottom: '1px solid #2C2C26' }}>
         <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 24px' }}>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))' }}>
             {STATS.map((s, i) => (
@@ -131,14 +131,14 @@ export default function About() {
                 style={{
                   padding: '40px 16px',
                   textAlign: 'center',
-                  borderRight: i < 3 ? '1px solid #E8E8E4' : 'none',
+                  borderRight: i < 3 ? '1px solid #2C2C26' : 'none',
                 }}
               >
                 <div style={{
                   fontFamily: "'Cormorant Garamond', serif",
                   fontSize: 36,
                   fontWeight: 500,
-                  color: '#111111',
+                  color: '#F5F0E8',
                   lineHeight: 1,
                 }}>{s.num}</div>
                 <div style={{
@@ -146,7 +146,7 @@ export default function About() {
                   fontSize: 11,
                   textTransform: 'uppercase',
                   letterSpacing: '0.12em',
-                  color: '#9E9E9E',
+                  color: '#6B6055',
                   marginTop: 8,
                 }}>{s.label}</div>
               </motion.div>
@@ -156,7 +156,7 @@ export default function About() {
       </section>
 
       {/* ── Brand story ───────────────────────────────────────────────────── */}
-      <section style={{ padding: '96px 0' }}>
+      <section style={{ padding: '96px 0', background: '#0D0D0B' }}>
         <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 24px' }}>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 64, alignItems: 'center' }} className="about-story-grid">
 
@@ -175,14 +175,14 @@ export default function About() {
                 fontFamily: "'Cormorant Garamond', serif",
                 fontSize: 'clamp(28px, 5vw, 44px)',
                 fontWeight: 500,
-                color: '#111111',
+                color: '#F5F0E8',
                 lineHeight: 1.1,
                 margin: '0 0 24px',
               }}>Built on a Passion for Quality</h2>
               <p style={{
                 fontFamily: "'DM Sans', sans-serif",
                 fontSize: 15,
-                color: '#6B6B6B',
+                color: '#A89880',
                 fontWeight: 300,
                 lineHeight: 1.8,
                 marginBottom: 16,
@@ -193,7 +193,7 @@ export default function About() {
               <p style={{
                 fontFamily: "'DM Sans', sans-serif",
                 fontSize: 15,
-                color: '#6B6B6B',
+                color: '#A89880',
                 fontWeight: 300,
                 lineHeight: 1.8,
                 marginBottom: 32,
@@ -210,8 +210,8 @@ export default function About() {
                   fontWeight: 500,
                   textTransform: 'uppercase',
                   letterSpacing: '0.06em',
-                  color: '#111111',
-                  border: '1px solid #111111',
+                  color: '#F5F0E8',
+                  border: '1px solid #3D3D34',
                   borderRadius: 2,
                   padding: '12px 28px',
                   textDecoration: 'none',
@@ -219,8 +219,8 @@ export default function About() {
                   display: 'inline-block',
                   background: 'transparent',
                 }}
-                onMouseEnter={e => { e.currentTarget.style.background = '#111111'; e.currentTarget.style.color = '#FFFFFF'; }}
-                onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#111111'; }}
+                onMouseEnter={e => { e.currentTarget.style.background = '#F5F0E8'; e.currentTarget.style.color = '#0D0D0B'; e.currentTarget.style.borderColor = '#F5F0E8'; }}
+                onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#F5F0E8'; e.currentTarget.style.borderColor = '#3D3D34'; }}
               >
                 Explore Our Collection →
               </Link>
@@ -232,8 +232,8 @@ export default function About() {
               variants={fadeUp} custom={2}
             >
               <div style={{
-                background: '#F8F8F6',
-                border: '1px solid #E8E8E4',
+                background: '#1C1C17',
+                border: '1px solid #2C2C26',
                 borderRadius: 2,
                 aspectRatio: '4/5',
                 display: 'flex',
@@ -253,11 +253,12 @@ export default function About() {
                   borderRadius: '50%',
                   top: '50%', left: '50%',
                   transform: 'translate(-50%, -50%)',
+                  opacity: 0.1
                 }} />
                 <div style={{
                   position: 'absolute',
                   width: 200, height: 200,
-                  border: '1px solid #E8E8E4',
+                  border: '1px solid #2C2C26',
                   borderRadius: '50%',
                   top: '50%', left: '50%',
                   transform: 'translate(-50%, -50%)',
@@ -266,9 +267,9 @@ export default function About() {
                   fontFamily: "'Cormorant Garamond', serif",
                   fontSize: 120,
                   fontWeight: 600,
-                  color: '#111111',
+                  color: '#F5F0E8',
                   lineHeight: 1,
-                  opacity: 0.05,
+                  opacity: 0.03,
                   position: 'absolute',
                   top: '50%',
                   left: '50%',
@@ -280,7 +281,7 @@ export default function About() {
                   fontFamily: "'Cormorant Garamond', serif",
                   fontSize: 56,
                   fontWeight: 500,
-                  color: '#111111',
+                  color: '#F5F0E8',
                   letterSpacing: '0.12em',
                   textTransform: 'uppercase',
                   lineHeight: 1,
@@ -305,7 +306,7 @@ export default function About() {
                 <p style={{
                   fontFamily: "'DM Sans', sans-serif",
                   fontSize: 13,
-                  color: '#9E9E9E',
+                  color: '#6B6055',
                   textAlign: 'center',
                   maxWidth: 240,
                   lineHeight: 1.7,
@@ -321,7 +322,7 @@ export default function About() {
       </section>
 
       {/* ── Values ─────────────────────────────────────────────────────────── */}
-      <section style={{ padding: '96px 0', background: '#F8F8F6' }}>
+      <section style={{ padding: '96px 0', background: '#141410' }}>
         <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 24px' }}>
           <motion.div
             initial="hidden" whileInView="visible" viewport={{ once: true }}
@@ -341,7 +342,7 @@ export default function About() {
               fontFamily: "'Cormorant Garamond', serif",
               fontSize: 44,
               fontWeight: 500,
-              color: '#111111',
+              color: '#F5F0E8',
               lineHeight: 1.1,
               margin: 0,
             }}>What We Stand For</h2>
@@ -356,21 +357,21 @@ export default function About() {
               >
                 <div
                   style={{
-                    background: '#FFFFFF',
-                    border: '1px solid #E8E8E4',
+                    background: '#1C1C17',
+                    border: '1px solid #2C2C26',
                     borderRadius: 2,
                     padding: 32,
                     height: '100%',
                     boxSizing: 'border-box',
                     transition: 'box-shadow 0.25s ease',
                   }}
-                  onMouseEnter={e => { e.currentTarget.style.boxShadow = '0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04)'; }}
+                  onMouseEnter={e => { e.currentTarget.style.boxShadow = '0 4px 16px rgba(0,0,0,0.35)'; }}
                   onMouseLeave={e => { e.currentTarget.style.boxShadow = 'none'; }}
                 >
                   <div style={{
                     width: 48, height: 48,
-                    background: '#F8F8F6',
-                    border: '1px solid #E8E8E4',
+                    background: '#2C2C26',
+                    border: '1px solid #3D3D34',
                     borderRadius: 2,
                     display: 'flex',
                     alignItems: 'center',
@@ -383,13 +384,13 @@ export default function About() {
                     fontFamily: "'DM Sans', sans-serif",
                     fontSize: 14,
                     fontWeight: 500,
-                    color: '#111111',
+                    color: '#F5F0E8',
                     margin: '0 0 8px',
                   }}>{v.title}</h3>
                   <p style={{
                     fontFamily: "'DM Sans', sans-serif",
                     fontSize: 13,
-                    color: '#6B6B6B',
+                    color: '#A89880',
                     lineHeight: 1.65,
                     fontWeight: 300,
                     margin: 0,

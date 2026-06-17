@@ -15,24 +15,24 @@ const PAGE_SIZE = 9;
 const S = {
   dm: "'DM Sans', sans-serif",
   cm: "'Cormorant Garamond', serif",
-  black: '#111111',
-  white: '#FFFFFF',
-  surface: '#F8F8F6',
-  muted: '#9E9E9E',
-  secondary: '#6B6B6B',
+  black: '#F5F0E8',
+  white: '#141410',
+  surface: '#1C1C17',
+  muted: '#6B6055',
+  secondary: '#A89880',
   gold: '#C9A96E',
-  border: '#E8E8E4',
-  danger: '#9B2226',
+  border: '#2C2C26',
+  danger: '#C0392B',
 };
 
 const chipStyle = {
-  background: S.white,
-  border: `1px solid ${S.border}`,
+  background: '#1C1C17',
+  border: '1px solid #2C2C26',
   borderRadius: 2,
   padding: '4px 10px',
   fontFamily: S.dm,
   fontSize: 11,
-  color: S.secondary,
+  color: '#A89880',
   display: 'inline-flex',
   alignItems: 'center',
   gap: 8,
@@ -69,7 +69,7 @@ function Sidebar({ filters, setFilters, onReset, availableFilters, onCategoryCha
   return (
     <aside style={{ width: 256, flexShrink: 0 }} className="hidden lg:block">
       <div style={{
-        background: S.white, border: `1px solid ${S.border}`, borderRadius: 2,
+        background: '#141410', border: '1px solid #2C2C26', borderRadius: 2,
         padding: 24, position: 'sticky', top: 96,
         maxHeight: 'calc(100vh - 120px)', overflowY: 'auto',
       }}>
@@ -402,7 +402,7 @@ export default function Products() {
 
   // ─── Render ───────────────────────────────────────────────────────────────
   return (
-    <div style={{ background: S.surface, minHeight: '100vh', paddingTop: 96, paddingBottom: 64 }}>
+    <div style={{ background: '#0D0D0B', minHeight: '100vh', paddingTop: 96, paddingBottom: 64 }}>
       <div className="products-container" style={{ maxWidth: 1280, margin: '0 auto', padding: '0 16px' }}>
         <Helmet>
           <title>{filters.search ? `Search: ${filters.search}` : filters.category !== 'All' ? `${filters.category} Products` : 'All Products'} — {settings?.siteName || 'Store'}</title>
@@ -414,7 +414,7 @@ export default function Products() {
           <p style={{ fontFamily: S.dm, fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.12em', color: S.gold, marginBottom: 8 }}>
             Our Collection
           </p>
-          <h1 style={{ fontFamily: S.cm, fontSize: 'clamp(28px, 5vw, 36px)', fontWeight: 500, color: S.black, lineHeight: 1.2, margin: 0 }}>
+          <h1 style={{ fontFamily: S.cm, fontSize: 'clamp(28px, 5vw, 36px)', fontWeight: 500, color: '#F5F0E8', lineHeight: 1.2, margin: 0 }}>
             {filters.search ? `Search: "${filters.search}"` : 'All Products'}
           </h1>
           <p style={{ fontFamily: S.dm, fontSize: 13, color: S.muted, marginTop: 4 }}>
@@ -500,8 +500,8 @@ export default function Products() {
               <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
 
                 <select value={sort} onChange={e => setSort(e.target.value)} style={{
-                  background: S.white, border: `1px solid ${S.border}`, borderRadius: 2,
-                  padding: '8px 12px', fontFamily: S.dm, fontSize: 13, color: S.black, outline: 'none', cursor: 'pointer', minHeight: 44,
+                  background: '#1C1C17', border: '1px solid #2C2C26', borderRadius: 2,
+                  padding: '8px 12px', fontFamily: S.dm, fontSize: 13, color: '#F5F0E8', outline: 'none', cursor: 'pointer', minHeight: 44,
                 }}>
                   <option value="newest">Newest First</option>
                   <option value="price_asc">Price: Low → High</option>
@@ -555,9 +555,9 @@ export default function Products() {
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, marginTop: 48 }}>
                 <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1}
                   style={{
-                    width: 44, height: 44, minWidth: 44, minHeight: 44, border: `1px solid ${S.border}`, borderRadius: 2,
+                    width: 44, height: 44, minWidth: 44, minHeight: 44, border: '1px solid #2C2C26', borderRadius: 2,
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    background: S.white, color: S.secondary,
+                    background: '#141410', color: '#A89880',
                     cursor: page === 1 ? 'not-allowed' : 'pointer', opacity: page === 1 ? 0.35 : 1,
                   }}>
                   <ChevronLeft size={15} />
@@ -565,21 +565,21 @@ export default function Products() {
                 {Array.from({ length: totalPages }, (_, i) => i + 1).map((n) => (
                   <button key={n} onClick={() => setPage(n)} style={{
                     width: 44, height: 44, minWidth: 44, minHeight: 44,
-                    border: `1px solid ${page === n ? S.black : S.border}`,
+                    border: `1px solid ${page === n ? '#C9A96E' : '#2C2C26'}`,
                     borderRadius: 2,
-                    background: page === n ? S.black : S.white,
-                    color: page === n ? S.white : S.secondary,
+                    background: page === n ? '#C9A96E' : '#141410',
+                    color: page === n ? '#0D0D0B' : '#A89880',
                     fontFamily: S.dm, fontSize: 13, cursor: 'pointer', transition: 'all 0.15s',
                   }}
-                    onMouseEnter={e => { if (page !== n) { e.currentTarget.style.borderColor = S.black; e.currentTarget.style.color = S.black; } }}
-                    onMouseLeave={e => { if (page !== n) { e.currentTarget.style.borderColor = S.border; e.currentTarget.style.color = S.secondary; } }}
+                    onMouseEnter={e => { if (page !== n) { e.currentTarget.style.borderColor = '#3D3D34'; e.currentTarget.style.color = '#F5F0E8'; } }}
+                    onMouseLeave={e => { if (page !== n) { e.currentTarget.style.borderColor = '#2C2C26'; e.currentTarget.style.color = '#A89880'; } }}
                   >{n}</button>
                 ))}
                 <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages}
                   style={{
-                    width: 44, height: 44, minWidth: 44, minHeight: 44, border: `1px solid ${S.border}`, borderRadius: 2,
+                    width: 44, height: 44, minWidth: 44, minHeight: 44, border: '1px solid #2C2C26', borderRadius: 2,
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    background: S.white, color: S.secondary,
+                    background: '#141410', color: '#A89880',
                     cursor: page === totalPages ? 'not-allowed' : 'pointer', opacity: page === totalPages ? 0.35 : 1,
                   }}>
                   <ChevronRight size={15} />
@@ -608,16 +608,16 @@ export default function Products() {
               transition={{ type: 'spring', damping: 25, stiffness: 300 }}
               style={{
                 position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 70,
-                background: '#FFFFFF', borderTop: '1px solid #E8E8E4',
+                background: '#141410', borderTop: '1px solid #2C2C26',
                 borderRadius: '4px 4px 0 0', maxHeight: '85vh', overflowY: 'auto',
               }}
             >
-              <div style={{ width: 40, height: 4, background: '#E8E8E4', borderRadius: 9999, margin: '16px auto 8px' }} />
+              <div style={{ width: 40, height: 4, background: '#2C2C26', borderRadius: 9999, margin: '16px auto 8px' }} />
               <div style={{ padding: '0 20px 24px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
-                  <h3 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 20, fontWeight: 500, color: '#111111', margin: 0 }}>Filters</h3>
+                  <h3 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 20, fontWeight: 500, color: '#F5F0E8', margin: 0 }}>Filters</h3>
                   <button onClick={() => setMobileFiltersOpen(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 8 }}>
-                    <X size={20} color="#6B6B6B" />
+                    <X size={20} color="#A89880" />
                   </button>
                 </div>
                 {/* Reuse same filter sections as Sidebar */}
@@ -667,18 +667,18 @@ export default function Products() {
                   </FilterSection>
                 )}
               </div>
-              <div style={{ position: 'sticky', bottom: 0, background: '#FFFFFF', borderTop: '1px solid #E8E8E4', padding: '16px 20px', display: 'flex', gap: 12 }}>
+              <div style={{ position: 'sticky', bottom: 0, background: '#141410', borderTop: '1px solid #2C2C26', padding: '16px 20px', display: 'flex', gap: 12 }}>
                 <button onClick={resetAll} style={{
-                  flex: 1, padding: '12px 0', border: '1px solid #E8E8E4', borderRadius: 2,
+                  flex: 1, padding: '12px 0', border: '1px solid #2C2C26', borderRadius: 2,
                   background: 'transparent', fontFamily: "'DM Sans', sans-serif", fontSize: 12,
                   fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.06em',
-                  color: '#6B6B6B', cursor: 'pointer', minHeight: 44,
+                  color: '#A89880', cursor: 'pointer', minHeight: 44,
                 }}>Clear All</button>
                 <button onClick={() => setMobileFiltersOpen(false)} style={{
                   flex: 1, padding: '12px 0', border: 'none', borderRadius: 2,
-                  background: '#111111', fontFamily: "'DM Sans', sans-serif", fontSize: 12,
+                  background: '#F5F0E8', fontFamily: "'DM Sans', sans-serif", fontSize: 12,
                   fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.06em',
-                  color: '#FFFFFF', cursor: 'pointer', minHeight: 44,
+                  color: '#0D0D0B', cursor: 'pointer', minHeight: 44,
                 }}>Show Results</button>
               </div>
             </motion.div>
@@ -704,9 +704,9 @@ export default function Products() {
         }
         .price-thumb {
           position: absolute; width: 16px; height: 16px;
-          background: #111111; border: 2px solid white;
+          background: #C9A96E; border: 2px solid #0D0D0B;
           border-radius: 50%; top: -6px;
-          box-shadow: 0 1px 4px rgba(0,0,0,0.18);
+          box-shadow: 0 1px 4px rgba(0,0,0,0.5);
           pointer-events: none; z-index: 5;
         }
         .products-container { padding: 0 16px; }
