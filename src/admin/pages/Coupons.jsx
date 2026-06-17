@@ -54,9 +54,6 @@ function CouponModal({ initial, onSave, onClose }) {
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
   const cls = 'w-full border border-[#D0D0CA] rounded-sm px-3 py-2.5 text-sm text-[#111111] outline-none focus:border-[#C9A96E] transition-all bg-white';
 
-  const toggleCat = (cat) => set('categories', form.categories.includes(cat)
-    ? form.categories.filter(c => c !== cat)
-    : [...form.categories, cat]);
 
   return (
     <Modal isOpen={true} onClose={onClose} title={initial ? 'Edit Coupon' : 'Add New Coupon'} size="md"
