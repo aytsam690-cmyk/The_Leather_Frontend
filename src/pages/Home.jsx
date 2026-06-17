@@ -461,7 +461,7 @@ export default function Home() {
               <p style={{ fontFamily: S.dm, fontSize: 11, fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.12em', color: S.gold, marginBottom: 12 }}>
                 Shop by Category
               </p>
-              <h2 style={{ fontFamily: S.cm, fontSize: 'clamp(28px, 5vw, 40px)', fontWeight: 500, color: S.black, lineHeight: 1.1, margin: 0 }}>
+              <h2 style={{ fontFamily: S.cm, fontSize: 'clamp(28px, 5vw, 40px)', fontWeight: 500, color: S.gold, lineHeight: 1.1, margin: 0 }}>
                 Find What You Love
               </h2>
             </motion.div>
