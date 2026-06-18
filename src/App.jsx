@@ -1,6 +1,7 @@
 import { useEffect, lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
+import { Helmet } from 'react-helmet-async';
 import useSettingsStore from './store/settingsStore';
 
 // ─── Always-loaded components (above the fold) ────────────────────────────────
@@ -91,13 +92,28 @@ function CustomerRoutes() {
 
 function App() {
   const fetchSettings = useSettingsStore(s => s.fetchSettings);
+  const settings = useSettingsStore(s => s.settings);
+  const siteName = settings?.siteName || 'Store';
 
   useEffect(() => {
     fetchSettings();
   }, [fetchSettings]);
 
+  // Update document title as soon as settings load
+  useEffect(() => {
+    if (settings?.siteName) {
+      document.title = settings.siteName;
+    }
+  }, [settings?.siteName]);
+
   return (
     <BrowserRouter>
+      <Helmet>
+        <title>{siteName}</title>
+        <meta name="description" content={`Shop premium products at ${siteName}. Quality guaranteed with free delivery.`} />
+        <meta property="og:title" content={siteName} />
+        <meta property="og:type" content="website" />
+      </Helmet>
       <Suspense fallback={<PageLoader />}>
         <Routes>
           <Route path="/admin/login" element={<AdminLogin />} />
