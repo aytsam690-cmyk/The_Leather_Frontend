@@ -268,9 +268,11 @@ export default function Navbar() {
           left: 0,
           right: 0,
           zIndex: 50,
-          background: '#0D0D0B',
-          borderBottom: '1px solid #2C2C26',
-          transition: 'box-shadow 0.3s ease',
+          background: 'rgba(13, 13, 11, 0.85)',
+          backdropFilter: 'blur(12px)',
+          WebkitBackdropFilter: 'blur(12px)',
+          borderBottom: '1px solid rgba(44, 44, 38, 0.6)',
+          transition: 'box-shadow 0.3s ease, background 0.3s ease',
           boxShadow: scrolled ? '0 1px 3px rgba(0,0,0,0.4), 0 4px 16px rgba(0,0,0,0.3)' : 'none',
         }}
       >
