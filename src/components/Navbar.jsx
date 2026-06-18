@@ -748,9 +748,9 @@ export default function Navbar() {
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
-                justifyContent: 'center',
+                justifyContent: 'flex-start',
                 gap: 8,
-                padding: 32,
+                padding: '48px 32px 32px',
                 overflowY: 'auto',
               }}
             >
