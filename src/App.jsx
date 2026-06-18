@@ -6,6 +6,7 @@ import useSettingsStore from './store/settingsStore';
 // ─── Always-loaded components (above the fold) ────────────────────────────────
 import Navbar from './components/Navbar';
 import CartDrawer from './components/CartDrawer';
+import WhatsAppButton from './components/WhatsAppButton';
 import Home from './pages/Home';
 import ProtectedRoute from './components/ProtectedRoute';
 
@@ -118,6 +119,7 @@ function App() {
             <div style={{ minHeight: '100vh', background: '#FFFFFF', color: '#111111', fontFamily: "'DM Sans', sans-serif", overflowX: 'hidden', width: '100%' }}>
               <Navbar />
               <CartDrawer />
+              <WhatsAppButton />
               <CustomerRoutes />
             </div>
           } />
