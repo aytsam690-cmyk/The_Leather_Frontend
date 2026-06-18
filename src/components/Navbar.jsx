@@ -729,31 +729,59 @@ export default function Navbar() {
           </div>
         </div>
 
-        {/* Mobile Menu — full-screen dark overlay */}
-        <AnimatePresence>
-          {mobileOpen && (
-            <motion.div
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.3, ease: 'easeInOut' }}
-              style={{
-                position: 'fixed',
-                top: 72,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                background: '#0D0D0B',
-                zIndex: 9999,
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'flex-start',
-                gap: 8,
-                padding: '48px 32px 32px',
-                overflowY: 'auto',
-              }}
-            >
+        {/* Responsive styles */}
+        <style>{`
+          .navbar-container {
+            padding: 0 16px;
+          }
+          @media (min-width: 768px) {
+            .navbar-container {
+              padding: 0 24px;
+            }
+          }
+          @media (min-width: 1024px) {
+            .navbar-desktop-links { display: flex !important; }
+            .navbar-hamburger { display: none !important; }
+            .navbar-login-btn { display: flex !important; }
+            .navbar-user-menu { display: block !important; }
+          }
+          @media (max-width: 1023px) {
+            .navbar-desktop-links { display: none !important; }
+            .navbar-hamburger { display: flex !important; }
+            .navbar-login-btn { display: none !important; }
+            .navbar-user-menu { display: none !important; }
+          }
+          @media (max-width: 639px) {
+            .navbar-search-toggle { display: none !important; }
+          }
+        `}</style>
+      </motion.nav>
+
+      {/* Mobile Menu — full-screen dark overlay (OUTSIDE motion.nav for proper z-index) */}
+      <AnimatePresence>
+        {mobileOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3, ease: 'easeInOut' }}
+            style={{
+              position: 'fixed',
+              top: 72,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              background: '#0D0D0B',
+              zIndex: 9999,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'flex-start',
+              gap: 8,
+              padding: '48px 32px 32px',
+              overflowY: 'auto',
+            }}
+          >
               {navLinks.map((link) => (
                 <Link
                   key={link.path}
@@ -918,34 +946,6 @@ export default function Navbar() {
             </motion.div>
           )}
         </AnimatePresence>
-
-        {/* Responsive styles */}
-        <style>{`
-          .navbar-container {
-            padding: 0 16px;
-          }
-          @media (min-width: 768px) {
-            .navbar-container {
-              padding: 0 24px;
-            }
-          }
-          @media (min-width: 1024px) {
-            .navbar-desktop-links { display: flex !important; }
-            .navbar-hamburger { display: none !important; }
-            .navbar-login-btn { display: flex !important; }
-            .navbar-user-menu { display: block !important; }
-          }
-          @media (max-width: 1023px) {
-            .navbar-desktop-links { display: none !important; }
-            .navbar-hamburger { display: flex !important; }
-            .navbar-login-btn { display: none !important; }
-            .navbar-user-menu { display: none !important; }
-          }
-          @media (max-width: 639px) {
-            .navbar-search-toggle { display: none !important; }
-          }
-        `}</style>
-      </motion.nav>
     </>
   );
 }
