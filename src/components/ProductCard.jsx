@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ShoppingCart } from 'lucide-react';
 import useCartStore from '../store/cartStore';
@@ -18,9 +18,10 @@ function Stars({ rating }) {
   );
 }
 
-export default function ProductCard({ product }) {
+export default function ProductCard({ product, onBuyNow }) {
   const [clicked, setClicked] = useState(false);
   const { addItem } = useCartStore();
+  const navigate = useNavigate();
 
   const { formatPrice } = useCurrency();
 
@@ -213,6 +214,40 @@ export default function ProductCard({ product }) {
               ({(product.ratings?.count || product.reviews || 0).toLocaleString()})
             </span>
           </div>
+
+          {/* Buy Now */}
+          <button
+            className="pc-buy-now"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              if (product.stock <= 0) return;
+              if (onBuyNow) {
+                onBuyNow(product);
+              } else {
+                addItem(product, 1);
+                navigate('/checkout');
+              }
+            }}
+            disabled={product.stock <= 0}
+            style={{
+              width: '100%',
+              background: product.stock <= 0 ? '#3D3D34' : '#C9A96E',
+              color: '#fff',
+              border: 'none',
+              borderRadius: 2,
+              fontFamily: "'DM Sans', sans-serif",
+              fontWeight: 500,
+              textTransform: 'uppercase',
+              cursor: product.stock <= 0 ? 'not-allowed' : 'pointer',
+              transition: 'background 0.2s ease, opacity 0.2s ease, transform 0.2s ease',
+              opacity: product.stock <= 0 ? 0.4 : 1,
+            }}
+            onMouseEnter={e => { if (product.stock > 0) e.currentTarget.style.background = '#A07840'; }}
+            onMouseLeave={e => { if (product.stock > 0) e.currentTarget.style.background = '#C9A96E'; }}
+          >
+            {product.stock <= 0 ? 'Out of Stock' : 'Buy Now'}
+          </button>
         </div>
       </motion.div>
 
@@ -233,6 +268,7 @@ export default function ProductCard({ product }) {
         .pc-badge-new { font-size: 8px; padding: 2px 6px; }
         .pc-badges { top: 6px !important; left: 6px !important; }
         .quick-add-bar { padding: 8px 0; min-height: 36px; font-size: 9px; letter-spacing: 0.06em; }
+        .pc-buy-now { margin-top: 6px; padding: 7px 0; min-height: 32px; font-size: 9px; letter-spacing: 0.06em; }
 
         /* sm+ (640px) — restore desktop sizes */
         @media (min-width: 640px) {
@@ -247,6 +283,7 @@ export default function ProductCard({ product }) {
           .pc-badge-new { font-size: 10px; padding: 3px 8px; }
           .pc-badges { top: 12px !important; left: 12px !important; }
           .quick-add-bar { padding: 14px 0; min-height: 44px; font-size: 11px; letter-spacing: 0.10em; }
+          .pc-buy-now { margin-top: 8px; padding: 9px 0; min-height: 36px; font-size: 10px; letter-spacing: 0.08em; }
         }
       `}</style>
     </Link>

@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { getProduct, addReview } from '../services/api';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ShoppingCart, Star, X, ChevronLeft, ChevronRight, Share2, Check, Truck, RefreshCw, Shield } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
@@ -489,6 +489,7 @@ export default function ProductDetail() {
   const [relatedPage, setRelatedPage] = useState(0);
 
   const { addItem } = useCartStore();
+  const navigate = useNavigate();
 
 
   const DEFAULT_GRADIENT = 'linear-gradient(135deg,#667eea,#764ba2)';
@@ -558,6 +559,12 @@ export default function ProductDetail() {
     addItem({ ...product, ratings: { average: product.ratings.average, count: product.ratings.count } }, qty, { size: selectedSize, color: product.colors[selectedColor] });
     setAddedAnim(true);
     setTimeout(() => setAddedAnim(false), 1500);
+  };
+
+  const handleBuyNow = () => {
+    if (product.stock <= 0) return;
+    addItem({ ...product, ratings: { average: product.ratings.average, count: product.ratings.count } }, qty, { size: selectedSize, color: product.colors[selectedColor] });
+    navigate('/checkout');
   };
 
   const ITEMS_PER_SLIDE = 4;
@@ -781,6 +788,29 @@ export default function ProductDetail() {
                   </motion.button>
                 )}
               </AnimatePresence>
+
+              {/* Buy Now button */}
+              <motion.button
+                onClick={handleBuyNow}
+                disabled={product.stock === 0}
+                whileTap={{ scale: 0.97 }}
+                style={{
+                  width: '100%', padding: '16px 0', borderRadius: 2,
+                  background: product.stock === 0 ? '#3D3D34' : '#C9A96E',
+                  border: 'none', color: '#fff',
+                  fontFamily: "'DM Sans', sans-serif", fontSize: 13, fontWeight: 500,
+                  textTransform: 'uppercase', letterSpacing: '0.06em',
+                  cursor: product.stock === 0 ? 'not-allowed' : 'pointer',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+                  transition: 'background 0.2s ease',
+                  opacity: product.stock === 0 ? 0.4 : 1,
+                  marginTop: 10,
+                }}
+                onMouseEnter={e => { if (product.stock > 0) e.currentTarget.style.background = '#A07840'; }}
+                onMouseLeave={e => { if (product.stock > 0) e.currentTarget.style.background = '#C9A96E'; }}
+              >
+                Buy Now
+              </motion.button>
 
               {/* Share */}
               <div style={{ display: 'flex', gap: 12, marginTop: 12 }}>
