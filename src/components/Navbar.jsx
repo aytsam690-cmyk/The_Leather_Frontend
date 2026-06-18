@@ -744,7 +744,7 @@ export default function Navbar() {
                 right: 0,
                 bottom: 0,
                 background: '#0D0D0B',
-                zIndex: 60,
+                zIndex: 9999,
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
