@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import { Helmet } from 'react-helmet-async';
+import useSettingsStore from '../store/settingsStore';
 import { createOrder } from '../services/api';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -700,6 +702,8 @@ export default function Checkout() {
   const [orderNumber, setOrderNumber] = useState(null);
   const { items, clearCart, appliedCoupon } = useCartStore();
   const navigate = useNavigate();
+  const settings = useSettingsStore(s => s.settings);
+  const siteName = settings?.siteName || 'Store';
 
   // ── Empty cart redirect ──
   if (items.length === 0 && !orderNumber) {
@@ -759,6 +763,15 @@ export default function Checkout() {
   if (orderNumber) return <SuccessState orderNumber={orderNumber} shipping={shipping} />;
 
   return (
+    <>
+    <Helmet>
+      <title>{`Checkout | ${siteName}`}</title>
+      <meta name="description" content={`Complete your order securely at ${siteName}.`} />
+      <link rel="canonical" href={window.location.origin + '/checkout'} />
+      <meta property="og:title" content={`Checkout | ${siteName}`} />
+      <meta property="og:description" content={`Complete your order securely at ${siteName}.`} />
+      <meta property="og:url" content={window.location.origin + '/checkout'} />
+    </Helmet>
     <div style={{ minHeight: '100vh', background: '#0D0D0B', paddingTop: 96, paddingBottom: 64 }}>
       <div style={{ maxWidth: 1024, margin: '0 auto', padding: '0 24px' }}>
         {/* Step progress */}
@@ -797,5 +810,6 @@ export default function Checkout() {
         }
       `}</style>
     </div>
+  </>
   );
 }

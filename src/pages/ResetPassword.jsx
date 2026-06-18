@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Lock, Eye, EyeOff, CheckCircle, ArrowLeft, ShieldCheck } from 'lucide-react';
@@ -79,6 +80,7 @@ export default function ResetPassword() {
   const { token } = useParams();
   const navigate = useNavigate();
   const { settings } = useSettingsStore();
+  const siteName = settings?.siteName || 'Store';
 
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -119,6 +121,15 @@ export default function ResetPassword() {
   };
 
   return (
+    <>
+    <Helmet>
+      <title>{`Reset Password | ${siteName}`}</title>
+      <meta name="description" content={`Set a new password for your ${siteName} account.`} />
+      <link rel="canonical" href={window.location.origin + '/reset-password'} />
+      <meta property="og:title" content={`Reset Password | ${siteName}`} />
+      <meta property="og:description" content={`Set a new password for your ${siteName} account.`} />
+      <meta property="og:url" content={window.location.origin + '/reset-password'} />
+    </Helmet>
     <div
       className="min-h-screen flex items-center justify-center bg-[#0D0D0B]"
       style={{ padding: '5rem 1rem 2rem' }}
@@ -344,5 +355,6 @@ export default function ResetPassword() {
         </motion.div>
       </div>
     </div>
+    </>
   );
 }

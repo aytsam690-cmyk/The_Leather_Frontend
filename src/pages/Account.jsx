@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react';
+import { Helmet } from 'react-helmet-async';
+import useSettingsStore from '../store/settingsStore';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -281,6 +283,8 @@ export default function Account({ defaultTab = 'profile' }) {
   const [activeTab, setActiveTab] = useState(defaultTab);
   const { user, logout } = useAuthStore();
   const navigate = useNavigate();
+  const settings = useSettingsStore(s => s.settings);
+  const siteName = settings?.siteName || 'Store';
 
   const handleLogout = () => {
     logout();
@@ -290,6 +294,15 @@ export default function Account({ defaultTab = 'profile' }) {
   const initials = (user?.name || 'User').split(' ').map((w) => w[0]).join('').toUpperCase().slice(0, 2);
 
   return (
+    <>
+    <Helmet>
+      <title>{`My Account | ${siteName}`}</title>
+      <meta name="description" content={`Manage your ${siteName} account, orders, and wishlist.`} />
+      <link rel="canonical" href={window.location.origin + '/account'} />
+      <meta property="og:title" content={`My Account | ${siteName}`} />
+      <meta property="og:description" content={`Manage your ${siteName} account, orders, and wishlist.`} />
+      <meta property="og:url" content={window.location.origin + '/account'} />
+    </Helmet>
     <div className="min-h-screen bg-[#0D0D0B]">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12">
         <div className="mb-8">
@@ -335,5 +348,6 @@ export default function Account({ defaultTab = 'profile' }) {
         </div>
       </div>
     </div>
+    </>
   );
 }

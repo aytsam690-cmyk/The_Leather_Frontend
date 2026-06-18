@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Eye, EyeOff, Check, Mail, Lock } from 'lucide-react';
@@ -74,6 +75,7 @@ export default function Login() {
 
   const storeLogin = useAuthStore((s) => s.login);
   const { settings } = useSettingsStore();
+  const siteName = settings?.siteName || 'Store';
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -110,6 +112,15 @@ export default function Login() {
   };
 
   return (
+    <>
+    <Helmet>
+      <title>{`Login | ${siteName}`}</title>
+      <meta name="description" content={`Log in to your ${siteName} account to track orders and manage your profile.`} />
+      <link rel="canonical" href={window.location.origin + '/login'} />
+      <meta property="og:title" content={`Login | ${siteName}`} />
+      <meta property="og:description" content={`Log in to your ${siteName} account to track orders and manage your profile.`} />
+      <meta property="og:url" content={window.location.origin + '/login'} />
+    </Helmet>
     <div className="min-h-screen flex items-center justify-center px-4 py-12" style={{ background: '#0D0D0B' }}>
       <motion.div
         initial={{ opacity: 0, scale: 0.97 }}
@@ -222,5 +233,6 @@ export default function Login() {
         </p>
       </motion.div>
     </div>
+    </>
   );
 }

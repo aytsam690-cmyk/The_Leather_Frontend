@@ -206,6 +206,7 @@ export default function Home() {
       <Helmet>
         <title>{settings?.siteName || 'Store'} — Premium Products</title>
         <meta name="description" content={`Discover premium products curated just for you at ${settings?.siteName || 'our store'}. Quality you can feel, style you can trust.`} />
+        <link rel="canonical" href={window.location.origin + window.location.pathname} />
       </Helmet>
 
       {/* ══════════════════════════════════════════════════════════════════════

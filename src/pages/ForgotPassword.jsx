@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Mail, ArrowLeft, CheckCircle, Send } from 'lucide-react';
@@ -12,6 +13,7 @@ export default function ForgotPassword() {
   const [error, setError] = useState('');
   const [focused, setFocused] = useState(false);
   const { settings } = useSettingsStore();
+  const siteName = settings?.siteName || 'Store';
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -31,6 +33,15 @@ export default function ForgotPassword() {
   };
 
   return (
+    <>
+    <Helmet>
+      <title>{`Forgot Password | ${siteName}`}</title>
+      <meta name="description" content={`Reset your ${siteName} account password.`} />
+      <link rel="canonical" href={window.location.origin + '/forgot-password'} />
+      <meta property="og:title" content={`Forgot Password | ${siteName}`} />
+      <meta property="og:description" content={`Reset your ${siteName} account password.`} />
+      <meta property="og:url" content={window.location.origin + '/forgot-password'} />
+    </Helmet>
     <div
       className="min-h-screen flex items-center justify-center bg-[#0D0D0B]"
       style={{ padding: '5rem 1rem 2rem' }}
@@ -256,5 +267,6 @@ export default function ForgotPassword() {
         </motion.div>
       </div>
     </div>
+    </>
   );
 }

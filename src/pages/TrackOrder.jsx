@@ -255,6 +255,7 @@ export default function TrackOrder() {
       <Helmet>
         <title>Track Order — {settings?.siteName || 'Store'}</title>
         <meta name="description" content="Track your orders by entering your phone number." />
+        <link rel="canonical" href={window.location.origin + window.location.pathname} />
       </Helmet>
 
       <div style={{ maxWidth: 720, margin: '0 auto', padding: '0 24px' }}>

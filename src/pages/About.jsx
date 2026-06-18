@@ -51,6 +51,7 @@ export default function About() {
       <Helmet>
         <title>About Us — {siteName}</title>
         <meta name="description" content={`Learn about ${siteName} — our story, values, and commitment to bringing you premium products with exceptional quality.`} />
+        <link rel="canonical" href={window.location.origin + window.location.pathname} />
       </Helmet>
 
       {/* ── Hero ──────────────────────────────────────────────────────────── */}

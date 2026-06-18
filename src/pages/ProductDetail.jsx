@@ -574,9 +574,39 @@ export default function ProductDetail() {
     <div style={{ background: '#0D0D0B', minHeight: '100vh', paddingTop: 96 }}>
       <Helmet>
         <title>{product.name} | {settings?.siteName || 'Store'}</title>
-        <meta name="description" content={product.description?.slice(0, 150) + '...'} />
-        <meta property="og:title" content={product.name} />
+        <meta name="description" content={product.description?.slice(0, 155) || `Buy ${product.name} at ${settings?.siteName || 'our store'}`} />
+        <link rel="canonical" href={window.location.origin + window.location.pathname} />
+        <meta property="og:title" content={`${product.name} | ${settings?.siteName || 'Store'}`} />
+        <meta property="og:description" content={product.description?.slice(0, 155) || ''} />
+        <meta property="og:type" content="product" />
+        <meta property="og:url" content={window.location.origin + `/products/${product.slug || product._id}`} />
         {product.images?.[0]?.url && <meta property="og:image" content={product.images[0].url} />}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={product.name} />
+        {product.images?.[0]?.url && <meta name="twitter:image" content={product.images[0].url} />}
+        <script type="application/ld+json">{JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Product",
+          "name": product.name,
+          "description": product.description?.slice(0, 500) || '',
+          "image": product.images?.[0]?.url || '',
+          "brand": { "@type": "Brand", "name": settings?.siteName || 'Store' },
+          "sku": product._id,
+          "offers": {
+            "@type": "Offer",
+            "price": product.price,
+            "priceCurrency": settings?.currency || 'PKR',
+            "availability": product.stock > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
+            "url": window.location.origin + `/products/${product.slug || product._id}`
+          },
+          ...(product.ratings?.count > 0 ? {
+            "aggregateRating": {
+              "@type": "AggregateRating",
+              "ratingValue": product.ratings.average,
+              "reviewCount": product.ratings.count
+            }
+          } : {})
+        })}</script>
       </Helmet>
 
       <div className="pd-container" style={{ maxWidth: 1280, margin: '0 auto', padding: '24px 16px' }}>

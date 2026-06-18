@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Eye, EyeOff, Check, Mail, Lock, Phone, User, ShieldCheck } from 'lucide-react';
@@ -89,6 +90,7 @@ export default function Register() {
 
   const storeLogin = useAuthStore((s) => s.login);
   const { settings } = useSettingsStore();
+  const siteName = settings?.siteName || 'Store';
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -132,6 +134,15 @@ export default function Register() {
   const strength = getPasswordStrength(form.password);
 
   return (
+    <>
+    <Helmet>
+      <title>{`Create Account | ${siteName}`}</title>
+      <meta name="description" content={`Create your ${siteName} account for exclusive offers and easy checkout.`} />
+      <link rel="canonical" href={window.location.origin + '/register'} />
+      <meta property="og:title" content={`Create Account | ${siteName}`} />
+      <meta property="og:description" content={`Create your ${siteName} account for exclusive offers and easy checkout.`} />
+      <meta property="og:url" content={window.location.origin + '/register'} />
+    </Helmet>
     <div className="min-h-screen bg-[#0D0D0B] flex items-center justify-center px-4 py-12">
       <motion.div
         initial={{ opacity: 0, scale: 0.97 }}
@@ -256,5 +267,6 @@ export default function Register() {
         </p>
       </motion.div>
     </div>
+    </>
   );
 }
