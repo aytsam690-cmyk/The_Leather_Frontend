@@ -699,9 +699,9 @@ export default function Home() {
               </div>
             </div>
             {(settings?.footerColumns?.length > 0 ? settings.footerColumns : [
-              { title: 'Shop', links: [{ label: 'All Products', url: '/products' }, { label: 'New Arrivals', url: '/products' }, { label: 'Featured', url: '/products' }, { label: 'Sale', url: '/products' }, { label: 'Categories', url: '/products' }] },
-              { title: 'Help', links: [{ label: 'Track Order', url: '/track-order' }, { label: 'Returns & Exchanges', url: '/track-order' }, { label: 'Shipping Info', url: '/track-order' }, { label: 'Size Guide', url: '/track-order' }, { label: 'Contact Us', url: '/track-order' }] },
-              { title: 'Account', links: [{ label: 'My Profile', url: '/account' }, { label: 'My Orders', url: '/orders' }, { label: 'Login / Register', url: '/login' }] },
+              { title: 'Shop', links: [{ label: 'All Products', url: '/products' }] },
+              { title: 'Help', links: [{ label: 'Track Order', url: '/track-order' }] },
+              { title: 'Account', links: [{ label: 'My Profile', url: '/account' }] },
             ]).map((col, idx) => (
               <div key={col.title || idx}>
                 <h4 style={{ fontFamily: S.dm, fontSize: 11, fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.1em', color: '#A89880', marginBottom: 16 }}>{col.title}</h4>
