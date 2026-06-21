@@ -911,8 +911,7 @@ export default function ProductDetail() {
               </div>
             </div>
 
-            {/* Reviews Section right after Buy Now */}
-            <ProductReviews product={product} reviews={reviews} onReviewSubmit={() => {}} />
+
 
             {/* Highlights */}
             <div style={{ borderTop: '1px solid #2C2C26', marginTop: 24, paddingTop: 24, display: 'flex', flexDirection: 'column', gap: 12 }}>
@@ -930,8 +929,15 @@ export default function ProductDetail() {
           </div>
         </div>
 
-        {/* Tabs */}
-        <Tabs product={product} />
+        {/* Description/Specs + Reviews side by side on desktop */}
+        <div className="pd-details-reviews" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 48, marginTop: 48 }}>
+          <div>
+            <Tabs product={product} />
+          </div>
+          <div>
+            <ProductReviews product={product} reviews={reviews} onReviewSubmit={() => {}} />
+          </div>
+        </div>
 
         {/* Related Products */}
         {relatedProducts.length > 0 && (
@@ -979,7 +985,10 @@ export default function ProductDetail() {
       <style>{`
   .pd-container { padding: 24px 16px; }
   @media (min-width: 768px) { .pd-container { padding: 48px 24px; } }
-  @media (max-width: 1023px) { .pd-grid { grid-template-columns: 1fr !important; gap: 32px !important; } }
+  @media (max-width: 1023px) {
+    .pd-grid { grid-template-columns: 1fr !important; gap: 32px !important; }
+    .pd-details-reviews { grid-template-columns: 1fr !important; gap: 32px !important; }
+  }
   @media (max-width: 639px) { 
     .pd-thumb { width: 56px !important; height: 56px !important; }
   }
