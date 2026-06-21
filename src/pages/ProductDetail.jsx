@@ -444,87 +444,7 @@ function ProductReviews({ product, reviews, onReviewSubmit }) {
   );
 }
 
-// ─── Tabs ────────────────────────────────────────────────────────────────────
-function Tabs({ product, reviews, onReviewSubmit }) {
-  const [tab, setTab] = useState('description');
-  const TABS = ['description', 'specifications'];
 
-  return (
-    <div style={{ marginTop: 64, borderTop: '1px solid #2C2C26' }}>
-      {/* Tab bar */}
-      <div className="pd-tab-bar" style={{ display: 'flex', overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
-        {TABS.map(t => (
-          <button
-            key={t}
-            onClick={() => setTab(t)}
-            style={{
-              fontFamily: "'DM Sans', sans-serif",
-              fontSize: 12,
-              textTransform: 'uppercase',
-              letterSpacing: '0.1em',
-              padding: '14px 16px', flexShrink: 0, minHeight: 44,
-              cursor: 'pointer',
-              background: 'transparent',
-              border: 'none',
-              borderBottom: tab === t ? '2px solid #C9A96E' : '2px solid transparent',
-              color: tab === t ? '#F5F0E8' : '#6B6055',
-              transition: 'all 0.2s ease',
-            }}
-            onMouseEnter={e => { if (tab !== t) e.currentTarget.style.color = '#A89880'; }}
-            onMouseLeave={e => { if (tab !== t) e.currentTarget.style.color = '#6B6055'; }}
-          >
-            {t.charAt(0).toUpperCase() + t.slice(1)}
-          </button>
-        ))}
-      </div>
-
-      {/* Tab content */}
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={tab}
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.25 }}
-          style={{ paddingTop: 32 }}
-        >
-          {/* ── Description ── */}
-          {tab === 'description' && (
-            <p style={{
-              fontFamily: "'DM Sans', sans-serif",
-              fontSize: 14,
-              color: '#A89880',
-              lineHeight: 1.5,
-              maxWidth: 680,
-            }}>
-              {product.description}
-            </p>
-          )}
-
-          {/* ── Specifications ── */}
-          {tab === 'specifications' && (
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 2, maxWidth: 700 }}>
-              {Object.entries(product.specs || {}).map(([k, v], i) => (
-                <div key={k} style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  padding: '12px 16px',
-                  background: i % 2 === 0 ? '#1C1C17' : '#141410',
-                  border: '1px solid #2C2C26',
-                }}>
-                  <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: '#6B6055' }}>{k}</span>
-                  <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, fontWeight: 500, color: '#F5F0E8' }}>{v}</span>
-                </div>
-              ))}
-            </div>
-          )}
-
-        </motion.div>
-      </AnimatePresence>
-    </div>
-  );
-}
 
 // ─── Main Component ───────────────────────────────────────────────────────────
 export default function ProductDetail() {
@@ -929,15 +849,55 @@ export default function ProductDetail() {
           </div>
         </div>
 
-        {/* Description/Specs + Reviews side by side on desktop */}
-        <div className="pd-details-reviews" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 48, marginTop: 48 }}>
-          <div>
-            <Tabs product={product} />
-          </div>
-          <div>
-            <ProductReviews product={product} reviews={reviews} onReviewSubmit={() => {}} />
-          </div>
-        </div>
+        {/* ── Reviews Section ── */}
+        <div style={{ borderTop: '1px solid #2C2C26' }} />
+        <section style={{ maxWidth: 1280, margin: '0 auto', padding: '48px 16px' }}>
+          <ProductReviews product={product} reviews={reviews} onReviewSubmit={() => {}} />
+        </section>
+
+        {/* ── Description Section ── */}
+        <div style={{ borderTop: '1px solid #2C2C26' }} />
+        <section style={{ maxWidth: 1280, margin: '0 auto', padding: '48px 16px' }}>
+          <h3 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(32px, 5vw, 40px)', fontWeight: 500, color: '#F5F0E8', marginBottom: 32 }}>
+            Description
+          </h3>
+          <p style={{
+            fontFamily: "'DM Sans', sans-serif",
+            fontSize: 14,
+            color: '#A89880',
+            lineHeight: 1.5,
+            maxWidth: 680,
+          }}>
+            {product.description}
+          </p>
+        </section>
+
+        {/* ── Specifications Section ── */}
+        {Object.keys(product.specs || {}).length > 0 && (
+          <>
+            <div style={{ borderTop: '1px solid #2C2C26' }} />
+            <section style={{ maxWidth: 1280, margin: '0 auto', padding: '48px 16px' }}>
+              <h3 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(32px, 5vw, 40px)', fontWeight: 500, color: '#F5F0E8', marginBottom: 32 }}>
+                Details & Specifications
+              </h3>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 2, maxWidth: 700 }}>
+                {Object.entries(product.specs || {}).map(([k, v], i) => (
+                  <div key={k} style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    padding: '12px 16px',
+                    background: i % 2 === 0 ? '#1C1C17' : '#141410',
+                    border: '1px solid #2C2C26',
+                  }}>
+                    <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: '#6B6055' }}>{k}</span>
+                    <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, fontWeight: 500, color: '#F5F0E8' }}>{v}</span>
+                  </div>
+                ))}
+              </div>
+            </section>
+          </>
+        )}
 
         {/* Related Products */}
         {relatedProducts.length > 0 && (
@@ -987,13 +947,10 @@ export default function ProductDetail() {
   @media (min-width: 768px) { .pd-container { padding: 48px 24px; } }
   @media (max-width: 1023px) {
     .pd-grid { grid-template-columns: 1fr !important; gap: 32px !important; }
-    .pd-details-reviews { grid-template-columns: 1fr !important; gap: 32px !important; }
   }
   @media (max-width: 639px) { 
     .pd-thumb { width: 56px !important; height: 56px !important; }
   }
-  .pd-tab-bar::-webkit-scrollbar { display: none; }
-  .pd-tab-bar { scrollbar-width: none; }
       `}</style>
     </div>
   );
