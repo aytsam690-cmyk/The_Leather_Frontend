@@ -155,8 +155,9 @@ img { max-width: 100%; height: auto; }
   /* Hero CTA buttons: stack on very small screens */
   .hero-cta-wrap { flex-direction: column !important; align-items: flex-start !important; gap: 12px !important; }
 
-  /* Home: footer single column */
-  .footer-grid { grid-template-columns: 1fr !important; }
+  /* Home: footer — brand full-width, link columns stay 3-up */
+  .footer-grid { grid-template-columns: repeat(3, 1fr) !important; }
+  .footer-grid > div:first-child { grid-column: 1 / -1 !important; }
 
   /* Home: category cards */
   .cat-card { min-width: 130px !important; }

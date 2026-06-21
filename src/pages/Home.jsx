@@ -781,7 +781,8 @@ export default function Home() {
           .footer-grid { grid-template-columns: 1fr 1fr !important; }
         }
         @media (max-width: 640px) {
-          .footer-grid { grid-template-columns: 1fr !important; }
+          .footer-grid { grid-template-columns: repeat(3, 1fr) !important; }
+          .footer-grid > div:first-child { grid-column: 1 / -1 !important; }
         }
         .home-container { padding-left: 16px !important; padding-right: 16px !important; }
         @media (min-width: 768px) { .home-container { padding-left: 24px !important; padding-right: 24px !important; } }
