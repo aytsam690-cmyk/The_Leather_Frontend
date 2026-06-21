@@ -283,7 +283,7 @@ function ProductForm({ initial, saving, onCancel, onSave, categories }) {
               <p className="text-blue-600 text-base font-medium leading-tight hover:underline cursor-pointer">
                 {form.metaTitle || form.name || 'Page Title'}
               </p>
-              <p className="text-[#2D6A4F] text-xs mt-0.5">shopverse.com/products/{form.slug || 'product-slug'}</p>
+              <p className="text-[#2D6A4F] text-xs mt-0.5">crafthid.com/products/{form.slug || 'product-slug'}</p>
               <p className="text-[#6B6B6B] text-sm mt-1 leading-relaxed">
                 {form.metaDescription || 'No description provided. Add a meta description to improve search visibility.'}
               </p>
