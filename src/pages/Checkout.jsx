@@ -384,7 +384,7 @@ function ReviewOrder({ shipping, onBack, onNext }) {
           <label style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 10, fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#6B6055', display: 'block', marginBottom: 6 }}>
             Shipping To
           </label>
-          <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: '#111111', lineHeight: 1.6, margin: 0 }}>
+          <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: '#F5F0E8', lineHeight: 1.6, margin: 0 }}>
             {shipping.fullName}<br />
             {shipping.address1}{shipping.address2 ? `, ${shipping.address2}` : ''}<br />
             {shipping.city}, {shipping.state} {shipping.zip}<br />
