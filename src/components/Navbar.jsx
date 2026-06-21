@@ -282,7 +282,7 @@ export default function Navbar() {
             {/* Logo */}
             <Link to="/" style={{ textDecoration: 'none', flexShrink: 0, display: 'flex', alignItems: 'center', gap: 12 }}>
               {settings?.logo && (
-                <img src={settings.logo} alt={settings.siteName || 'Store Logo'} style={{ maxHeight: '52px', maxWidth: '200px', width: 'auto', height: 'auto', objectFit: 'contain' }} />
+                <img src={settings.logo} alt={settings.siteName || 'Store Logo'} style={{ maxHeight: '58px', maxWidth: '220px', width: 'auto', height: 'auto', objectFit: 'contain' }} />
               )}
               <span style={{
                 fontFamily: "'Cormorant Garamond', serif",
