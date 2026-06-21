@@ -259,14 +259,12 @@ function Gallery({ images }) {
   );
 }
 
-// ─── Tabs ────────────────────────────────────────────────────────────────────
-function Tabs({ product, reviews, onReviewSubmit }) {
-  const [tab, setTab] = useState('description');
+
+// ─── Product Reviews ─────────────────────────────────────────────────────────
+function ProductReviews({ product, reviews, onReviewSubmit }) {
   const [reviewForm, setReviewForm] = useState({ rating: 0, comment: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [reviewMsg, setReviewMsg] = useState({ type: '', text: '' });
-
-  const TABS = ['description', 'specifications', 'reviews'];
 
   // ── handleSubmitReview logic unchanged ──
   const handleSubmitReview = async () => {
@@ -294,79 +292,9 @@ function Tabs({ product, reviews, onReviewSubmit }) {
   const avgRating = reviews.length ? (reviews.reduce((s, r) => s + r.rating, 0) / reviews.length).toFixed(1) : (product.ratings?.average || 0).toFixed(1);
 
   return (
-    <div style={{ marginTop: 64, borderTop: '1px solid #2C2C26' }}>
-      {/* Tab bar */}
-      <div className="pd-tab-bar" style={{ display: 'flex', overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
-        {TABS.map(t => (
-          <button
-            key={t}
-            onClick={() => setTab(t)}
-            style={{
-              fontFamily: "'DM Sans', sans-serif",
-              fontSize: 12,
-              textTransform: 'uppercase',
-              letterSpacing: '0.1em',
-              padding: '14px 16px', flexShrink: 0, minHeight: 44,
-              cursor: 'pointer',
-              background: 'transparent',
-              border: 'none',
-              borderBottom: tab === t ? '2px solid #C9A96E' : '2px solid transparent',
-              color: tab === t ? '#F5F0E8' : '#6B6055',
-              transition: 'all 0.2s ease',
-            }}
-            onMouseEnter={e => { if (tab !== t) e.currentTarget.style.color = '#A89880'; }}
-            onMouseLeave={e => { if (tab !== t) e.currentTarget.style.color = '#6B6055'; }}
-          >
-            {t === 'reviews' ? `Reviews (${reviews.length})` : t.charAt(0).toUpperCase() + t.slice(1)}
-          </button>
-        ))}
-      </div>
+    <div style={{ marginTop: 40, borderTop: '1px solid #2C2C26', paddingTop: 32 }}>
+      <h3 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 24, fontWeight: 500, color: '#F5F0E8', marginBottom: 24 }}>Customer Reviews</h3>
 
-      {/* Tab content */}
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={tab}
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.25 }}
-          style={{ paddingTop: 32 }}
-        >
-          {/* ── Description ── */}
-          {tab === 'description' && (
-            <p style={{
-              fontFamily: "'DM Sans', sans-serif",
-              fontSize: 14,
-              color: '#A89880',
-              lineHeight: 1.8,
-              maxWidth: 680,
-            }}>
-              {product.description}
-            </p>
-          )}
-
-          {/* ── Specifications ── */}
-          {tab === 'specifications' && (
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 2, maxWidth: 700 }}>
-              {Object.entries(product.specs || {}).map(([k, v], i) => (
-                <div key={k} style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  padding: '12px 16px',
-                  background: i % 2 === 0 ? '#1C1C17' : '#141410',
-                  border: '1px solid #2C2C26',
-                }}>
-                  <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: '#6B6055' }}>{k}</span>
-                  <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, fontWeight: 500, color: '#F5F0E8' }}>{v}</span>
-                </div>
-              ))}
-            </div>
-          )}
-
-          {/* ── Reviews ── */}
-          {tab === 'reviews' && (
-            <div>
               {/* Summary */}
               {reviews.length > 0 && (
                 <div style={{
@@ -512,8 +440,86 @@ function Tabs({ product, reviews, onReviewSubmit }) {
                   {isSubmitting ? 'Submitting…' : 'Submit Review'}
                 </button>
               </div>
+    </div>
+  );
+}
+
+// ─── Tabs ────────────────────────────────────────────────────────────────────
+function Tabs({ product, reviews, onReviewSubmit }) {
+  const [tab, setTab] = useState('description');
+  const TABS = ['description', 'specifications'];
+
+  return (
+    <div style={{ marginTop: 64, borderTop: '1px solid #2C2C26' }}>
+      {/* Tab bar */}
+      <div className="pd-tab-bar" style={{ display: 'flex', overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
+        {TABS.map(t => (
+          <button
+            key={t}
+            onClick={() => setTab(t)}
+            style={{
+              fontFamily: "'DM Sans', sans-serif",
+              fontSize: 12,
+              textTransform: 'uppercase',
+              letterSpacing: '0.1em',
+              padding: '14px 16px', flexShrink: 0, minHeight: 44,
+              cursor: 'pointer',
+              background: 'transparent',
+              border: 'none',
+              borderBottom: tab === t ? '2px solid #C9A96E' : '2px solid transparent',
+              color: tab === t ? '#F5F0E8' : '#6B6055',
+              transition: 'all 0.2s ease',
+            }}
+            onMouseEnter={e => { if (tab !== t) e.currentTarget.style.color = '#A89880'; }}
+            onMouseLeave={e => { if (tab !== t) e.currentTarget.style.color = '#6B6055'; }}
+          >
+            {t.charAt(0).toUpperCase() + t.slice(1)}
+          </button>
+        ))}
+      </div>
+
+      {/* Tab content */}
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={tab}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.25 }}
+          style={{ paddingTop: 32 }}
+        >
+          {/* ── Description ── */}
+          {tab === 'description' && (
+            <p style={{
+              fontFamily: "'DM Sans', sans-serif",
+              fontSize: 14,
+              color: '#A89880',
+              lineHeight: 1.5,
+              maxWidth: 680,
+            }}>
+              {product.description}
+            </p>
+          )}
+
+          {/* ── Specifications ── */}
+          {tab === 'specifications' && (
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 2, maxWidth: 700 }}>
+              {Object.entries(product.specs || {}).map(([k, v], i) => (
+                <div key={k} style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  padding: '12px 16px',
+                  background: i % 2 === 0 ? '#1C1C17' : '#141410',
+                  border: '1px solid #2C2C26',
+                }}>
+                  <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: '#6B6055' }}>{k}</span>
+                  <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, fontWeight: 500, color: '#F5F0E8' }}>{v}</span>
+                </div>
+              ))}
             </div>
           )}
+
         </motion.div>
       </AnimatePresence>
     </div>
@@ -905,6 +911,9 @@ export default function ProductDetail() {
               </div>
             </div>
 
+            {/* Reviews Section right after Buy Now */}
+            <ProductReviews product={product} reviews={reviews} onReviewSubmit={() => {}} />
+
             {/* Highlights */}
             <div style={{ borderTop: '1px solid #2C2C26', marginTop: 24, paddingTop: 24, display: 'flex', flexDirection: 'column', gap: 12 }}>
               {[
@@ -922,7 +931,7 @@ export default function ProductDetail() {
         </div>
 
         {/* Tabs */}
-        <Tabs product={product} reviews={reviews} onReviewSubmit={() => {}} />
+        <Tabs product={product} />
 
         {/* Related Products */}
         {relatedProducts.length > 0 && (
