@@ -113,6 +113,7 @@ function App() {
         <meta name="description" content={`Shop premium products at ${siteName}. Quality guaranteed with free delivery.`} />
         <meta property="og:title" content={siteName} />
         <meta property="og:type" content="website" />
+        {settings?.logo && <link rel="icon" href={settings.logo} />}
       </Helmet>
       <Suspense fallback={<PageLoader />}>
         <Routes>
