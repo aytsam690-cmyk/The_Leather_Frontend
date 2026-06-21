@@ -46,7 +46,25 @@ function StarDisplay({ rating, size = 14 }) {
 // ─── Image Gallery ───────────────────────────────────────────────────────────
 function Gallery({ images }) {
   const [active, setActive] = useState(0);
+  const [direction, setDirection] = useState(0);
   const [lightboxOpen, setLightboxOpen] = useState(false);
+
+  const slideVariants = {
+    enter: (dir) => ({
+      x: dir > 0 ? '100%' : '-100%',
+      opacity: 0,
+    }),
+    center: {
+      zIndex: 1,
+      x: 0,
+      opacity: 1,
+    },
+    exit: (dir) => ({
+      zIndex: 0,
+      x: dir < 0 ? '100%' : '-100%',
+      opacity: 0,
+    }),
+  };
 
   return (
     <>
@@ -63,24 +81,28 @@ function Gallery({ images }) {
             cursor: 'zoom-in',
           }}
         >
-          <AnimatePresence mode="wait">
+          <AnimatePresence initial={false} custom={direction}>
             <motion.div
               key={active}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.25 }}
+              custom={direction}
+              variants={slideVariants}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              transition={{ x: { type: 'spring', stiffness: 300, damping: 30 }, opacity: { duration: 0.2 } }}
               style={{ position: 'absolute', inset: 0, touchAction: 'pan-y' }}
               drag="x"
               dragConstraints={{ left: 0, right: 0 }}
-              dragElastic={0.2}
+              dragElastic={1}
               onDragEnd={(e, { offset }) => {
                 const swipe = offset.x;
                 if (swipe < -40) {
                   // Swiped left -> next
+                  setDirection(1);
                   setActive(a => (a + 1) % images.length);
                 } else if (swipe > 40) {
                   // Swiped right -> prev
+                  setDirection(-1);
                   setActive(a => (a - 1 + images.length) % images.length);
                 } else {
                   // Small or no movement -> treat as click
@@ -120,7 +142,10 @@ function Gallery({ images }) {
           {images.map((img, i) => (
             <button
               key={i}
-              onClick={() => setActive(i)}
+              onClick={() => {
+                setDirection(i > active ? 1 : -1);
+                setActive(i);
+              }}
               className="pd-thumb"
               style={{
                 width: 64, height: 64, flexShrink: 0,
@@ -186,7 +211,10 @@ function Gallery({ images }) {
 
             {/* Prev */}
             <button
-              onClick={() => setActive(a => Math.max(0, a - 1))}
+              onClick={() => {
+                setDirection(-1);
+                setActive(a => Math.max(0, a - 1));
+              }}
               disabled={active === 0}
               style={{
                 position: 'absolute', left: 24, top: '50%', transform: 'translateY(-50%)',
@@ -204,7 +232,10 @@ function Gallery({ images }) {
 
             {/* Next */}
             <button
-              onClick={() => setActive(a => Math.min(images.length - 1, a + 1))}
+              onClick={() => {
+                setDirection(1);
+                setActive(a => Math.min(images.length - 1, a + 1));
+              }}
               disabled={active === images.length - 1}
               style={{
                 position: 'absolute', right: 24, top: '50%', transform: 'translateY(-50%)',
