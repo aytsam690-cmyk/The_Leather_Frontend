@@ -268,10 +268,10 @@ export default function Navbar() {
           left: 0,
           right: 0,
           zIndex: 50,
-          background: 'rgba(13, 13, 11, 0.25)',
-          backdropFilter: 'blur(16px)',
-          WebkitBackdropFilter: 'blur(16px)',
-          borderBottom: '1px solid rgba(44, 44, 38, 0.3)',
+          background: 'transparent',
+          backdropFilter: 'none',
+          WebkitBackdropFilter: 'none',
+          borderBottom: 'none',
           transition: 'box-shadow 0.3s ease, background 0.3s ease',
           boxShadow: scrolled ? '0 1px 3px rgba(0,0,0,0.4), 0 4px 16px rgba(0,0,0,0.3)' : 'none',
         }}
@@ -282,7 +282,7 @@ export default function Navbar() {
             {/* Logo */}
             <Link to="/" style={{ textDecoration: 'none', flexShrink: 0, display: 'flex', alignItems: 'center', gap: 12 }}>
               {settings?.logo && (
-                <img src={settings.logo} alt={settings.siteName || 'Store Logo'} style={{ maxHeight: '32px', maxWidth: '140px', width: 'auto', height: 'auto', objectFit: 'contain' }} />
+                <img src={settings.logo} alt={settings.siteName || 'Store Logo'} style={{ maxHeight: '52px', maxWidth: '200px', width: 'auto', height: 'auto', objectFit: 'contain' }} />
               )}
               <span style={{
                 fontFamily: "'Cormorant Garamond', serif",
