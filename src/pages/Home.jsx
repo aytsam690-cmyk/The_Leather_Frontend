@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+// Arrow icons removed — hero auto-slides
 import { getFeaturedProducts, getCategories, getBanners } from '../services/api';
 
 import useSettingsStore from '../store/settingsStore';
@@ -271,21 +271,7 @@ export default function Home() {
             display: 'flex', flexDirection: 'column', justifyContent: 'space-between',
           }}>
 
-            {/* TOP BAR */}
-            <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'flex-start' }}>
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={`slide-count-${currentSlide}`}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.4 }}
-                  style={{ fontFamily: S.dm, fontSize: 11, color: 'rgba(255,255,255,0.6)', textTransform: 'uppercase', letterSpacing: '0.12em' }}
-                >
-                  {pad2(currentSlide)} — {pad2(homeBanners.length - 1)}
-                </motion.div>
-              </AnimatePresence>
-            </div>
+
 
             {/* CENTER TEXT */}
             <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', maxWidth: 680 }}>
@@ -388,39 +374,7 @@ export default function Home() {
                 ))}
               </div>
 
-              {/* Right — Arrow navigation */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                <button
-                  onClick={goToPrev}
-                  className="hero-arrow-btn"
-                  style={{
-                    width: 44, height: 44,
-                    border: '1px solid rgba(255,255,255,0.3)', borderRadius: 2,
-                    background: 'none', cursor: 'pointer',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    color: 'rgba(255,255,255,0.7)', transition: 'all 0.3s',
-                  }}
-                  onMouseEnter={e => { e.currentTarget.style.borderColor = S.white; e.currentTarget.style.color = S.white; e.currentTarget.style.background = 'rgba(255,255,255,0.1)'; }}
-                  onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.3)'; e.currentTarget.style.color = 'rgba(255,255,255,0.7)'; e.currentTarget.style.background = 'none'; }}
-                >
-                  <ChevronLeft size={14} />
-                </button>
-                <button
-                  onClick={goToNext}
-                  className="hero-arrow-btn"
-                  style={{
-                    width: 44, height: 44,
-                    border: '1px solid rgba(255,255,255,0.3)', borderRadius: 2,
-                    background: 'none', cursor: 'pointer',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    color: 'rgba(255,255,255,0.7)', transition: 'all 0.3s',
-                  }}
-                  onMouseEnter={e => { e.currentTarget.style.borderColor = S.white; e.currentTarget.style.color = S.white; e.currentTarget.style.background = 'rgba(255,255,255,0.1)'; }}
-                  onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.3)'; e.currentTarget.style.color = 'rgba(255,255,255,0.7)'; e.currentTarget.style.background = 'none'; }}
-                >
-                  <ChevronRight size={14} />
-                </button>
-              </div>
+
             </div>
           </div>
         </section>
