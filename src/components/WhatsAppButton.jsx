@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import useSettingsStore from '../store/settingsStore';
 
@@ -12,7 +12,6 @@ export default function WhatsAppButton() {
   const [show, setShow] = useState(hasShownOnce);
   const [hovered, setHovered] = useState(false);
   const [isPulsing, setIsPulsing] = useState(true);
-  const [mobileLabel, setMobileLabel] = useState(false);
 
   // Delayed entrance — only on first ever load, not on route changes
   useEffect(() => {
@@ -27,22 +26,11 @@ export default function WhatsAppButton() {
     return () => clearTimeout(timer);
   }, []);
 
-  // Mobile label appears 3 seconds after button shows
-  useEffect(() => {
-    if (show && whatsappNumber) {
-      const labelTimer = setTimeout(() => setMobileLabel(true), 3000);
-      return () => clearTimeout(labelTimer);
-    }
-  }, [show, whatsappNumber]);
-
   // If no number set, render nothing
   if (!whatsappNumber || !whatsappNumber.trim()) return null;
   if (!show) return null;
 
-  const handleClick = () => {
-    setMobileLabel(false);
-    window.open('https://wa.me/' + whatsappNumber.trim(), '_blank');
-  };
+  const whatsappUrl = 'https://wa.me/' + whatsappNumber.trim();
 
   const handleHoverStart = () => {
     setHovered(true);
@@ -63,40 +51,15 @@ export default function WhatsAppButton() {
         initial={hasShownOnce ? false : { opacity: 0, scale: 0.5, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         transition={{ duration: 0.5, type: 'spring', stiffness: 200, damping: 15 }}
-        style={{ position: 'fixed', bottom: 24, right: 16, zIndex: 999 }}
-        className="sm:!bottom-8 sm:!right-6"
+        style={{
+          position: 'fixed',
+          bottom: 28,
+          right: 24,
+          zIndex: 9998,
+        }}
         onMouseEnter={handleHoverStart}
         onMouseLeave={() => setHovered(false)}
       >
-        {/* ── Mobile label (above button, always visible on small screens) ── */}
-        <AnimatePresence>
-          {mobileLabel && (
-            <motion.div
-              initial={{ opacity: 0, y: 6 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 6 }}
-              transition={{ duration: 0.3 }}
-              className="sm:!hidden"
-              style={{
-                position: 'absolute',
-                bottom: 68,
-                right: 0,
-                background: '#111111',
-                color: '#FFFFFF',
-                fontFamily: "'DM Sans', sans-serif",
-                fontSize: 10,
-                fontWeight: 500,
-                padding: '6px 10px',
-                borderRadius: 2,
-                whiteSpace: 'nowrap',
-                boxShadow: '0 4px 16px rgba(0,0,0,0.15)',
-              }}
-            >
-              Chat with us
-            </motion.div>
-          )}
-        </AnimatePresence>
-
         {/* ── Desktop tooltip (left of button, on hover only) ── */}
         <AnimatePresence>
           {hovered && (
@@ -105,7 +68,6 @@ export default function WhatsAppButton() {
               animate={{ opacity: 1, scale: 1, x: 0 }}
               exit={{ opacity: 0, scale: 0.95, x: 4 }}
               transition={{ duration: 0.15 }}
-              className="!hidden sm:!block"
               style={{
                 position: 'absolute',
                 right: 72,
@@ -116,14 +78,14 @@ export default function WhatsAppButton() {
                 fontFamily: "'DM Sans', sans-serif",
                 fontSize: 12,
                 fontWeight: 500,
-                padding: '8px 12px',
+                padding: '8px 14px',
                 borderRadius: 2,
                 whiteSpace: 'nowrap',
                 boxShadow: '0 4px 16px rgba(0,0,0,0.15)',
+                pointerEvents: 'none',
               }}
             >
               Chat with us
-              {/* Arrow pointing right */}
               <div style={{
                 position: 'absolute',
                 right: -6,
@@ -157,9 +119,11 @@ export default function WhatsAppButton() {
           </>
         )}
 
-        {/* ── Main button ── */}
-        <motion.button
-          onClick={handleClick}
+        {/* ── Main button — using <a> tag for reliable cross-device behavior ── */}
+        <motion.a
+          href={whatsappUrl}
+          target="_blank"
+          rel="noopener noreferrer"
           whileHover={{ scale: 1.08 }}
           whileTap={{ scale: 0.93 }}
           onMouseEnter={(e) => {
@@ -172,8 +136,8 @@ export default function WhatsAppButton() {
             e.currentTarget.style.boxShadow = '0 4px 20px rgba(37,211,102,0.4), 0 2px 8px rgba(0,0,0,0.15)';
           }}
           style={{
-            width: 56,
-            height: 56,
+            width: 60,
+            height: 60,
             borderRadius: '50%',
             background: '#25D366',
             border: 'none',
@@ -185,15 +149,15 @@ export default function WhatsAppButton() {
             transition: 'background 0.25s ease, box-shadow 0.25s ease',
             position: 'relative',
             zIndex: 1,
+            textDecoration: 'none',
           }}
-          className="sm:!w-16 sm:!h-16"
           aria-label="Chat on WhatsApp"
         >
-          <svg viewBox="0 0 24 24" fill="white" width="28" height="28" className="sm:!w-8 sm:!h-8">
+          <svg viewBox="0 0 24 24" fill="white" style={{ width: 30, height: 30 }}>
             <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
             <path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.118 1.528 5.849L.057 23.994l6.305-1.654A11.954 11.954 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.002-1.368l-.359-.213-3.722.976.994-3.624-.234-.373A9.818 9.818 0 1112 21.818z"/>
           </svg>
-        </motion.button>
+        </motion.a>
       </motion.div>
     </>
   );
