@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
-// Arrow icons removed — hero auto-slides
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { getFeaturedProducts, getCategories, getBanners } from '../services/api';
 
 import useSettingsStore from '../store/settingsStore';
@@ -132,6 +132,24 @@ export default function Home() {
     });
   }, [startInterval]);
 
+  // ── Touch swipe for mobile ──
+  const touchStartX = useRef(0);
+  const touchEndX = useRef(0);
+  const handleTouchStart = useCallback((e) => {
+    touchStartX.current = e.touches[0].clientX;
+    touchEndX.current = e.touches[0].clientX;
+  }, []);
+  const handleTouchMove = useCallback((e) => {
+    touchEndX.current = e.touches[0].clientX;
+  }, []);
+  const handleTouchEnd = useCallback(() => {
+    const diff = touchStartX.current - touchEndX.current;
+    if (Math.abs(diff) > 50) {
+      if (diff > 0) goToNext();
+      else goToPrev();
+    }
+  }, [goToNext, goToPrev]);
+
   // Auto-advance hero slides
   useEffect(() => {
     if (homeBanners.length > 1) startInterval();
@@ -239,7 +257,11 @@ export default function Home() {
         </section>
       ) : (
         /* ── Billboard Hero ── */
-        <section id="hero-billboard" className="hero-billboard" style={{ position: 'relative', width: '100%', overflow: 'hidden' }}>
+        <section id="hero-billboard" className="hero-billboard" style={{ position: 'relative', width: '100%', overflow: 'hidden' }}
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+        >
 
           {/* LAYER 1 — Banner Image with crossfade */}
           <AnimatePresence mode="sync">
@@ -374,7 +396,37 @@ export default function Home() {
                 ))}
               </div>
 
-
+              {/* Right — Arrow navigation (desktop only) */}
+              <div className="hero-arrows-desktop" style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                <button
+                  onClick={goToPrev}
+                  style={{
+                    width: 44, height: 44,
+                    border: '1px solid rgba(255,255,255,0.3)', borderRadius: 2,
+                    background: 'none', cursor: 'pointer',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    color: 'rgba(255,255,255,0.7)', transition: 'all 0.3s',
+                  }}
+                  onMouseEnter={e => { e.currentTarget.style.borderColor = S.white; e.currentTarget.style.color = S.white; e.currentTarget.style.background = 'rgba(255,255,255,0.1)'; }}
+                  onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.3)'; e.currentTarget.style.color = 'rgba(255,255,255,0.7)'; e.currentTarget.style.background = 'none'; }}
+                >
+                  <ChevronLeft size={14} />
+                </button>
+                <button
+                  onClick={goToNext}
+                  style={{
+                    width: 44, height: 44,
+                    border: '1px solid rgba(255,255,255,0.3)', borderRadius: 2,
+                    background: 'none', cursor: 'pointer',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    color: 'rgba(255,255,255,0.7)', transition: 'all 0.3s',
+                  }}
+                  onMouseEnter={e => { e.currentTarget.style.borderColor = S.white; e.currentTarget.style.color = S.white; e.currentTarget.style.background = 'rgba(255,255,255,0.1)'; }}
+                  onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.3)'; e.currentTarget.style.color = 'rgba(255,255,255,0.7)'; e.currentTarget.style.background = 'none'; }}
+                >
+                  <ChevronRight size={14} />
+                </button>
+              </div>
             </div>
           </div>
         </section>

@@ -109,7 +109,7 @@ img { max-width: 100%; height: auto; }
   .hero-headline     { font-size: 44px !important; }
   .hero-overlay-lr   { background: rgba(0,0,0,0.55) !important; }
   .hero-progress-track { width: 28px !important; }
-  .hero-arrow-btn    { width: 38px !important; height: 38px !important; min-width: 44px; min-height: 44px; }
+  .hero-arrows-desktop { display: none !important; }
 
   /* Home: promo sale countdown */
   .promo-grid { grid-template-columns: 1fr !important; gap: 32px !important; }
@@ -149,7 +149,7 @@ img { max-width: 100%; height: auto; }
   .hero-overlay-lr   { background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.6) 40%, rgba(0,0,0,0.2) 100%) !important; }
   .hero-progress-bars { gap: 4px !important; }
   .hero-progress-track { width: 18px !important; }
-  .hero-arrow-btn    { width: 36px !important; height: 36px !important; min-width: 44px; min-height: 44px; }
+  .hero-arrows-desktop { display: none !important; }
   .hero-bottom-controls { flex-direction: row; gap: 12px; }
 
   /* Hero CTA buttons: stack on very small screens */
