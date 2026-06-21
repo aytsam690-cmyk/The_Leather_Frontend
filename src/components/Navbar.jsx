@@ -289,7 +289,7 @@ export default function Navbar() {
                 fontSize: 'clamp(18px, 4vw, 28px)',
                 fontWeight: 600,
                 color: '#F5F0E8',
-                letterSpacing: 'clamp(0.04em, 1vw, 0.12em)',
+                letterSpacing: '0.02em',
                 textTransform: 'uppercase',
                 lineHeight: 1,
                 whiteSpace: 'nowrap',
