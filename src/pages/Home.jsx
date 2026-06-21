@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
-import { ChevronLeft, ChevronRight, Instagram, Facebook } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { getFeaturedProducts, getCategories, getBanners } from '../services/api';
 
 import useSettingsStore from '../store/settingsStore';
@@ -659,10 +659,18 @@ export default function Home() {
               <div style={{ display: 'flex', gap: 8, marginTop: 20 }}>
                 {(settings?.socialLinks || []).map(s => {
                   let IconComponent = null;
-                  if (s.platform === 'instagram') IconComponent = <Instagram size={16} />;
-                  else if (s.platform === 'facebook') IconComponent = <Facebook size={16} />;
+                  if (s.platform === 'instagram') IconComponent = (
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/>
+                    </svg>
+                  );
+                  else if (s.platform === 'facebook') IconComponent = (
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+                    </svg>
+                  );
                   else if (s.platform === 'tiktok') IconComponent = (
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"/>
                     </svg>
                   );
