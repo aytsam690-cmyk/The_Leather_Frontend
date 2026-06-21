@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Instagram, Facebook } from 'lucide-react';
 import { getFeaturedProducts, getCategories, getBanners } from '../services/api';
 
 import useSettingsStore from '../store/settingsStore';
@@ -657,17 +657,31 @@ export default function Home() {
                 Premium products curated for those who appreciate quality and craftsmanship.
               </p>
               <div style={{ display: 'flex', gap: 8, marginTop: 20 }}>
-                {['𝕏', 'f', 'in', '📷'].map(s => (
-                  <button key={s} style={{
-                    width: 36, height: 36, minWidth: 44, minHeight: 44, border: '1px solid #2C2C26', borderRadius: 2,
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    color: '#6B6055', background: 'transparent', cursor: 'pointer',
-                    fontSize: 13, fontFamily: S.dm, transition: 'all 0.2s',
-                  }}
-                    onMouseEnter={e => { e.currentTarget.style.borderColor = '#C9A96E'; e.currentTarget.style.color = '#C9A96E'; }}
-                    onMouseLeave={e => { e.currentTarget.style.borderColor = '#2C2C26'; e.currentTarget.style.color = '#6B6055'; }}
-                  >{s}</button>
-                ))}
+                {(settings?.socialLinks || []).map(s => {
+                  let IconComponent = null;
+                  if (s.platform === 'instagram') IconComponent = <Instagram size={16} />;
+                  else if (s.platform === 'facebook') IconComponent = <Facebook size={16} />;
+                  else if (s.platform === 'tiktok') IconComponent = (
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"/>
+                    </svg>
+                  );
+                  else IconComponent = <span style={{ fontSize: 13, fontWeight: 600 }}>{s.platform.charAt(0).toUpperCase()}</span>;
+
+                  return (
+                    <a key={s.platform} href={s.url} target="_blank" rel="noopener noreferrer" style={{
+                      width: 36, height: 36, minWidth: 44, minHeight: 44, border: '1px solid #2C2C26', borderRadius: 2,
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      color: '#6B6055', background: 'transparent', cursor: 'pointer',
+                      transition: 'all 0.2s', textDecoration: 'none'
+                    }}
+                      onMouseEnter={e => { e.currentTarget.style.borderColor = '#C9A96E'; e.currentTarget.style.color = '#C9A96E'; }}
+                      onMouseLeave={e => { e.currentTarget.style.borderColor = '#2C2C26'; e.currentTarget.style.color = '#6B6055'; }}
+                    >
+                      {IconComponent}
+                    </a>
+                  );
+                })}
               </div>
             </div>
             {[

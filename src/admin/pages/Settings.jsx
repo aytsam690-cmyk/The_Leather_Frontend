@@ -117,8 +117,7 @@ function ContactTab({ onSave, settings }) {
   const socials = [
     { k:'instagram', icon: Link2, label:'Instagram', placeholder:'https://instagram.com/store' },
     { k:'facebook',  icon: Link2, label:'Facebook',  placeholder:'https://facebook.com/store' },
-    { k:'twitter',   icon: Link2, label:'Twitter/X', placeholder:'https://twitter.com/store' },
-    { k:'youtube',   icon: Link2, label:'YouTube',   placeholder:'https://youtube.com/@store' },
+    { k:'tiktok',    icon: Link2, label:'TikTok',    placeholder:'https://tiktok.com/@store' },
   ];
 
   // Build social links from settings
