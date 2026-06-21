@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import {
-  Globe, Truck, Phone, Search, Plus, Trash2, Link2, Megaphone
+  Globe, Truck, Phone, Search, Plus, Trash2, Link2, Megaphone, Layout
 } from 'lucide-react';
 import { useAdminToast } from '../components/Toast';
 import useAdminStore from '../store/adminStore';
@@ -13,6 +13,7 @@ const TABS = [
   { id:'contact',  label:'Contact Info', icon: Phone },
   { id:'seo',      label:'SEO Defaults', icon: Search },
   { id:'promo',    label:'Promo Banner', icon: Megaphone },
+  { id:'footer',   label:'Footer',       icon: Layout },
 ];
 
 const CURRENCIES = ['USD', 'EUR', 'GBP', 'PKR', 'AED', 'CAD', 'AUD'];
@@ -302,6 +303,105 @@ function PromoBannerTab({ onSave, settings }) {
   );
 }
 
+// ─── Footer Tab ───────────────────────────────────────────────────────────────
+function FooterTab({ onSave, settings }) {
+  const [form, setForm] = useState({
+    footerDescription: settings.footerDescription || '',
+    footerColumns: settings.footerColumns?.length > 0 ? settings.footerColumns : [
+      { title: 'Shop', links: [{ label: 'All Products', url: '/products' }] },
+      { title: 'Help', links: [{ label: 'Track Order', url: '/track-order' }] },
+      { title: 'Account', links: [{ label: 'My Profile', url: '/account' }] },
+    ],
+    footerCopyright: settings.footerCopyright || '',
+    footerBottomText: settings.footerBottomText || '',
+  });
+
+  const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
+
+  const updateColumn = (ci, key, val) => {
+    const cols = [...form.footerColumns];
+    cols[ci] = { ...cols[ci], [key]: val };
+    set('footerColumns', cols);
+  };
+
+  const addColumn = () => {
+    set('footerColumns', [...form.footerColumns, { title: 'New Column', links: [{ label: 'Link', url: '/' }] }]);
+  };
+
+  const removeColumn = (ci) => {
+    set('footerColumns', form.footerColumns.filter((_, i) => i !== ci));
+  };
+
+  const addLink = (ci) => {
+    const cols = [...form.footerColumns];
+    cols[ci] = { ...cols[ci], links: [...cols[ci].links, { label: '', url: '' }] };
+    set('footerColumns', cols);
+  };
+
+  const removeLink = (ci, li) => {
+    const cols = [...form.footerColumns];
+    cols[ci] = { ...cols[ci], links: cols[ci].links.filter((_, i) => i !== li) };
+    set('footerColumns', cols);
+  };
+
+  const updateLink = (ci, li, key, val) => {
+    const cols = [...form.footerColumns];
+    const links = [...cols[ci].links];
+    links[li] = { ...links[li], [key]: val };
+    cols[ci] = { ...cols[ci], links };
+    set('footerColumns', cols);
+  };
+
+  return (
+    <div className="space-y-5">
+      <Field label="Footer Description">
+        <textarea rows={2} className={`${inputCls} resize-none`} value={form.footerDescription} onChange={e => set('footerDescription', e.target.value)} placeholder="Premium products curated for those who appreciate quality and craftsmanship." />
+      </Field>
+
+      {/* Footer Columns */}
+      <div>
+        <label className={labelCls}>Footer Columns</label>
+        <div className="space-y-4">
+          {form.footerColumns.map((col, ci) => (
+            <div key={ci} className="border border-[#E8E8E4] rounded-sm p-4">
+              <div className="flex items-center gap-3 mb-3">
+                <input className={inputCls} value={col.title} onChange={e => updateColumn(ci, 'title', e.target.value)} placeholder="Column Title" />
+                <button onClick={() => removeColumn(ci)} className="text-red-400 hover:text-red-600 transition-colors shrink-0" title="Remove column"><Trash2 size={16} /></button>
+              </div>
+              <div className="space-y-2 ml-2">
+                {col.links.map((link, li) => (
+                  <div key={li} className="flex items-center gap-2">
+                    <input className={inputCls} value={link.label} onChange={e => updateLink(ci, li, 'label', e.target.value)} placeholder="Label" />
+                    <input className={inputCls} value={link.url} onChange={e => updateLink(ci, li, 'url', e.target.value)} placeholder="/url-path" />
+                    <button onClick={() => removeLink(ci, li)} className="text-red-400 hover:text-red-600 transition-colors shrink-0" title="Remove link"><Trash2 size={14} /></button>
+                  </div>
+                ))}
+                <button onClick={() => addLink(ci)} className="flex items-center gap-1.5 text-xs font-medium text-[#6B6B6B] hover:text-[#111111] transition-colors mt-1">
+                  <Plus size={14} /> Add Link
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+        <button onClick={addColumn} className="flex items-center gap-1.5 text-xs font-medium text-[#6B6B6B] hover:text-[#111111] transition-colors mt-3">
+          <Plus size={14} /> Add Column
+        </button>
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+        <Field label="Copyright Text">
+          <input className={inputCls} value={form.footerCopyright} onChange={e => set('footerCopyright', e.target.value)} placeholder="© 2025 Store. All rights reserved." />
+        </Field>
+        <Field label="Bottom Text">
+          <input className={inputCls} value={form.footerBottomText} onChange={e => set('footerBottomText', e.target.value)} placeholder="Made with ❤️ in Pakistan" />
+        </Field>
+      </div>
+
+      <button onClick={() => onSave(form)} className="px-6 py-2.5 rounded-sm text-sm font-semibold text-white hover:opacity-90 transition-all" style={{ background: CORAL }}>Save Footer Settings</button>
+    </div>
+  );
+}
+
 // ─── Main Component ───────────────────────────────────────────────────────────
 export default function Settings() {
   const { setBreadcrumbs } = useAdminStore();
@@ -364,6 +464,7 @@ export default function Settings() {
           {activeTab === 'contact'  && <ContactTab  onSave={handleSave} settings={settings} />}
           {activeTab === 'seo'      && <SeoTab      onSave={handleSave} settings={settings} />}
           {activeTab === 'promo'    && <PromoBannerTab onSave={handleSave} settings={settings} />}
+          {activeTab === 'footer'   && <FooterTab onSave={handleSave} settings={settings} />}
         </div>
       </div>
     </div>

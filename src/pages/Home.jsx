@@ -660,7 +660,7 @@ export default function Home() {
                 <div style={{ fontFamily: S.cm, fontSize: 24, fontWeight: 500, color: '#F5F0E8', letterSpacing: '0.14em', textTransform: 'uppercase' }}>{settings?.siteName || 'Store'}</div>
               </div>
               <p style={{ fontFamily: S.dm, fontSize: 12, color: '#6B6055', fontWeight: 300, marginTop: 8, lineHeight: 1.7 }}>
-                Premium products curated for those who appreciate quality and craftsmanship.
+                {settings?.footerDescription || 'Premium products curated for those who appreciate quality and craftsmanship.'}
               </p>
               <div style={{ display: 'flex', gap: 8, marginTop: 20 }}>
                 {(settings?.socialLinks || []).map(s => {
@@ -698,25 +698,25 @@ export default function Home() {
                 })}
               </div>
             </div>
-            {[
-              { title: 'Shop', links: ['All Products', 'New Arrivals', 'Featured', 'Sale', 'Categories'], to: '/products' },
-              { title: 'Help', links: ['Track Order', 'Returns & Exchanges', 'Shipping Info', 'Size Guide', 'Contact Us'], to: '/track-order' },
-              { title: 'Account', links: ['My Profile', 'My Orders', 'Login / Register'], to: '/account' },
-            ].map(col => (
-              <div key={col.title}>
+            {(settings?.footerColumns?.length > 0 ? settings.footerColumns : [
+              { title: 'Shop', links: [{ label: 'All Products', url: '/products' }, { label: 'New Arrivals', url: '/products' }, { label: 'Featured', url: '/products' }, { label: 'Sale', url: '/products' }, { label: 'Categories', url: '/products' }] },
+              { title: 'Help', links: [{ label: 'Track Order', url: '/track-order' }, { label: 'Returns & Exchanges', url: '/track-order' }, { label: 'Shipping Info', url: '/track-order' }, { label: 'Size Guide', url: '/track-order' }, { label: 'Contact Us', url: '/track-order' }] },
+              { title: 'Account', links: [{ label: 'My Profile', url: '/account' }, { label: 'My Orders', url: '/orders' }, { label: 'Login / Register', url: '/login' }] },
+            ]).map((col, idx) => (
+              <div key={col.title || idx}>
                 <h4 style={{ fontFamily: S.dm, fontSize: 11, fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.1em', color: '#A89880', marginBottom: 16 }}>{col.title}</h4>
-                {col.links.map(link => (
-                  <Link key={link} to={col.to} style={{ fontFamily: S.dm, fontSize: 13, color: '#6B6055', textDecoration: 'none', display: 'block', lineHeight: 2.2, transition: 'color 0.2s' }}
+                {(col.links || []).map((link, li) => (
+                  <Link key={li} to={link.url || '/'} style={{ fontFamily: S.dm, fontSize: 13, color: '#6B6055', textDecoration: 'none', display: 'block', lineHeight: 2.2, transition: 'color 0.2s' }}
                     onMouseEnter={e => { e.currentTarget.style.color = '#F5F0E8'; }}
                     onMouseLeave={e => { e.currentTarget.style.color = '#6B6055'; }}
-                  >{link}</Link>
+                  >{link.label}</Link>
                 ))}
               </div>
             ))}
           </div>
           <div style={{ borderTop: '1px solid #2C2C26', marginTop: 36, paddingTop: 20, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 8 }}>
-            <span style={{ fontFamily: S.dm, fontSize: 12, color: '#4A4A3F' }}>© {new Date().getFullYear()} {settings?.siteName || 'Store'}. All rights reserved.</span>
-            <span style={{ fontFamily: S.dm, fontSize: 12, color: '#4A4A3F' }}>Made with ❤️ in Pakistan</span>
+            <span style={{ fontFamily: S.dm, fontSize: 12, color: '#4A4A3F' }}>{settings?.footerCopyright || `© ${new Date().getFullYear()} ${settings?.siteName || 'Store'}. All rights reserved.`}</span>
+            <span style={{ fontFamily: S.dm, fontSize: 12, color: '#4A4A3F' }}>{settings?.footerBottomText || 'Made with ❤️ in Pakistan'}</span>
           </div>
         </div>
       </footer>
