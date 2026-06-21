@@ -53,7 +53,6 @@ function Gallery({ images }) {
       <div>
         {/* Main image */}
         <div
-          onClick={() => setLightboxOpen(true)}
           style={{
             position: 'relative',
             aspectRatio: '1/1',
@@ -71,7 +70,23 @@ function Gallery({ images }) {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.25 }}
-              style={{ position: 'absolute', inset: 0 }}
+              style={{ position: 'absolute', inset: 0, touchAction: 'pan-y' }}
+              drag="x"
+              dragConstraints={{ left: 0, right: 0 }}
+              dragElastic={0.2}
+              onDragEnd={(e, { offset }) => {
+                const swipe = offset.x;
+                if (swipe < -40) {
+                  // Swiped left -> next
+                  setActive(a => (a + 1) % images.length);
+                } else if (swipe > 40) {
+                  // Swiped right -> prev
+                  setActive(a => (a - 1 + images.length) % images.length);
+                } else {
+                  // Small or no movement -> treat as click
+                  setLightboxOpen(true);
+                }
+              }}
             >
               {images[active]?.url ? (
                 <img
@@ -80,6 +95,7 @@ function Gallery({ images }) {
                   style={{
                     width: '100%', height: '100%', objectFit: 'cover',
                     transition: 'transform 700ms ease-out',
+                    pointerEvents: 'none',
                   }}
                   className="gallery-main-img"
                 />
