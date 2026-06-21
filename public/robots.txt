@@ -8,4 +8,4 @@ Disallow: /register
 Disallow: /forgot-password
 Disallow: /reset-password
 
-Sitemap: https://yourdomain.com/sitemap.xml
+Sitemap: https://crafthid.com/sitemap.xml
