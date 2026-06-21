@@ -292,8 +292,8 @@ function ProductReviews({ product, reviews, onReviewSubmit }) {
   const avgRating = reviews.length ? (reviews.reduce((s, r) => s + r.rating, 0) / reviews.length).toFixed(1) : (product.ratings?.average || 0).toFixed(1);
 
   return (
-    <div style={{ marginTop: 40, borderTop: '1px solid #2C2C26', paddingTop: 32 }}>
-      <h3 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 24, fontWeight: 500, color: '#F5F0E8', marginBottom: 24 }}>Customer Reviews</h3>
+    <div style={{ marginTop: 0, paddingTop: 0 }}>
+      <h3 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 24, fontWeight: 500, color: '#F5F0E8', marginBottom: 16 }}>Customer Reviews</h3>
 
               {/* Summary */}
               {reviews.length > 0 && (
@@ -301,7 +301,7 @@ function ProductReviews({ product, reviews, onReviewSubmit }) {
                   display: 'flex',
                   gap: 24,
                   alignItems: 'center',
-                  paddingBottom: 32,
+                  paddingBottom: 20,
                   borderBottom: '1px solid #2C2C26',
                   flexWrap: 'wrap',
                 }}>
@@ -339,12 +339,12 @@ function ProductReviews({ product, reviews, onReviewSubmit }) {
               {/* Review list */}
               <div>
                 {reviews.length === 0 ? (
-                  <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: '#6B6055', padding: '32px 0' }}>
+                  <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: '#6B6055', padding: '16px 0' }}>
                     No reviews yet. Be the first to review this product!
                   </p>
                 ) : (
                   reviews.map((r, idx) => (
-                    <div key={r.id || r._id || idx} style={{ paddingTop: 32, paddingBottom: 32, borderBottom: '1px solid #2C2C26' }}>
+                    <div key={r.id || r._id || idx} style={{ paddingTop: 20, paddingBottom: 20, borderBottom: '1px solid #2C2C26' }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
                         <div style={{
                           width: 40, height: 40, borderRadius: 2,
@@ -377,13 +377,13 @@ function ProductReviews({ product, reviews, onReviewSubmit }) {
               </div>
 
               {/* Write Review Form */}
-              <div style={{ marginTop: 48, borderTop: '1px solid #2C2C26', paddingTop: 40 }}>
-                <h3 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 28, fontWeight: 500, color: '#F5F0E8', marginBottom: 32 }}>
+              <div style={{ marginTop: 24, borderTop: '1px solid #2C2C26', paddingTop: 24 }}>
+                <h3 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 28, fontWeight: 500, color: '#F5F0E8', marginBottom: 16 }}>
                   Write a Review
                 </h3>
 
                 {/* Star selector */}
-                <div style={{ marginBottom: 24 }}>
+                <div style={{ marginBottom: 16 }}>
                   <label style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 10, fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#6B6055', display: 'block', marginBottom: 8 }}>
                     Your Rating
                   </label>
@@ -584,7 +584,7 @@ export default function ProductDetail() {
 
       <div className="pd-container" style={{ maxWidth: 1280, margin: '0 auto', padding: '24px 16px' }}>
         {/* Breadcrumb */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 32, overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 20, overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>
           {[{ label: 'Home', to: '/' }, { label: 'Products', to: '/products' }].map((item, i) => (
             <span key={item.to} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
               <Link to={item.to} style={{
@@ -631,7 +631,7 @@ export default function ProductDetail() {
             </div>
 
             {/* Price block */}
-            <div style={{ borderTop: '1px solid #2C2C26', borderBottom: '1px solid #2C2C26', padding: '20px 0', marginTop: 20, display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
+            <div style={{ borderTop: '1px solid #2C2C26', borderBottom: '1px solid #2C2C26', padding: '14px 0', marginTop: 14, display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
               <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 28, fontWeight: 600, color: discountPct ? '#C9A96E' : '#F5F0E8' }}>
                 {formatPrice(product.price)}
               </span>
@@ -653,7 +653,7 @@ export default function ProductDetail() {
 
             {/* Colors */}
             {product.colors.length > 0 && (
-              <div style={{ marginTop: 24 }}>
+              <div style={{ marginTop: 16 }}>
                 <label style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 10, fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#6B6055', display: 'block', marginBottom: 10 }}>
                   Colour: {product.colors[selectedColor]}
                 </label>
@@ -682,7 +682,7 @@ export default function ProductDetail() {
 
             {/* Sizes */}
             {product.sizes.length > 0 && (
-              <div style={{ marginTop: 20 }}>
+              <div style={{ marginTop: 14 }}>
                 <label style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 10, fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#6B6055', display: 'block', marginBottom: 10 }}>
                   Size:
                 </label>
@@ -712,7 +712,7 @@ export default function ProductDetail() {
             )}
 
             {/* Quantity */}
-            <div style={{ marginTop: 20 }}>
+            <div style={{ marginTop: 14 }}>
               <label style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 10, fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#6B6055', display: 'block', marginBottom: 10 }}>
                 Quantity:
               </label>
@@ -750,7 +750,7 @@ export default function ProductDetail() {
             </p>
 
             {/* Action buttons */}
-            <div style={{ marginTop: 24 }}>
+            <div style={{ marginTop: 16 }}>
               {/* Add to cart */}
               <AnimatePresence mode="wait">
                 {addedAnim ? (
@@ -834,7 +834,7 @@ export default function ProductDetail() {
 
 
             {/* Highlights */}
-            <div style={{ borderTop: '1px solid #2C2C26', marginTop: 24, paddingTop: 24, display: 'flex', flexDirection: 'column', gap: 12 }}>
+            <div style={{ borderTop: '1px solid #2C2C26', marginTop: 16, paddingTop: 16, display: 'flex', flexDirection: 'column', gap: 8 }}>
               {[
                 { icon: <Check size={15} />, text: 'Free Delivery All Over Pakistan' },
                 { icon: <Truck size={15} />, text: 'Cash on delivery available nationwide' },
@@ -851,14 +851,14 @@ export default function ProductDetail() {
 
         {/* ── Reviews Section ── */}
         <div style={{ borderTop: '1px solid #2C2C26' }} />
-        <section style={{ maxWidth: 1280, margin: '0 auto', padding: '48px 16px' }}>
+        <section style={{ maxWidth: 1280, margin: '0 auto', padding: '28px 16px' }}>
           <ProductReviews product={product} reviews={reviews} onReviewSubmit={() => {}} />
         </section>
 
         {/* ── Description Section ── */}
         <div style={{ borderTop: '1px solid #2C2C26' }} />
-        <section style={{ maxWidth: 1280, margin: '0 auto', padding: '48px 16px' }}>
-          <h3 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(32px, 5vw, 40px)', fontWeight: 500, color: '#F5F0E8', marginBottom: 32 }}>
+        <section style={{ maxWidth: 1280, margin: '0 auto', padding: '28px 16px' }}>
+          <h3 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(32px, 5vw, 40px)', fontWeight: 500, color: '#F5F0E8', marginBottom: 16 }}>
             Description
           </h3>
           <p style={{
@@ -876,8 +876,8 @@ export default function ProductDetail() {
         {Object.keys(product.specs || {}).length > 0 && (
           <>
             <div style={{ borderTop: '1px solid #2C2C26' }} />
-            <section style={{ maxWidth: 1280, margin: '0 auto', padding: '48px 16px' }}>
-              <h3 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(32px, 5vw, 40px)', fontWeight: 500, color: '#F5F0E8', marginBottom: 32 }}>
+            <section style={{ maxWidth: 1280, margin: '0 auto', padding: '28px 16px' }}>
+              <h3 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(32px, 5vw, 40px)', fontWeight: 500, color: '#F5F0E8', marginBottom: 16 }}>
                 Details & Specifications
               </h3>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 2, maxWidth: 700 }}>
@@ -901,8 +901,8 @@ export default function ProductDetail() {
 
         {/* Related Products */}
         {relatedProducts.length > 0 && (
-          <div style={{ marginTop: 80, background: '#141410', marginLeft: -16, marginRight: -16, padding: '48px 16px' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 32 }}>
+          <div style={{ marginTop: 40, background: '#141410', marginLeft: -16, marginRight: -16, padding: '28px 16px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
               <div>
                 <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 11, fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.12em', color: '#C9A96E', marginBottom: 8 }}>
                   You May Also Like
@@ -944,7 +944,7 @@ export default function ProductDetail() {
       {/* Responsive */}
       <style>{`
   .pd-container { padding: 24px 16px; }
-  @media (min-width: 768px) { .pd-container { padding: 48px 24px; } }
+  @media (min-width: 768px) { .pd-container { padding: 32px 24px; } }
   @media (max-width: 1023px) {
     .pd-grid { grid-template-columns: 1fr !important; gap: 32px !important; }
   }
