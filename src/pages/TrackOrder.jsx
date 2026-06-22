@@ -256,6 +256,13 @@ export default function TrackOrder() {
         <title>Track Order — {settings?.siteName || 'Store'}</title>
         <meta name="description" content="Track your orders by entering your phone number." />
         <link rel="canonical" href={window.location.origin + window.location.pathname} />
+        <meta property="og:title" content={`Track Order — ${settings?.siteName || 'Store'}`} />
+        <meta property="og:description" content="Track your orders by entering your phone number." />
+        <meta property="og:url" content={window.location.origin + '/track-order'} />
+        <meta property="og:image" content={settings?.logo || ''} />
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:title" content={`Track Order — ${settings?.siteName || 'Store'}`} />
+        <meta name="twitter:description" content="Track your orders by entering your phone number." />
       </Helmet>
 
       <div style={{ maxWidth: 720, margin: '0 auto', padding: '0 24px' }}>

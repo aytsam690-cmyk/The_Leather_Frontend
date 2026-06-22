@@ -453,6 +453,9 @@ export default function Account({ defaultTab = 'profile' }) {
       <meta property="og:title" content={`My Account | ${siteName}`} />
       <meta property="og:description" content={`Manage your ${siteName} account, orders, and wishlist.`} />
       <meta property="og:url" content={window.location.origin + '/account'} />
+      <meta name="twitter:card" content="summary" />
+      <meta name="twitter:title" content={`My Account | ${siteName}`} />
+      <meta name="twitter:description" content={`Manage your ${siteName} account, orders, and wishlist.`} />
     </Helmet>
     <div className="min-h-screen bg-[#0D0D0B]">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12">

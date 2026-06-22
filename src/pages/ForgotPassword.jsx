@@ -41,6 +41,9 @@ export default function ForgotPassword() {
       <meta property="og:title" content={`Forgot Password | ${siteName}`} />
       <meta property="og:description" content={`Reset your ${siteName} account password.`} />
       <meta property="og:url" content={window.location.origin + '/forgot-password'} />
+      <meta name="twitter:card" content="summary" />
+      <meta name="twitter:title" content={`Forgot Password | ${siteName}`} />
+      <meta name="twitter:description" content={`Reset your ${siteName} account password.`} />
     </Helmet>
     <div
       className="min-h-screen flex items-center justify-center bg-[#0D0D0B]"

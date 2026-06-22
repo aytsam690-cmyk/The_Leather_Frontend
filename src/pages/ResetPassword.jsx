@@ -129,6 +129,9 @@ export default function ResetPassword() {
       <meta property="og:title" content={`Reset Password | ${siteName}`} />
       <meta property="og:description" content={`Set a new password for your ${siteName} account.`} />
       <meta property="og:url" content={window.location.origin + '/reset-password'} />
+      <meta name="twitter:card" content="summary" />
+      <meta name="twitter:title" content={`Reset Password | ${siteName}`} />
+      <meta name="twitter:description" content={`Set a new password for your ${siteName} account.`} />
     </Helmet>
     <div
       className="min-h-screen flex items-center justify-center bg-[#0D0D0B]"

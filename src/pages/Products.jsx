@@ -408,6 +408,21 @@ export default function Products() {
           <title>{filters.search ? `Search: ${filters.search}` : filters.category !== 'All' ? `${filters.category} Products` : 'All Products'} — {settings?.siteName || 'Store'}</title>
           <meta name="description" content="Browse our extensive collection of products. Filter by category, brand, price, and more." />
           <link rel="canonical" href={window.location.origin + window.location.pathname} />
+          <meta property="og:title" content={`${filters.search ? `Search: ${filters.search}` : filters.category !== 'All' ? `${filters.category} Products` : 'All Products'} — ${settings?.siteName || 'Store'}`} />
+          <meta property="og:description" content="Browse our extensive collection of products. Filter by category, brand, price, and more." />
+          <meta property="og:url" content={window.location.origin + '/products'} />
+          <meta property="og:image" content={settings?.logo || ''} />
+          <meta name="twitter:card" content="summary_large_image" />
+          <meta name="twitter:title" content={`${filters.category !== 'All' ? `${filters.category} Products` : 'All Products'} — ${settings?.siteName || 'Store'}`} />
+          <meta name="twitter:description" content="Browse our extensive collection of products. Filter by category, brand, price, and more." />
+          <meta name="twitter:image" content={settings?.logo || ''} />
+          <script type="application/ld+json">{JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'ItemList',
+            name: filters.category !== 'All' ? `${filters.category} Products` : 'All Products',
+            url: window.location.origin + '/products',
+            numberOfItems: filtered.length
+          })}</script>
         </Helmet>
 
         {/* ── Page Header ─────────────────────────────────────────────────── */}

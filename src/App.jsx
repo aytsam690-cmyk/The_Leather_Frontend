@@ -154,7 +154,16 @@ function App() {
         <title>{siteName}</title>
         <meta name="description" content={`Shop premium products at ${siteName}. Quality guaranteed with free delivery.`} />
         <meta property="og:title" content={siteName} />
+        <meta property="og:description" content={`Shop premium products at ${siteName}. Quality guaranteed with free delivery.`} />
         <meta property="og:type" content="website" />
+        <meta property="og:url" content={window.location.origin} />
+        <meta property="og:site_name" content={siteName} />
+        <meta property="og:locale" content="en_US" />
+        <meta property="og:image" content={settings?.logo || ''} />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={siteName} />
+        <meta name="twitter:description" content={`Shop premium products at ${siteName}. Quality guaranteed with free delivery.`} />
+        <meta name="twitter:image" content={settings?.logo || ''} />
         {settings?.logo && <link rel="icon" href={settings.logo} />}
       </Helmet>
       <Suspense fallback={<PageLoader />}>

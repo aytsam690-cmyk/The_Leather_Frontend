@@ -120,6 +120,9 @@ export default function Login() {
       <meta property="og:title" content={`Login | ${siteName}`} />
       <meta property="og:description" content={`Log in to your ${siteName} account to track orders and manage your profile.`} />
       <meta property="og:url" content={window.location.origin + '/login'} />
+      <meta name="twitter:card" content="summary" />
+      <meta name="twitter:title" content={`Login | ${siteName}`} />
+      <meta name="twitter:description" content={`Log in to your ${siteName} account to track orders and manage your profile.`} />
     </Helmet>
     <div className="min-h-screen flex items-center justify-center px-4 py-12" style={{ background: '#0D0D0B' }}>
       <motion.div

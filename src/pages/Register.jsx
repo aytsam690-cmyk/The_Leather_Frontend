@@ -142,6 +142,9 @@ export default function Register() {
       <meta property="og:title" content={`Create Account | ${siteName}`} />
       <meta property="og:description" content={`Create your ${siteName} account for exclusive offers and easy checkout.`} />
       <meta property="og:url" content={window.location.origin + '/register'} />
+      <meta name="twitter:card" content="summary" />
+      <meta name="twitter:title" content={`Create Account | ${siteName}`} />
+      <meta name="twitter:description" content={`Create your ${siteName} account for exclusive offers and easy checkout.`} />
     </Helmet>
     <div className="min-h-screen bg-[#0D0D0B] flex items-center justify-center px-4 py-12">
       <motion.div

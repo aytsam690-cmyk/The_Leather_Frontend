@@ -873,6 +873,9 @@ export default function Checkout() {
       <meta property="og:title" content={`Checkout | ${siteName}`} />
       <meta property="og:description" content={`Complete your order securely at ${siteName}.`} />
       <meta property="og:url" content={window.location.origin + '/checkout'} />
+      <meta name="twitter:card" content="summary" />
+      <meta name="twitter:title" content={`Checkout | ${siteName}`} />
+      <meta name="twitter:description" content={`Complete your order securely at ${siteName}.`} />
     </Helmet>
     <div style={{ minHeight: '100vh', background: '#0D0D0B', paddingTop: 96, paddingBottom: 64 }}>
       <div style={{ maxWidth: 1024, margin: '0 auto', padding: '0 24px' }}>

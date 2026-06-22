@@ -321,6 +321,26 @@ export default function Home() {
         <title>{settings?.siteName || 'Store'} — Premium Products</title>
         <meta name="description" content={`Discover premium products curated just for you at ${settings?.siteName || 'our store'}. Quality you can feel, style you can trust.`} />
         <link rel="canonical" href={window.location.origin + window.location.pathname} />
+        <meta property="og:title" content={`${settings?.siteName || 'Store'} — Premium Products`} />
+        <meta property="og:description" content={`Discover premium products curated just for you at ${settings?.siteName || 'our store'}. Quality you can feel, style you can trust.`} />
+        <meta property="og:url" content={window.location.origin} />
+        <meta property="og:image" content={settings?.logo || ''} />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={`${settings?.siteName || 'Store'} — Premium Products`} />
+        <meta name="twitter:description" content={`Discover premium products curated just for you at ${settings?.siteName || 'our store'}. Quality you can feel, style you can trust.`} />
+        <meta name="twitter:image" content={settings?.logo || ''} />
+        <script type="application/ld+json">{JSON.stringify({
+          '@context': 'https://schema.org',
+          '@type': 'WebSite',
+          name: settings?.siteName || 'CRAFT HID',
+          url: window.location.origin,
+          description: `Discover premium products at ${settings?.siteName || 'CRAFT HID'}.`,
+          potentialAction: {
+            '@type': 'SearchAction',
+            target: `${window.location.origin}/products?keyword={search_term_string}`,
+            'query-input': 'required name=search_term_string'
+          }
+        })}</script>
       </Helmet>
 
       {/* ══════════════════════════════════════════════════════════════════════
