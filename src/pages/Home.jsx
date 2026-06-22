@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
@@ -600,7 +600,7 @@ export default function Home() {
       </section>
 
       {/* ══════════════════════════════════════════════════════════════════════
-          PROMO BANNER — Sale countdown (editable from Admin → Settings → Promo Banner)
+          PROMO POPUP — Sale countdown (editable from Admin → Settings → Promo Banner)
       ═══════════════════════════════════════════════════════════════════════ */}
       {(settings?.promoBanner?.enabled !== false) && (() => {
         const pb = settings?.promoBanner || {};
@@ -612,37 +612,91 @@ export default function Home() {
         const bgImage    = pb.image      || '';
         const endDate    = pb.endDate;
 
+        const [showPromo, setShowPromo] = React.useState(false);
+
+        React.useEffect(() => {
+          if (!sessionStorage.getItem('promoSeen')) {
+            const timer = setTimeout(() => setShowPromo(true), 1500);
+            return () => clearTimeout(timer);
+          }
+        }, []);
+
+        const closePromo = () => {
+          setShowPromo(false);
+          sessionStorage.setItem('promoSeen', '1');
+        };
+
+        if (!showPromo) return null;
+
         return (
-          <section style={{
-            padding: 'clamp(48px, 8vw, 64px) 0',
-            background: bgImage ? `linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url(${bgImage}) center/cover no-repeat` : S.black,
-          }}>
-            <div className="home-container" style={{ maxWidth: 1280, margin: '0 auto', padding: '0 16px' }}>
-              <div className="promo-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 48, alignItems: 'center' }}>
-                <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.45 }}>
-                  <p style={{ fontFamily: S.dm, fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.14em', color: S.gold, marginBottom: 16 }}>{eyebrow}</p>
-                  <h2 style={{ fontFamily: S.cm, fontSize: 'clamp(32px, 4vw, 48px)', fontWeight: 500, color: S.white, lineHeight: 1.1, margin: 0 }}>
-                    {heading}
-                  </h2>
-                  <p style={{ fontFamily: S.dm, fontSize: 14, color: 'rgba(255,255,255,0.6)', fontWeight: 300, marginTop: 14 }}>
-                    {subtext}
-                  </p>
-                  <Link to={buttonLink} style={{
-                    display: 'inline-block', marginTop: 28, padding: '12px 28px',
-                    background: 'transparent', border: `1px solid ${S.gold}`, borderRadius: 2,
-                    color: S.gold, fontFamily: S.dm, fontSize: 13, fontWeight: 500, textDecoration: 'none',
-                    textTransform: 'uppercase', letterSpacing: '0.06em', transition: 'all 0.2s ease',
-                  }}
-                    onMouseEnter={e => { e.currentTarget.style.background = S.gold; e.currentTarget.style.color = S.white; }}
-                    onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = S.gold; }}
-                  >{buttonText}</Link>
-                </motion.div>
-                <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.45, delay: 0.15 }}>
-                  <Countdown endDate={endDate} />
-                </motion.div>
+          <div style={{
+            position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 9999,
+            background: 'rgba(0,0,0,0.75)', backdropFilter: 'blur(6px)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            padding: 16, boxSizing: 'border-box',
+          }} onClick={closePromo}>
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9, y: 30 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              transition={{ duration: 0.4, ease: 'easeOut' }}
+              onClick={e => e.stopPropagation()}
+              className="promo-popup"
+              style={{
+                position: 'relative',
+                width: '100%', maxWidth: 520,
+                background: bgImage
+                  ? `linear-gradient(rgba(10,10,8,0.88), rgba(10,10,8,0.92)), url(${bgImage}) center/cover no-repeat`
+                  : '#141410',
+                border: '1px solid #2C2C26', borderRadius: 6,
+                padding: 'clamp(24px, 5vw, 40px)',
+                boxSizing: 'border-box',
+                overflow: 'hidden',
+              }}
+            >
+              {/* Close button */}
+              <button onClick={closePromo} style={{
+                position: 'absolute', top: 12, right: 12,
+                width: 32, height: 32, borderRadius: '50%',
+                background: 'rgba(255,255,255,0.08)', border: '1px solid #2C2C26',
+                color: '#A89880', fontSize: 18, cursor: 'pointer',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                transition: 'all 0.2s',
+              }}
+                onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.15)'; e.currentTarget.style.color = '#F5F0E8'; }}
+                onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.08)'; e.currentTarget.style.color = '#A89880'; }}
+              >✕</button>
+
+              {/* Content */}
+              <div style={{ textAlign: 'center' }}>
+                <p style={{ fontFamily: S.dm, fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.14em', color: S.gold, marginBottom: 12 }}>{eyebrow}</p>
+                <h2 style={{ fontFamily: S.cm, fontSize: 'clamp(26px, 6vw, 38px)', fontWeight: 500, color: S.white, lineHeight: 1.1, margin: 0 }}>
+                  {heading}
+                </h2>
+                <p style={{ fontFamily: S.dm, fontSize: 14, color: 'rgba(255,255,255,0.55)', fontWeight: 300, marginTop: 12, lineHeight: 1.6 }}>
+                  {subtext}
+                </p>
               </div>
-            </div>
-          </section>
+
+              {/* Countdown */}
+              <div style={{ marginTop: 24 }}>
+                <Countdown endDate={endDate} />
+              </div>
+
+              {/* CTA Button */}
+              <div style={{ textAlign: 'center', marginTop: 24 }}>
+                <Link to={buttonLink} onClick={closePromo} style={{
+                  display: 'inline-block', padding: '12px 32px',
+                  background: S.gold, border: 'none', borderRadius: 2,
+                  color: '#0A0A08', fontFamily: S.dm, fontSize: 13, fontWeight: 600, textDecoration: 'none',
+                  textTransform: 'uppercase', letterSpacing: '0.06em', transition: 'all 0.2s ease',
+                }}
+                  onMouseEnter={e => { e.currentTarget.style.background = '#D4B87A'; }}
+                  onMouseLeave={e => { e.currentTarget.style.background = S.gold; }}
+                >{buttonText}</Link>
+              </div>
+            </motion.div>
+          </div>
         );
       })()}
 
