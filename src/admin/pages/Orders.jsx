@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { X, Eye, ChevronLeft, ChevronRight, Printer, Trash2 } from 'lucide-react';
 import useAdminStore from '../store/adminStore';
-import { getAdminOrders, updateOrderStatus as apiUpdateStatus, assignTrackingId as apiAddTracking, deleteOrder as apiDeleteOrder } from '../adminApi';
+import { getAdminOrders, updateOrderStatus as apiUpdateStatus, assignTrackingId as apiAddTracking, deleteOrder as apiDeleteOrder, bulkUpdateOrders as apiBulkUpdate } from '../adminApi';
 import { useCurrency } from '../../utils/currency';
 
 const CORAL = '#111111';
@@ -318,6 +318,7 @@ export default function Orders() {
       try { await Promise.allSettled(promises); } catch(_) {}
       setOrders(o => o.filter(x => !selected.includes(x.id)));
     } else {
+      try { await apiBulkUpdate(selected, bulkAction); } catch(_) {}
       setOrders(o => o.map(x => selected.includes(x.id) ? { ...x, status: bulkAction } : x));
     }
     setSelected([]);

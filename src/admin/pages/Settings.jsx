@@ -39,7 +39,7 @@ function UploadZone({ preview, onUpload, label, size = 'full' }) {
       const res = await uploadImage(file);
       onUpload(res.url);
     } catch (err) {
-      showToast('error', 'Image upload failed');
+      showToast('Image upload failed', 'error');
     } finally {
       setUploading(false);
     }
