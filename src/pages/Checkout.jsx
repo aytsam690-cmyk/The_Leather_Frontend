@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import useSettingsStore from '../store/settingsStore';
 import { createOrder } from '../services/api';
@@ -6,6 +6,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ShieldCheck, MapPin, ArrowRight, ArrowLeft, Check, Package } from 'lucide-react';
 import useCartStore from '../store/cartStore';
+import useAuthStore from '../store/authStore';
 import { useCurrency } from '../utils/currency';
 
 // ─── Confetti (CSS-based, unchanged logic) ────────────────────────────────────
@@ -257,11 +258,53 @@ function OrderSidebar({ items, appliedCoupon }) {
 function ShippingForm({ data, setData, onNext }) {
   const [errors, setErrors] = useState({});
   const [saveAddress, setSaveAddress] = useState(false);
+  const [selectedAddr, setSelectedAddr] = useState(null); // null = none, 'new' = manual, addr.id = saved
+  const { user } = useAuthStore();
+
+  // Load saved addresses from localStorage
+  const [savedAddresses, setSavedAddresses] = useState([]);
+  useEffect(() => {
+    try {
+      const raw = JSON.parse(localStorage.getItem('user-addresses')) || [];
+      setSavedAddresses(raw);
+    } catch { setSavedAddresses([]); }
+  }, []);
+
+  // Auto-fill logged-in user's name/email on mount if fields are empty
+  useEffect(() => {
+    if (user && !data.fullName && !data.email) {
+      setData(d => ({ ...d, fullName: user.name || '', email: user.email || '' }));
+    }
+  }, [user]);
+
+  const handleSelectAddress = (addr) => {
+    setSelectedAddr(addr.id);
+    setData(d => ({
+      ...d,
+      fullName: addr.name || d.fullName,
+      address1: addr.street || '',
+      address2: '',
+      city: addr.city || '',
+      state: addr.state || '',
+      zip: addr.zip || '',
+      country: addr.country || '',
+    }));
+    setErrors({});
+  };
+
+  const handleNewAddress = () => {
+    setSelectedAddr('new');
+    setData(d => ({
+      ...d,
+      address1: '', address2: '', city: '', state: '', zip: '', country: '',
+    }));
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setData(d => ({ ...d, [name]: value }));
-    if (errors[name]) setErrors(e => ({ ...e, [name]: '' }));
+    if (errors[name]) setErrors(prev => ({ ...prev, [name]: '' }));
+    if (selectedAddr && selectedAddr !== 'new') setSelectedAddr(null);
   };
 
   const validate = () => {
@@ -275,6 +318,25 @@ function ShippingForm({ data, setData, onNext }) {
   const handleNext = () => {
     const errs = validate();
     if (Object.keys(errs).length > 0) { setErrors(errs); return; }
+
+    // Save address to localStorage if checked
+    if (saveAddress && data.address1) {
+      try {
+        const existing = JSON.parse(localStorage.getItem('user-addresses')) || [];
+        const newAddr = {
+          id: Date.now().toString(),
+          label: 'Shipping',
+          name: data.fullName,
+          street: data.address1 + (data.address2 ? `, ${data.address2}` : ''),
+          city: data.city,
+          state: data.state,
+          zip: data.zip,
+          country: data.country,
+          isDefault: existing.length === 0,
+        };
+        localStorage.setItem('user-addresses', JSON.stringify([...existing, newAddr]));
+      } catch {}
+    }
     onNext();
   };
 
@@ -285,6 +347,50 @@ function ShippingForm({ data, setData, onNext }) {
       <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 24, fontWeight: 500, color: '#F5F0E8', margin: '0 0 24px' }}>
         Shipping Information
       </h2>
+
+      {/* Saved Addresses Selector */}
+      {savedAddresses.length > 0 && (
+        <div style={{ marginBottom: 24 }}>
+          <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 10, fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#6B6055', marginBottom: 12 }}>
+            Saved Addresses
+          </p>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 10 }}>
+            {savedAddresses.map(addr => (
+              <div
+                key={addr.id}
+                onClick={() => handleSelectAddress(addr)}
+                style={{
+                  background: selectedAddr === addr.id ? '#1C1C17' : 'transparent',
+                  border: selectedAddr === addr.id ? '1px solid #C9A96E' : '1px solid #2C2C26',
+                  borderRadius: 2, padding: '14px 16px', cursor: 'pointer',
+                  transition: 'all 0.2s ease',
+                }}
+              >
+                <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, fontWeight: 500, color: selectedAddr === addr.id ? '#C9A96E' : '#F5F0E8', margin: 0 }}>
+                  {addr.label || 'Address'} {addr.isDefault && '· Default'}
+                </p>
+                <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 11, color: '#6B6055', margin: '4px 0 0', lineHeight: 1.5 }}>
+                  {addr.street}, {addr.city}
+                </p>
+              </div>
+            ))}
+            <div
+              onClick={handleNewAddress}
+              style={{
+                background: selectedAddr === 'new' ? '#1C1C17' : 'transparent',
+                border: selectedAddr === 'new' ? '1px solid #C9A96E' : '1px dashed #3D3D34',
+                borderRadius: 2, padding: '14px 16px', cursor: 'pointer',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                transition: 'all 0.2s ease',
+              }}
+            >
+              <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, fontWeight: 500, color: selectedAddr === 'new' ? '#C9A96E' : '#6B6055', margin: 0 }}>
+                + New Address
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
         {/* Row 1: Name + Email */}
