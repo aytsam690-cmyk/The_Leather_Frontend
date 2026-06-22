@@ -2,6 +2,7 @@
   "rewrites": [
     { "source": "/api/(.*)", "destination": "http://20.244.38.147/api/$1" },
     { "source": "/sitemap.xml", "destination": "http://20.244.38.147/sitemap.xml" },
+    { "source": "/share/(.*)", "destination": "http://20.244.38.147/share/$1" },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
 }

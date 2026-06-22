@@ -859,16 +859,17 @@ export default function ProductDetail() {
                   transition: 'all 0.2s ease', flexShrink: 0,
                 }}
                   onClick={async () => {
+                    const shareUrl = `${window.location.origin}/share/product/${product.slug}`;
                     const shareData = {
                       title: product.name,
                       text: `Check out ${product.name} at ${settings?.siteName || 'CRAFT HID'}!`,
-                      url: window.location.href,
+                      url: shareUrl,
                     };
                     try {
                       if (navigator.share) {
                         await navigator.share(shareData);
                       } else {
-                        await navigator.clipboard.writeText(window.location.href);
+                        await navigator.clipboard.writeText(shareUrl);
                         alert('Link copied to clipboard!');
                       }
                     } catch (err) {
