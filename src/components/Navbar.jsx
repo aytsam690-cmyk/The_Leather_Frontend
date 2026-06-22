@@ -184,7 +184,7 @@ export default function Navbar() {
   const [mobileCatOpen, setMobileCatOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [searchResults, setSearchResults] = useState([]);
+  const [searchResults, setSearchResults] = useState({ products: [], categories: [] });
   const [megaMenu, setMegaMenu] = useState(false);
   const [categories, setCategories] = useState([]);
   const searchRef = useRef(null);
@@ -222,7 +222,7 @@ export default function Navbar() {
 
   // Search with debounce
   useEffect(() => {
-    if (!searchQuery.trim()) { setSearchResults([]); return; }
+    if (!searchQuery.trim()) { setSearchResults({ products: [], categories: [] }); return; }
     const timer = setTimeout(() => {
       import('../services/api').then(({ getSearchSuggestions }) => {
         getSearchSuggestions(searchQuery)
@@ -541,7 +541,7 @@ export default function Navbar() {
                               letterSpacing: '0.08em',
                               fontFamily: "'DM Sans', sans-serif",
                             }}>Categories</p>
-                            {searchResults.categories.map(c => (
+                            {(searchResults.categories || []).map(c => (
                               <Link key={c._id} to={`/products?category=${encodeURIComponent(c.name)}`}
                                 onClick={() => { setSearchOpen(false); setSearchQuery(''); saveRecentSearch(searchQuery); }}
                                 style={{
@@ -574,7 +574,7 @@ export default function Navbar() {
                               letterSpacing: '0.08em',
                               fontFamily: "'DM Sans', sans-serif",
                             }}>Products</p>
-                            {searchResults.products.map(p => (
+                            {(searchResults.products || []).map(p => (
                               <Link key={p._id} to={`/products/${p.slug || p._id}`}
                                 onClick={() => { setSearchOpen(false); setSearchQuery(''); saveRecentSearch(searchQuery); }}
                                 style={{
