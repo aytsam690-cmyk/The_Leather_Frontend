@@ -225,7 +225,7 @@ function OrderDrawer({ order, onClose, onStatusChange }) {
               </select>
               <input value={tracking} onChange={e => setTracking(e.target.value)} placeholder="Tracking number"
                 className="flex-1 text-sm border border-[#D0D0CA] rounded-sm px-3 py-2.5 outline-none focus:border-[#C9A96E] text-[#111111]" />
-              <button onClick={async () => { if(tracking.trim()) { try { await apiAddTracking(order._id || order.id, { carrier, number: tracking }); } catch(_) {} } }} className="px-4 py-2.5 rounded-sm text-sm font-semibold text-white" style={{ background: CORAL }}>Save</button>
+              <button onClick={async () => { if(tracking.trim()) { try { await apiAddTracking(order._id || order.id, tracking.trim()); } catch(_) {} } }} className="px-4 py-2.5 rounded-sm text-sm font-semibold text-white" style={{ background: CORAL }}>Save</button>
             </div>
           </div>
 
