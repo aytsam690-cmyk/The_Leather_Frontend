@@ -159,11 +159,11 @@ function App() {
         <meta property="og:url" content={window.location.origin} />
         <meta property="og:site_name" content={siteName} />
         <meta property="og:locale" content="en_US" />
-        <meta property="og:image" content={`${window.location.origin}/og-image.png`} />
+        <meta property="og:image" content={settings?.metaTags?.ogImage || `${window.location.origin}/og-image.png`} />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={siteName} />
         <meta name="twitter:description" content={`Shop premium products at ${siteName}. Quality guaranteed with free delivery.`} />
-        <meta name="twitter:image" content={`${window.location.origin}/og-image.png`} />
+        <meta name="twitter:image" content={settings?.metaTags?.ogImage || `${window.location.origin}/og-image.png`} />
         {settings?.logo && <link rel="icon" href={settings.logo} />}
       </Helmet>
       <Suspense fallback={<PageLoader />}>

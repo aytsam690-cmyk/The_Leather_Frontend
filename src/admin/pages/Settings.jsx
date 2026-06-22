@@ -202,6 +202,7 @@ function SeoTab({ onSave, settings }) {
     title: mt.title || '',
     description: mt.description || '',
     keywords: mt.keywords || '',
+    ogImage: mt.ogImage || '',
   });
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
 
@@ -222,6 +223,10 @@ function SeoTab({ onSave, settings }) {
         <textarea rows={3} className={`${inputCls} resize-none`} value={form.description} onChange={e => set('description', e.target.value)} maxLength={180} />
       </div>
       <Field label="Keywords (comma-separated)"><input className={inputCls} value={form.keywords} onChange={e => set('keywords', e.target.value)} placeholder="ecommerce, shopping, deals" /></Field>
+      <div>
+        <UploadZone label="Social Share Image (1200×630px)" preview={form.ogImage} onUpload={v => set('ogImage', v)} />
+        <p className="text-xs text-[#9E9E9E] mt-1">Appears when your link is shared on WhatsApp, Facebook, Twitter etc.</p>
+      </div>
       <button onClick={() => onSave({ metaTags: form })} className="px-6 py-2.5 rounded-sm text-sm font-semibold text-white hover:opacity-90 transition-all" style={{ background: CORAL }}>Save Settings</button>
     </div>
   );
