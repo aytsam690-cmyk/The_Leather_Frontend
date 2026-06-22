@@ -26,6 +26,7 @@ const useCartStore = create(
       addItem: (product, qty = 1, variant = null) => {
         const items = get().items;
         const key = `${product._id}-${variant?.size || ''}-${variant?.color || ''}`;
+        const effectivePrice = (variant?.price && Number(variant.price) > 0) ? Number(variant.price) : product.price;
         const existing = items.find((i) => i.key === key);
         if (existing) {
           set({
@@ -34,7 +35,7 @@ const useCartStore = create(
             ),
           });
         } else {
-          set({ items: [...items, { ...product, qty, variant, key }] });
+          set({ items: [...items, { ...product, price: effectivePrice, qty, variant, key }] });
         }
       },
 
