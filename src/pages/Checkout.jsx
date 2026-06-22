@@ -844,7 +844,7 @@ export default function Checkout() {
       const orderData = {
         items: items.map(i => ({ product: i._id || i.id, quantity: i.qty || i.quantity || 1, price: i.price })),
         shippingAddress: shipping,
-        paymentMethod: 'cod',
+        paymentMethod: 'Cash on Delivery',
         subtotal,
         shippingCost: 0,
         discount,

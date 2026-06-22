@@ -9,6 +9,7 @@ import {
 } from 'lucide-react';
 import useAuthStore from '../store/authStore';
 import { getOrders, updateProfile, changePassword, cancelOrder } from '../services/api';
+import { useCurrency } from '../utils/currency';
 
 
 
@@ -75,6 +76,7 @@ const STATUS_COLORS = {
 };
 
 function OrdersTab() {
+  const { formatPrice } = useCurrency();
   const [expanded, setExpanded] = useState(null);
   const [orders, setOrders] = useState([]);
   const [filter, setFilter] = useState('All');
@@ -158,7 +160,7 @@ function OrdersTab() {
                 </div>
 
                 <div className="mt-4 pt-4 border-t border-[#2C2C26] flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-0">
-                  <p className="font-cormorant text-[18px] font-medium text-[#F5F0E8]">${order.total.toFixed(2)}</p>
+                  <p className="font-cormorant text-[18px] font-medium text-[#F5F0E8]">{formatPrice(order.total)}</p>
                   <div className="flex gap-3">
                     {order.status === 'pending' && (
                       <button

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { X, Eye, ChevronLeft, ChevronRight, Trash2 } from 'lucide-react';
 import useAdminStore from '../store/adminStore';
+import { useCurrency } from '../../utils/currency';
 import { getCustomers, toggleCustomerStatus, deleteCustomer } from '../adminApi';
 
 const CORAL = '#111111';
@@ -140,8 +141,8 @@ function CustomerDrawer({ customer, onClose, onRefresh }) {
           <div className="grid grid-cols-3 gap-3">
             {[
               { label:'Total Orders', value: customer.orders },
-              { label:'Total Spent',  value: `$${customer.spent.toLocaleString()}` },
-              { label:'Avg Order',    value: `$${avgOrder}` },
+              { label:'Total Spent',  value: formatPrice(customer.spent) },
+              { label:'Avg Order',    value: formatPrice(avgOrder) },
             ].map((s) => (
               <div key={s.label} className="p-3 rounded-sm bg-[#F8F8F6] border border-[#E8E8E4] text-center">
                 <p className="text-xl font-black text-[#111111]">{s.value}</p>
@@ -209,6 +210,7 @@ function CustomerDrawer({ customer, onClose, onRefresh }) {
 
 // ─── Main Component ───────────────────────────────────────────────────────────
 export default function Customers() {
+  const { formatPrice } = useCurrency();
   const { setBreadcrumbs } = useAdminStore();
   const [loading, setLoading] = useState(true);
   const [customers, setCustomers] = useState([]);
@@ -358,7 +360,7 @@ export default function Customers() {
                     </td>
                     <td className="px-4 py-3 text-sm text-[#6B6B6B] whitespace-nowrap">{c.phone}</td>
                     <td className="px-4 py-3 text-sm font-semibold text-[#111111] text-center">{c.orders}</td>
-                    <td className="px-4 py-3 text-sm font-semibold text-[#111111]">${c.spent.toLocaleString()}</td>
+                    <td className="px-4 py-3 text-sm font-semibold text-[#111111]">{formatPrice(c.spent)}</td>
                     <td className="px-4 py-3 text-xs text-[#9E9E9E] whitespace-nowrap">{c.joined}</td>
                     <td className="px-4 py-3">
                       {c.isGuest ? (

@@ -3,6 +3,7 @@ import { Plus, Pencil, Trash2, RefreshCw } from 'lucide-react';
 import Modal from '../components/Modal';
 import { useAdminToast } from '../components/Toast';
 import useAdminStore from '../store/adminStore';
+import { useCurrency } from '../../utils/currency';
 import { getCoupons as apiGetCoupons, createCoupon as apiCreateCoupon, updateCoupon as apiUpdateCoupon, deleteCoupon as apiDeleteCoupon, toggleCoupon as apiToggleCoupon } from '../adminApi';
 
 const CORAL = '#111111';
@@ -149,6 +150,7 @@ function CouponModal({ initial, onSave, onClose }) {
 
 // ─── Main Component ───────────────────────────────────────────────────────────
 export default function Coupons() {
+  const { formatPrice } = useCurrency();
   const { setBreadcrumbs } = useAdminStore();
   const { showToast, ToastUI } = useAdminToast();
   const [coupons, setCoupons] = useState([]);
@@ -268,9 +270,9 @@ export default function Coupons() {
                       <span className="px-2.5 py-1 rounded-full text-xs font-semibold whitespace-nowrap" style={{ background: tb.bg, color: tb.text }}>{tb.label}</span>
                     </td>
                     <td className="px-4 py-3 text-sm text-[#111111]">
-                      {c.type === 'percentage' ? `${c.value}%` : c.type === 'fixed' ? `$${c.value}` : '—'}
+                      {c.type === 'percentage' ? `${c.value}%` : c.type === 'fixed' ? formatPrice(c.value) : '—'}
                     </td>
-                    <td className="px-4 py-3 text-sm text-[#6B6B6B]">${c.minOrder}</td>
+                    <td className="px-4 py-3 text-sm text-[#6B6B6B]">{formatPrice(c.minOrder)}</td>
                     <td className="px-4 py-3 text-sm text-[#6B6B6B]">{c.used}{c.limit ? `/${c.limit}` : '/∞'}</td>
                     <td className="px-4 py-3">
                       <span className={`text-sm font-medium ${expired ? 'text-[#9B2226]' : 'text-[#6B6B6B]'}`}>
