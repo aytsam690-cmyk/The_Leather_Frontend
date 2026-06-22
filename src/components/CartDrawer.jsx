@@ -122,8 +122,7 @@ export default function CartDrawer() {
     }
     return Math.min(appliedCoupon.value || 0, subtotal);
   })();
-  const shippingCost = (subtotal - discount) >= 50 ? 0 : 8.99;
-  const total = subtotal - discount + shippingCost;
+  const total = subtotal - discount;
   const count = items.reduce((s, i) => s + i.qty, 0);
 
   const handleApplyCoupon = async () => {
@@ -327,9 +326,7 @@ export default function CartDrawer() {
                     )}
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                       <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#6B6055' }}>Shipping</span>
-                      <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, fontWeight: 500, color: shippingCost === 0 ? '#C9A96E' : '#F5F0E8' }}>
-                        {shippingCost === 0 ? 'Free' : formatPrice(shippingCost)}
-                      </span>
+                      <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, fontWeight: 500, color: '#C9A96E' }}>Free</span>
                     </div>
                   </div>
 

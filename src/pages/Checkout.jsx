@@ -177,8 +177,7 @@ function OrderSidebar({ items, appliedCoupon }) {
     }
     return Math.min(appliedCoupon.value || 0, subtotal);
   })();
-  const shippingCost = (subtotal - discount) >= 50 ? 0 : 8.99;
-  const total = subtotal - discount + shippingCost;
+  const total = subtotal - discount;
 
   return (
     <div style={{
@@ -224,7 +223,7 @@ function OrderSidebar({ items, appliedCoupon }) {
         {[
           { label: 'Subtotal', value: formatPrice(subtotal), color: '#F5F0E8' },
           ...(discount > 0 ? [{ label: `Discount (${appliedCoupon.code})`, value: `−${formatPrice(discount)}`, color: '#C9A96E' }] : []),
-          { label: 'Shipping', value: shippingCost === 0 ? 'Free' : formatPrice(shippingCost), color: shippingCost === 0 ? '#C9A96E' : '#F5F0E8' },
+          { label: 'Shipping', value: 'Free', color: '#C9A96E' },
         ].map(row => (
           <div key={row.label} style={{ display: 'flex', justifyContent: 'space-between' }}>
             <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: '#6B6055', textTransform: 'uppercase', letterSpacing: '0.04em' }}>{row.label}</span>
@@ -477,8 +476,7 @@ function ReviewOrder({ shipping, onBack, onNext }) {
     }
     return Math.min(appliedCoupon.value || 0, subtotal);
   })();
-  const shipping_cost = (subtotal - discount) >= 50 ? 0 : 8.99;
-  const total = subtotal - discount + shipping_cost;
+  const total = subtotal - discount;
 
   return (
     <div>
@@ -604,8 +602,7 @@ function ConfirmOrder({ onBack, onPlace, loading }) {
     }
     return Math.min(appliedCoupon.value || 0, subtotal);
   })();
-  const shipping_cost = (subtotal - discount) >= 50 ? 0 : 8.99;
-  const total = subtotal - discount + shipping_cost;
+  const total = subtotal - discount;
 
   return (
     <div style={{ background: '#141410', border: '1px solid #2C2C26', borderRadius: 2, padding: 32 }}>
@@ -844,16 +841,15 @@ export default function Checkout() {
         }
         return Math.min(appliedCoupon.value || 0, subtotal);
       })();
-      const shippingCost = (subtotal - discount) >= 50 ? 0 : 8.99;
       const orderData = {
         items: items.map(i => ({ product: i._id || i.id, quantity: i.qty || i.quantity || 1, price: i.price })),
         shippingAddress: shipping,
         paymentMethod: 'cod',
         subtotal,
-        shippingCost,
+        shippingCost: 0,
         discount,
         couponCode: appliedCoupon?.code || undefined,
-        total: subtotal - discount + shippingCost,
+        total: subtotal - discount,
       };
       const result = await createOrder(orderData);
       setOrderNumber(result.orderNumber || `#ORD-${Date.now()}`);
