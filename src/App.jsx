@@ -45,20 +45,24 @@ const PageLoader = () => (
   </div>
 );
 
-// ─── Error Boundary — prevents blank screen on crash ─────────────────────────
+// ─── Error Boundary — silently retries once, shows error only on 2nd crash ───
 class ErrorBoundary extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { hasError: false };
+    this.state = { hasError: false, retryCount: 0 };
   }
   static getDerivedStateFromError() {
     return { hasError: true };
   }
   componentDidCatch(error, info) {
     console.error('[ErrorBoundary] Caught:', error, info?.componentStack);
+    // Silent auto-retry on first crash
+    if (this.state.retryCount === 0) {
+      this.setState({ hasError: false, retryCount: 1 });
+    }
   }
   render() {
-    if (this.state.hasError) {
+    if (this.state.hasError && this.state.retryCount > 0) {
       return (
         <div style={{
           minHeight: '100vh', display: 'flex', flexDirection: 'column',
@@ -68,7 +72,7 @@ class ErrorBoundary extends React.Component {
         }}>
           <p style={{ fontSize: 18, fontFamily: "'Cormorant Garamond', serif", fontWeight: 500 }}>Something went wrong</p>
           <button
-            onClick={() => { this.setState({ hasError: false }); window.location.reload(); }}
+            onClick={() => { this.setState({ hasError: false, retryCount: 0 }); window.location.reload(); }}
             style={{
               padding: '12px 32px', background: '#C9A96E', color: '#0D0D0B',
               border: 'none', borderRadius: 2, fontSize: 13, fontWeight: 500,
