@@ -570,7 +570,7 @@ export default function Home() {
             </p>
           </motion.div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))', gap: 20 }}>
+          <div className="why-us-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 20, maxWidth: 960, margin: '0 auto' }}>
             {[
               { icon: '🚚', title: 'Free Delivery', desc: 'Free shipping on all orders. Fast and reliable delivery across Pakistan.' },
               { icon: '💵', title: 'Cash on Delivery', desc: 'Pay when your order arrives. No online payment required.' },

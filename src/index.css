@@ -155,6 +155,9 @@ img { max-width: 100%; height: auto; }
   /* Hero CTA buttons: stack on very small screens */
   .hero-cta-wrap { flex-direction: column !important; align-items: flex-start !important; gap: 12px !important; }
 
+  /* Why Shop With Us: keep 2 cols on mobile */
+  .why-us-grid { grid-template-columns: repeat(2, 1fr) !important; max-width: none !important; }
+
   /* Home: footer — brand full-width, link columns stay 3-up */
   .footer-grid { grid-template-columns: repeat(3, 1fr) !important; }
   .footer-grid > div:first-child { grid-column: 1 / -1 !important; }
