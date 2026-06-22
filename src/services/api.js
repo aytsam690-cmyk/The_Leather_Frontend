@@ -78,6 +78,7 @@ export const register = (data) => api.post('/auth/register', data).then((r) => r
 export const updateProfile = (data) => api.put('/auth/update-profile', data).then((r) => r.data);
 export const forgotPassword = (email) => api.post('/auth/forgot-password', { email }).then((r) => r.data);
 export const resetPassword = (token, password) => api.post(`/auth/reset-password/${token}`, { password }).then((r) => r.data);
+export const changePassword = (data) => api.put('/auth/change-password', data).then((r) => r.data);
 
 // Products
 export const getProducts = (params) => api.get('/products', { params }).then((r) => r.data);

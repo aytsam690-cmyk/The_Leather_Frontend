@@ -8,7 +8,7 @@ import {
   ChevronDown, ChevronUp, Plus, Lock
 } from 'lucide-react';
 import useAuthStore from '../store/authStore';
-import { getOrders, updateProfile } from '../services/api';
+import { getOrders, updateProfile, changePassword } from '../services/api';
 
 
 
@@ -252,18 +252,73 @@ function AddressesTab() {
 // ─── Change Password Tab ──────────────────────────────────────────────────────
 function ChangePasswordTab() {
   const [form, setForm] = useState({ oldPassword: '', newPassword: '', confirmPassword: '' });
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState(null);
+  const [error, setError] = useState(null);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForm(prev => ({ ...prev, [name]: value }));
+    setError(null);
+    setMessage(null);
+  };
+
+  const handleSubmit = async () => {
+    if (!form.oldPassword || !form.newPassword || !form.confirmPassword) {
+      setError('All fields are required');
+      return;
+    }
+    if (form.newPassword.length < 6) {
+      setError('New password must be at least 6 characters');
+      return;
+    }
+    if (form.newPassword !== form.confirmPassword) {
+      setError('New passwords do not match');
+      return;
+    }
+    setLoading(true);
+    setError(null);
+    try {
+      await changePassword({ oldPassword: form.oldPassword, newPassword: form.newPassword });
+      setMessage('Password updated successfully');
+      setForm({ oldPassword: '', newPassword: '', confirmPassword: '' });
+    } catch (err) {
+      setError(err.response?.data?.message || 'Failed to update password');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fields = [
+    { label: 'Current Password', name: 'oldPassword' },
+    { label: 'New Password', name: 'newPassword' },
+    { label: 'Confirm Password', name: 'confirmPassword' },
+  ];
+
   return (
     <div className="bg-[#141410] border border-[#2C2C26] rounded-sm p-5 sm:p-8">
       <h2 className="font-cormorant text-[24px] font-medium text-[#F5F0E8] mb-8">Change Password</h2>
-      <form className="max-w-md space-y-5">
-        {['Current Password', 'New Password', 'Confirm Password'].map(label => (
-          <div key={label}>
+      <form className="max-w-md space-y-5" onSubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
+        {fields.map(({ label, name }) => (
+          <div key={name}>
             <label className="font-dm text-[10px] font-medium uppercase tracking-[0.08em] text-[#6B6055] mb-1.5 block">{label}</label>
-            <input type="password" className="bg-[#1C1C17] border border-[#2C2C26] rounded-sm px-4 py-3 font-dm text-sm text-[#F5F0E8] focus:border-[#C9A96E] focus:outline-none focus:ring-0 focus:shadow-[0_0_0_3px_rgba(201,169,110,0.08)] transition-all w-full" />
+            <input
+              type="password"
+              name={name}
+              value={form[name]}
+              onChange={handleChange}
+              className="bg-[#1C1C17] border border-[#2C2C26] rounded-sm px-4 py-3 font-dm text-sm text-[#F5F0E8] focus:border-[#C9A96E] focus:outline-none focus:ring-0 focus:shadow-[0_0_0_3px_rgba(201,169,110,0.08)] transition-all w-full"
+            />
           </div>
         ))}
-        <button type="button" className="bg-[#F5F0E8] hover:bg-[#C9A96E] text-[#0D0D0B] border border-[#F5F0E8] rounded-sm px-8 py-3 font-dm font-medium text-sm uppercase tracking-[0.04em] transition-colors mt-6 w-full sm:w-auto min-h-[48px]">
-          Update Password
+        {error && <p className="font-dm text-[13px] text-[#C0392B]">{error}</p>}
+        {message && <p className="font-dm text-[13px] text-[#27ae60]">{message}</p>}
+        <button
+          type="submit"
+          disabled={loading}
+          className="bg-[#F5F0E8] hover:bg-[#C9A96E] text-[#0D0D0B] border border-[#F5F0E8] rounded-sm px-8 py-3 font-dm font-medium text-sm uppercase tracking-[0.04em] transition-colors mt-6 w-full sm:w-auto min-h-[48px] disabled:opacity-50"
+        >
+          {loading ? 'Updating…' : 'Update Password'}
         </button>
       </form>
     </div>
