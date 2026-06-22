@@ -1,4 +1,4 @@
-import { useEffect, lazy, Suspense } from 'react';
+import React, { useEffect, lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
@@ -44,6 +44,43 @@ const PageLoader = () => (
     <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
   </div>
 );
+
+// ─── Error Boundary — prevents blank screen on crash ─────────────────────────
+class ErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false };
+  }
+  static getDerivedStateFromError() {
+    return { hasError: true };
+  }
+  componentDidCatch(error, info) {
+    console.error('[ErrorBoundary] Caught:', error, info?.componentStack);
+  }
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div style={{
+          minHeight: '100vh', display: 'flex', flexDirection: 'column',
+          alignItems: 'center', justifyContent: 'center', gap: 16,
+          background: '#0D0D0B', color: '#F5F0E8',
+          fontFamily: "'DM Sans', sans-serif",
+        }}>
+          <p style={{ fontSize: 18, fontFamily: "'Cormorant Garamond', serif", fontWeight: 500 }}>Something went wrong</p>
+          <button
+            onClick={() => { this.setState({ hasError: false }); window.location.reload(); }}
+            style={{
+              padding: '12px 32px', background: '#C9A96E', color: '#0D0D0B',
+              border: 'none', borderRadius: 2, fontSize: 13, fontWeight: 500,
+              textTransform: 'uppercase', letterSpacing: '0.04em', cursor: 'pointer',
+            }}
+          >Reload Page</button>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
 
 // ─── Page transition wrapper ───────────────────────────────────────────────
 const pageVariants = {
@@ -107,6 +144,7 @@ function App() {
   }, [settings?.siteName]);
 
   return (
+    <ErrorBoundary>
     <BrowserRouter>
       <Helmet>
         <title>{siteName}</title>
@@ -143,6 +181,7 @@ function App() {
         </Routes>
       </Suspense>
     </BrowserRouter>
+    </ErrorBoundary>
   );
 }
 
