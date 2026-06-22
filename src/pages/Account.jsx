@@ -8,7 +8,7 @@ import {
   ChevronDown, ChevronUp, Plus, Lock
 } from 'lucide-react';
 import useAuthStore from '../store/authStore';
-import { getOrders, updateProfile, changePassword } from '../services/api';
+import { getOrders, updateProfile, changePassword, cancelOrder } from '../services/api';
 
 
 
@@ -161,7 +161,17 @@ function OrdersTab() {
                   <p className="font-cormorant text-[18px] font-medium text-[#F5F0E8]">${order.total.toFixed(2)}</p>
                   <div className="flex gap-3">
                     {order.status === 'pending' && (
-                      <button className="bg-transparent text-[#C0392B] hover:text-[#9B2226] text-[12px] uppercase tracking-[0.06em] font-medium border-none cursor-pointer px-4 min-h-[44px]">Cancel</button>
+                      <button
+                        className="bg-transparent text-[#C0392B] hover:text-[#9B2226] text-[12px] uppercase tracking-[0.06em] font-medium border-none cursor-pointer px-4 min-h-[44px]"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          if (window.confirm('Are you sure you want to cancel this order?')) {
+                            cancelOrder(order.id)
+                              .then(() => setOrders(prev => prev.map(o => o.id === order.id ? { ...o, status: 'cancelled' } : o)))
+                              .catch(err => alert(err.response?.data?.message || 'Failed to cancel order'));
+                          }
+                        }}
+                      >Cancel</button>
                     )}
                     <button onClick={() => setExpanded(isOpen ? null : order.id)} className="bg-transparent text-[#A89880] hover:text-[#F5F0E8] text-[12px] uppercase tracking-[0.06em] font-medium border-none cursor-pointer px-4 min-h-[44px]">
                       {isOpen ? 'Close' : 'View Details'}
@@ -215,36 +225,120 @@ function OrdersTab() {
   );
 }
 
-// ─── Addresses Tab ────────────────────────────────────────────────────────────
+// ─── Addresses Tab ────────────────────────────────────────────────────────
+const EMPTY_ADDR = { label: '', name: '', street: '', city: '', state: '', zip: '', country: '', isDefault: false };
+
 function AddressesTab() {
   const [addresses, setAddresses] = useState(() => {
     try { return JSON.parse(localStorage.getItem('user-addresses')) || []; } catch { return []; }
   });
+  const [editing, setEditing] = useState(null); // null = closed, 'new' = add, addr.id = edit
+  const [form, setForm] = useState(EMPTY_ADDR);
+
   useEffect(() => { localStorage.setItem('user-addresses', JSON.stringify(addresses)); }, [addresses]);
 
+  const openAdd = () => { setForm(EMPTY_ADDR); setEditing('new'); };
+  const openEdit = (addr) => { setForm({ ...addr }); setEditing(addr.id); };
+  const close = () => { setEditing(null); setForm(EMPTY_ADDR); };
+
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setForm(prev => ({ ...prev, [name]: type === 'checkbox' ? checked : value }));
+  };
+
+  const handleSave = () => {
+    if (!form.label || !form.name || !form.street || !form.city) return;
+    if (editing === 'new') {
+      const newAddr = { ...form, id: Date.now().toString() };
+      if (newAddr.isDefault) setAddresses(prev => [...prev.map(a => ({ ...a, isDefault: false })), newAddr]);
+      else setAddresses(prev => [...prev, newAddr]);
+    } else {
+      setAddresses(prev => prev.map(a => {
+        if (a.id === editing) return { ...form };
+        if (form.isDefault) return { ...a, isDefault: false };
+        return a;
+      }));
+    }
+    close();
+  };
+
+  const inputClass = "bg-[#1C1C17] border border-[#2C2C26] rounded-sm px-4 py-3 font-dm text-sm text-[#F5F0E8] focus:border-[#C9A96E] focus:outline-none focus:ring-0 focus:shadow-[0_0_0_3px_rgba(201,169,110,0.08)] transition-all w-full";
+  const labelClass = "font-dm text-[10px] font-medium uppercase tracking-[0.08em] text-[#6B6055] mb-1.5 block";
+
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-      {addresses.map((addr) => (
-        <div key={addr.id} className="bg-[#141410] border border-[#2C2C26] rounded-sm p-5 relative hover:border-[#3D3D34] transition-all duration-250">
-          {addr.isDefault && <span className="font-dm text-[10px] uppercase tracking-[0.08em] bg-[#1C1C17] border border-[#2C2C26] rounded-sm px-2 py-1 absolute top-4 right-4 text-[#A89880]">Default</span>}
-          <div className="font-dm text-[13px] text-[#A89880] leading-relaxed mt-2">
-            <strong className="text-[#F5F0E8] font-medium">{addr.label}</strong><br />
-            {addr.name}<br />
-            {addr.street}<br />
-            {addr.city}, {addr.state} {addr.zip}<br />
-            {addr.country}
+    <>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {addresses.map((addr) => (
+          <div key={addr.id} className="bg-[#141410] border border-[#2C2C26] rounded-sm p-5 relative hover:border-[#3D3D34] transition-all duration-250">
+            {addr.isDefault && <span className="font-dm text-[10px] uppercase tracking-[0.08em] bg-[#1C1C17] border border-[#2C2C26] rounded-sm px-2 py-1 absolute top-4 right-4 text-[#A89880]">Default</span>}
+            <div className="font-dm text-[13px] text-[#A89880] leading-relaxed mt-2">
+              <strong className="text-[#F5F0E8] font-medium">{addr.label}</strong><br />
+              {addr.name}<br />
+              {addr.street}<br />
+              {addr.city}, {addr.state} {addr.zip}<br />
+              {addr.country}
+            </div>
+            <div className="flex gap-4 mt-4 pt-4 border-t border-[#2C2C26]">
+              <button className="bg-transparent border-none font-dm text-[11px] uppercase tracking-[0.06em] text-[#6B6055] hover:text-[#F5F0E8] cursor-pointer p-0 min-h-[44px]" onClick={() => openEdit(addr)}>Edit</button>
+              <button className="bg-transparent border-none font-dm text-[11px] uppercase tracking-[0.06em] text-[#6B6055] hover:text-[#F5F0E8] cursor-pointer p-0 min-h-[44px]" onClick={() => setAddresses(a => a.filter(x => x.id !== addr.id))}>Delete</button>
+            </div>
           </div>
-          <div className="flex gap-4 mt-4 pt-4 border-t border-[#2C2C26]">
-            <button className="bg-transparent border-none font-dm text-[11px] uppercase tracking-[0.06em] text-[#6B6055] hover:text-[#F5F0E8] cursor-pointer p-0 min-h-[44px]">Edit</button>
-            <button className="bg-transparent border-none font-dm text-[11px] uppercase tracking-[0.06em] text-[#6B6055] hover:text-[#F5F0E8] cursor-pointer p-0 min-h-[44px]" onClick={() => setAddresses(a => a.filter(x => x.id !== addr.id))}>Delete</button>
-          </div>
+        ))}
+        <div className="border border-dashed border-[#3D3D34] rounded-sm p-5 flex flex-col items-center justify-center gap-2 cursor-pointer hover:border-[#C9A96E] transition-all min-h-[160px]" onClick={openAdd}>
+          <Plus size={24} className="text-[#6B6055]" />
+          <span className="font-dm text-[12px] uppercase tracking-[0.08em] text-[#6B6055]">Add New Address</span>
         </div>
-      ))}
-      <div className="border border-dashed border-[#3D3D34] rounded-sm p-5 flex flex-col items-center justify-center gap-2 cursor-pointer hover:border-[#C9A96E] transition-all min-h-[160px]">
-        <Plus size={24} className="text-[#6B6055]" />
-        <span className="font-dm text-[12px] uppercase tracking-[0.08em] text-[#6B6055]">Add New Address</span>
       </div>
-    </div>
+
+      {/* Add / Edit Modal */}
+      <AnimatePresence>
+        {editing !== null && (
+          <motion.div
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center p-4"
+            style={{ background: 'rgba(0,0,0,0.7)' }}
+            onClick={close}
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className="bg-[#141410] border border-[#2C2C26] rounded-sm p-6 sm:p-8 w-full max-w-lg max-h-[90vh] overflow-y-auto"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <h3 className="font-cormorant text-[22px] font-medium text-[#F5F0E8] mb-6">
+                {editing === 'new' ? 'Add New Address' : 'Edit Address'}
+              </h3>
+              <div className="space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div><label className={labelClass}>Label *</label><input name="label" value={form.label} onChange={handleChange} placeholder="Home, Office..." className={inputClass} /></div>
+                  <div><label className={labelClass}>Full Name *</label><input name="name" value={form.name} onChange={handleChange} className={inputClass} /></div>
+                </div>
+                <div><label className={labelClass}>Street Address *</label><input name="street" value={form.street} onChange={handleChange} className={inputClass} /></div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div><label className={labelClass}>City *</label><input name="city" value={form.city} onChange={handleChange} className={inputClass} /></div>
+                  <div><label className={labelClass}>State / Province</label><input name="state" value={form.state} onChange={handleChange} className={inputClass} /></div>
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div><label className={labelClass}>ZIP / Postal Code</label><input name="zip" value={form.zip} onChange={handleChange} className={inputClass} /></div>
+                  <div><label className={labelClass}>Country</label><input name="country" value={form.country} onChange={handleChange} className={inputClass} /></div>
+                </div>
+                <label className="flex items-center gap-3 cursor-pointer mt-2">
+                  <input type="checkbox" name="isDefault" checked={form.isDefault} onChange={handleChange} className="accent-[#C9A96E] w-4 h-4" />
+                  <span className="font-dm text-[13px] text-[#A89880]">Set as default address</span>
+                </label>
+              </div>
+              <div className="flex gap-3 mt-8">
+                <button onClick={close} className="flex-1 bg-transparent border border-[#2C2C26] text-[#A89880] hover:text-[#F5F0E8] hover:border-[#3D3D34] rounded-sm py-3 font-dm text-sm uppercase tracking-[0.04em] transition-all cursor-pointer">
+                  Cancel
+                </button>
+                <button onClick={handleSave} className="flex-1 bg-[#F5F0E8] hover:bg-[#C9A96E] text-[#0D0D0B] border-none rounded-sm py-3 font-dm font-medium text-sm uppercase tracking-[0.04em] transition-colors cursor-pointer">
+                  {editing === 'new' ? 'Add Address' : 'Save Changes'}
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   );
 }
 

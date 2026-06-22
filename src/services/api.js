@@ -92,6 +92,7 @@ export const getCategories = () => api.get('/categories').then((r) => r.data);
 // Orders
 export const createOrder = (payload) => api.post('/orders/place', payload).then((r) => r.data);
 export const getOrders = () => api.get('/orders/my-orders').then((r) => r.data);
+export const cancelOrder = (id) => api.put(`/orders/${id}/cancel`).then((r) => r.data);
 export const trackOrdersByPhone = (phone) => api.get(`/orders/track-by-phone/${encodeURIComponent(phone)}`).then((r) => r.data);
 
 // Coupons
