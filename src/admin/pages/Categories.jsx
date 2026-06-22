@@ -120,13 +120,13 @@ function CategoryForm({ initial, allCats, onSave, onCancel }) {
     : { ...EMPTY_FORM }
   );
 
-  useEffect(() => {
-    if (!initial) {
-      setForm(f => ({ ...f, slug: f.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '') }));
+  const set = (k, v) => setForm(f => {
+    const updated = { ...f, [k]: v };
+    if (k === 'name' && !initial) {
+      updated.slug = v.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
     }
-  }, [form.name]);
-
-  const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
+    return updated;
+  });
   const cls = 'w-full border border-[#D0D0CA] rounded-sm px-3 py-2.5 text-sm text-[#111111] outline-none focus:border-[#C9A96E] transition-all bg-white';
 
   return (

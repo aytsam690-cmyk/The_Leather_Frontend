@@ -78,12 +78,13 @@ function ProductForm({ initial, saving, onCancel, onSave, categories }) {
   const [form, setForm] = useState({ ...defaults, ...(initial || {}), images: (initial?.images || []), variants: (initial?.variants || []) });
   const [variantRow, setVariantRow] = useState({ size:'', color:'', price:'', stock:'' });
 
-  const set = (key, val) => setForm(f => ({ ...f, [key]: val }));
-
-  // Auto-slug from name
-  useEffect(() => {
-    set('slug', form.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, ''));
-  }, [form.name]);
+  const set = (key, val) => setForm(f => {
+    const updated = { ...f, [key]: val };
+    if (key === 'name') {
+      updated.slug = val.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+    }
+    return updated;
+  });
 
   const addVariant = () => {
     if (!variantRow.size && !variantRow.color) return;
