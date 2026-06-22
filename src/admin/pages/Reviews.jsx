@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Star, CheckCircle, XCircle, Clock, Search, Filter } from 'lucide-react';
+import { Star, CheckCircle, XCircle, Clock, Search, Filter, Plus, Trash2, X } from 'lucide-react';
 import useAdminStore from '../store/adminStore';
 import adminApi from '../adminApi';
 
@@ -11,6 +11,10 @@ export default function Reviews() {
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('all'); // all, pending, approved
   const [search, setSearch] = useState('');
+  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [products, setProducts] = useState([]);
+  const [createForm, setCreateForm] = useState({ product: '', name: '', rating: 5, comment: '' });
+  const [creating, setCreating] = useState(false);
   const { setBreadcrumbs } = useAdminStore();
 
   useEffect(() => {
@@ -19,6 +23,7 @@ export default function Reviews() {
       { label: 'Reviews', path: '/admin/reviews' }
     ]);
     fetchReviews();
+    adminApi.get('/products').then(res => setProducts(res.data?.products || res.data || [])).catch(() => {});
   }, [setBreadcrumbs]);
 
   const fetchReviews = async () => {
@@ -30,6 +35,31 @@ export default function Reviews() {
       console.error('Failed to load reviews', err);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleCreate = async () => {
+    if (!createForm.product || !createForm.name.trim()) return;
+    setCreating(true);
+    try {
+      await adminApi.post('/reviews/admin', createForm);
+      setShowCreateModal(false);
+      setCreateForm({ product: '', name: '', rating: 5, comment: '' });
+      fetchReviews();
+    } catch (err) {
+      console.error('Failed to create review', err);
+    } finally {
+      setCreating(false);
+    }
+  };
+
+  const handleDelete = async (id) => {
+    if (!confirm('Delete this review permanently?')) return;
+    try {
+      await adminApi.delete(`/reviews/${id}`);
+      setReviews(prev => prev.filter(r => r._id !== id));
+    } catch (err) {
+      console.error('Failed to delete review', err);
     }
   };
 
@@ -50,6 +80,7 @@ export default function Reviews() {
       const q = search.toLowerCase();
       return r.comment?.toLowerCase().includes(q) || 
              r.user?.name?.toLowerCase().includes(q) ||
+             r.name?.toLowerCase().includes(q) ||
              r.product?.name?.toLowerCase().includes(q);
     }
     return true;
@@ -58,7 +89,12 @@ export default function Reviews() {
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <h2 className="text-xl font-bold text-[#111111]">Product Reviews</h2>
+        <div className="flex items-center gap-3">
+          <h2 className="text-xl font-bold text-[#111111]">Product Reviews</h2>
+          <button onClick={() => setShowCreateModal(true)} className="flex items-center gap-1.5 px-3 py-1.5 text-white text-xs font-semibold rounded-sm hover:opacity-90 transition-all" style={{ background: CORAL }}>
+            <Plus size={14} /> Add Review
+          </button>
+        </div>
         <div className="flex items-center gap-3">
           <div className="relative">
             <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#9E9E9E]" />
@@ -156,12 +192,66 @@ export default function Reviews() {
                       </button>
                     )}
                   </div>
+                    <button 
+                      onClick={() => handleDelete(review._id)}
+                      className="px-3 py-1.5 bg-red-50 text-red-500 hover:bg-red-100 rounded-sm text-xs font-semibold transition-colors flex-1 sm:flex-none text-center mt-1"
+                    >
+                      Delete
+                    </button>
                 </div>
               </div>
             ))}
           </div>
         )}
       </div>
+      {/* Create Review Modal */}
+      <AnimatePresence>
+        {showCreateModal && (
+          <div style={{ position: 'fixed', inset: 0, zIndex: 50, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16 }} onClick={() => setShowCreateModal(false)}>
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }}
+              onClick={e => e.stopPropagation()}
+              className="bg-white rounded-sm border border-[#E8E8E4] p-6 w-full max-w-md"
+            >
+              <div className="flex items-center justify-between mb-5">
+                <h3 className="text-lg font-bold text-[#111111]">Add Review</h3>
+                <button onClick={() => setShowCreateModal(false)} className="text-[#9E9E9E] hover:text-[#111111]"><X size={20} /></button>
+              </div>
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-xs font-semibold text-[#6B6B6B] mb-1.5">Product</label>
+                  <select value={createForm.product} onChange={e => setCreateForm(f => ({ ...f, product: e.target.value }))} className="w-full border border-[#D0D0CA] rounded-sm px-3 py-2.5 text-sm text-[#111111] outline-none focus:border-[#C9A96E] bg-white">
+                    <option value="">Select a product...</option>
+                    {products.map(p => <option key={p._id} value={p._id}>{p.name}</option>)}
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-[#6B6B6B] mb-1.5">Reviewer Name</label>
+                  <input value={createForm.name} onChange={e => setCreateForm(f => ({ ...f, name: e.target.value }))} className="w-full border border-[#D0D0CA] rounded-sm px-3 py-2.5 text-sm text-[#111111] outline-none focus:border-[#C9A96E] bg-white" placeholder="Enter reviewer name" />
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-[#6B6B6B] mb-1.5">Rating</label>
+                  <div className="flex gap-1">
+                    {[1,2,3,4,5].map(s => (
+                      <button key={s} type="button" onClick={() => setCreateForm(f => ({...f, rating: s}))}>
+                        <Star size={24} fill={s <= createForm.rating ? '#fbbf24' : 'none'} stroke={s <= createForm.rating ? '#fbbf24' : '#D0D0CA'} />
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-[#6B6B6B] mb-1.5">Comment</label>
+                  <textarea value={createForm.comment} onChange={e => setCreateForm(f => ({ ...f, comment: e.target.value }))} rows={3} className="w-full border border-[#D0D0CA] rounded-sm px-3 py-2.5 text-sm text-[#111111] outline-none focus:border-[#C9A96E] bg-white resize-none" placeholder="Write the review comment..." />
+                </div>
+              </div>
+              <div className="flex gap-3 mt-5">
+                <button onClick={() => setShowCreateModal(false)} className="flex-1 px-4 py-2.5 border border-[#D0D0CA] rounded-sm text-sm font-semibold text-[#6B6B6B] hover:bg-[#F8F8F6] transition-colors">Cancel</button>
+                <button onClick={handleCreate} disabled={creating || !createForm.product || !createForm.name.trim()} className="flex-1 px-4 py-2.5 rounded-sm text-sm font-semibold text-white hover:opacity-90 transition-all disabled:opacity-50" style={{ background: CORAL }}>{creating ? 'Creating...' : 'Create Review'}</button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

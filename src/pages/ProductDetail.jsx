@@ -1,10 +1,11 @@
 import { useState, useEffect, useRef } from 'react';
-import { getProduct, addReview } from '../services/api';
+import { getProduct, addReview, addGuestReview } from '../services/api';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ShoppingCart, Star, X, ChevronLeft, ChevronRight, Share2, Check, Truck, RefreshCw, Shield } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
 import useCartStore from '../store/cartStore';
+import useAuthStore from '../store/authStore';
 
 import useSettingsStore from '../store/settingsStore';
 import { useCurrency } from '../utils/currency';
@@ -262,20 +263,25 @@ function Gallery({ images }) {
 
 // ─── Product Reviews ─────────────────────────────────────────────────────────
 function ProductReviews({ product, reviews, onReviewSubmit }) {
-  const [reviewForm, setReviewForm] = useState({ rating: 0, comment: '' });
+  const { user } = useAuthStore();
+  const [reviewForm, setReviewForm] = useState({ rating: 0, comment: '', phone: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [reviewMsg, setReviewMsg] = useState({ type: '', text: '' });
 
-  // ── handleSubmitReview logic unchanged ──
   const handleSubmitReview = async () => {
     if (reviewForm.rating === 0) { setReviewMsg({ type: 'error', text: 'Please select a rating' }); return; }
     if (!reviewForm.comment.trim()) { setReviewMsg({ type: 'error', text: 'Please enter a comment' }); return; }
+    if (!user && !reviewForm.phone.trim()) { setReviewMsg({ type: 'error', text: 'Please enter your phone number' }); return; }
     setIsSubmitting(true);
     setReviewMsg({ type: '', text: '' });
     try {
-      await addReview(product._id, reviewForm);
+      if (user) {
+        await addReview(product._id, { rating: reviewForm.rating, comment: reviewForm.comment });
+      } else {
+        await addGuestReview(product._id, { rating: reviewForm.rating, comment: reviewForm.comment, phone: reviewForm.phone });
+      }
       setReviewMsg({ type: 'success', text: 'Review submitted! It will appear once approved.' });
-      setReviewForm({ rating: 0, comment: '' });
+      setReviewForm({ rating: 0, comment: '', phone: '' });
       if (onReviewSubmit) onReviewSubmit();
     } catch (err) {
       setReviewMsg({ type: 'error', text: err.response?.data?.message || 'Failed to submit review' });
@@ -381,6 +387,34 @@ function ProductReviews({ product, reviews, onReviewSubmit }) {
                 <h3 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 28, fontWeight: 500, color: '#F5F0E8', marginBottom: 16 }}>
                   Write a Review
                 </h3>
+
+                {/* Phone number for guests */}
+                {!user && (
+                  <div style={{ marginBottom: 16 }}>
+                    <label style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 10, fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#6B6055', display: 'block', marginBottom: 6 }}>
+                      Your Phone Number
+                    </label>
+                    <input
+                      type="tel"
+                      value={reviewForm.phone}
+                      onChange={e => setReviewForm(f => ({ ...f, phone: e.target.value }))}
+                      placeholder="Enter phone number used in your order"
+                      style={{
+                        width: '100%', boxSizing: 'border-box',
+                        background: '#1C1C17', border: '1px solid #2C2C26',
+                        borderRadius: 2, padding: '12px 16px',
+                        fontFamily: "'DM Sans', sans-serif", fontSize: 14,
+                        color: '#F5F0E8', outline: 'none',
+                        transition: 'border-color 0.2s',
+                      }}
+                      onFocus={e => { e.target.style.borderColor = '#C9A96E'; }}
+                      onBlur={e => { e.target.style.borderColor = '#2C2C26'; }}
+                    />
+                    <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 11, color: '#6B6055', marginTop: 6 }}>
+                      We'll fetch your name from your order automatically
+                    </p>
+                  </div>
+                )}
 
                 {/* Star selector */}
                 <div style={{ marginBottom: 16 }}>

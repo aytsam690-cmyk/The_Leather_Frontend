@@ -102,6 +102,7 @@ export const getFilters = (category) => api.get('/filters', { params: { category
 
 // Reviews
 export const addReview = (productId, data) => api.post(`/reviews/${productId}`, data).then((r) => r.data);
+export const addGuestReview = (productId, data) => api.post(`/reviews/guest/${productId}`, data).then((r) => r.data);
 
 // Banners
 export const getBanners = () => api.get('/banners').then((r) => r.data);
