@@ -858,6 +858,23 @@ export default function ProductDetail() {
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   transition: 'all 0.2s ease', flexShrink: 0,
                 }}
+                  onClick={async () => {
+                    const shareData = {
+                      title: product.name,
+                      text: `Check out ${product.name} at ${settings?.siteName || 'CRAFT HID'}!`,
+                      url: window.location.href,
+                    };
+                    try {
+                      if (navigator.share) {
+                        await navigator.share(shareData);
+                      } else {
+                        await navigator.clipboard.writeText(window.location.href);
+                        alert('Link copied to clipboard!');
+                      }
+                    } catch (err) {
+                      // User cancelled share or error
+                    }
+                  }}
                   onMouseLeave={e => { e.currentTarget.style.borderColor = '#E8E8E4'; e.currentTarget.style.color = '#6B6B6B'; }}
                 >
                   <Share2 size={15} />
