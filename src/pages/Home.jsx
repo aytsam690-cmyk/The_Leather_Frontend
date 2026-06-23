@@ -182,7 +182,7 @@ export default function Home() {
   const sliderRef = useRef(null);
   const dragStartX = useRef(0);
   const dragCurrentX = useRef(0);
-  const isDragging = useRef(false);
+  const isHeroDragging = useRef(false);
   const [dragOffset, setDragOffset] = useState(0);
 
   bannerCountRef.current = homeBanners.length;
@@ -215,22 +215,22 @@ export default function Home() {
 
   // ── Touch/Mouse drag for Daraz-style sliding ──
   const handleDragStart = useCallback((clientX) => {
-    isDragging.current = true;
+    isHeroDragging.current = true;
     dragStartX.current = clientX;
     dragCurrentX.current = clientX;
     if (intervalRef.current) clearInterval(intervalRef.current);
   }, []);
 
   const handleDragMove = useCallback((clientX) => {
-    if (!isDragging.current) return;
+    if (!isHeroDragging.current) return;
     dragCurrentX.current = clientX;
     const diff = dragCurrentX.current - dragStartX.current;
     setDragOffset(diff);
   }, []);
 
   const handleDragEnd = useCallback(() => {
-    if (!isDragging.current) return;
-    isDragging.current = false;
+    if (!isHeroDragging.current) return;
+    isHeroDragging.current = false;
     const diff = dragCurrentX.current - dragStartX.current;
     const threshold = sliderRef.current ? sliderRef.current.offsetWidth * 0.15 : 80;
     if (diff < -threshold) goToNext();
@@ -248,7 +248,7 @@ export default function Home() {
   const handleMouseDown = useCallback((e) => { e.preventDefault(); handleDragStart(e.clientX); }, [handleDragStart]);
   const handleMouseMove = useCallback((e) => handleDragMove(e.clientX), [handleDragMove]);
   const handleMouseUp = useCallback(() => handleDragEnd(), [handleDragEnd]);
-  const handleMouseLeave = useCallback(() => { if (isDragging.current) handleDragEnd(); }, [handleDragEnd]);
+  const handleMouseLeave = useCallback(() => { if (isHeroDragging.current) handleDragEnd(); }, [handleDragEnd]);
 
   // Auto-advance hero slides
   useEffect(() => {
@@ -378,7 +378,7 @@ export default function Home() {
       ) : (
         /* ── Billboard Hero ── */
         <section id="hero-billboard" className="hero-billboard" ref={sliderRef}
-          style={{ position: 'relative', width: '100%', overflow: 'hidden', cursor: isDragging.current ? 'grabbing' : 'grab' }}
+          style={{ position: 'relative', width: '100%', overflow: 'hidden', cursor: isHeroDragging.current ? 'grabbing' : 'grab' }}
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
@@ -393,7 +393,7 @@ export default function Home() {
             display: 'flex',
             width: `${homeBanners.length * 100}%`,
             transform: `translateX(calc(-${currentSlide * (100 / homeBanners.length)}% + ${dragOffset}px))`,
-            transition: isDragging.current ? 'none' : 'transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+            transition: isHeroDragging.current ? 'none' : 'transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
             willChange: 'transform',
           }}>
             {homeBanners.map((banner, i) => (
