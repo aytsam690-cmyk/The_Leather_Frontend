@@ -580,16 +580,17 @@ export default function ProductDetail() {
   return (
     <div style={{ background: '#0D0D0B', minHeight: '100vh', paddingTop: 96 }}>
       <Helmet>
-        <title>{product.name} | {settings?.siteName || 'Store'}</title>
-        <meta name="description" content={product.description?.slice(0, 155) || `Buy ${product.name} at ${settings?.siteName || 'our store'}`} />
+        <title>{product.metaTitle || product.name} | {settings?.siteName || 'Store'}</title>
+        <meta name="description" content={product.metaDescription || product.description?.slice(0, 155) || `Buy ${product.name} at ${settings?.siteName || 'our store'}`} />
+        {product.metaKeywords && <meta name="keywords" content={product.metaKeywords} />}
         <link rel="canonical" href={window.location.origin + window.location.pathname} />
-        <meta property="og:title" content={`${product.name} | ${settings?.siteName || 'Store'}`} />
-        <meta property="og:description" content={product.description?.slice(0, 155) || ''} />
+        <meta property="og:title" content={`${product.metaTitle || product.name} | ${settings?.siteName || 'Store'}`} />
+        <meta property="og:description" content={product.metaDescription || product.description?.slice(0, 155) || ''} />
         <meta property="og:type" content="product" />
         <meta property="og:url" content={window.location.origin + `/products/${product.slug || product._id}`} />
         {product.images?.[0]?.url && <meta property="og:image" content={product.images[0].url} />}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={product.name} />
+        <meta name="twitter:title" content={product.metaTitle || product.name} />
         {product.images?.[0]?.url && <meta name="twitter:image" content={product.images[0].url} />}
         <script type="application/ld+json">{JSON.stringify({
           "@context": "https://schema.org",

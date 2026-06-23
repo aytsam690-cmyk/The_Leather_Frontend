@@ -72,7 +72,7 @@ function ProductForm({ initial, saving, onCancel, onSave, categories }) {
   const defaults = {
     name:'', category:'', subcategory:'', brand:'', status:'active',
     price:'', comparePrice:'', costPrice:'', sku:'', barcode:'', stock:'', trackInventory:true,
-    description:'', metaTitle:'', metaDescription:'', slug:'',
+    description:'', metaTitle:'', metaDescription:'', metaKeywords:'', slug:'',
     images:[], variants:[], isFeatured: false,
   };
   const [form, setForm] = useState({ ...defaults, ...(initial || {}), images: (initial?.images || []), variants: (initial?.variants || []) });
@@ -272,6 +272,10 @@ function ProductForm({ initial, saving, onCancel, onSave, categories }) {
             </div>
             <textarea rows={3} className={`${inputCls} resize-none`} value={form.metaDescription}
               onChange={e => set('metaDescription', e.target.value)} placeholder="SEO description" maxLength={180} />
+          </div>
+          <div>
+            <label className={labelCls}>SEO Keywords (comma-separated)</label>
+            <input className={inputCls} value={form.metaKeywords} onChange={e => set('metaKeywords', e.target.value)} placeholder="leather wallet, premium wallet, handmade leather" />
           </div>
           <div>
             <label className={labelCls}>URL Slug</label>
