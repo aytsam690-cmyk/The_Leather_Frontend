@@ -165,6 +165,21 @@ function App() {
         <meta name="twitter:description" content={`Shop premium products at ${siteName}. Quality guaranteed with free delivery.`} />
         <meta name="twitter:image" content={settings?.metaTags?.ogImage || `${window.location.origin}/og-image.png`} />
         {settings?.logo && <link rel="icon" href={settings.logo} />}
+        <script type="application/ld+json">{JSON.stringify({
+          '@context': 'https://schema.org',
+          '@type': 'Organization',
+          name: siteName,
+          url: window.location.origin,
+          logo: settings?.logo || `${window.location.origin}/og-image.png`,
+          description: `Shop premium products at ${siteName}. Quality guaranteed with free delivery across Pakistan.`,
+          contactPoint: settings?.contactInfo?.phone ? {
+            '@type': 'ContactPoint',
+            telephone: settings.contactInfo.phone,
+            contactType: 'customer service',
+            availableLanguage: ['English', 'Urdu']
+          } : undefined,
+          sameAs: (settings?.socialLinks || []).map(s => s.url).filter(Boolean)
+        })}</script>
       </Helmet>
       <Suspense fallback={<PageLoader />}>
         <Routes>
