@@ -177,74 +177,78 @@ export default function Home() {
 
   // ── Hero billboard state ──
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [isTransitioning, setIsTransitioning] = useState(false);
   const intervalRef = useRef(null);
   const bannerCountRef = useRef(0);
-  const transitioningRef = useRef(false);
+  const sliderRef = useRef(null);
+  const dragStartX = useRef(0);
+  const dragCurrentX = useRef(0);
+  const isDragging = useRef(false);
+  const [dragOffset, setDragOffset] = useState(0);
 
-  // Keep refs in sync
   bannerCountRef.current = homeBanners.length;
-  transitioningRef.current = isTransitioning;
 
   const startInterval = useCallback(() => {
     if (intervalRef.current) clearInterval(intervalRef.current);
     intervalRef.current = setInterval(() => {
       const len = bannerCountRef.current;
       if (len <= 1) return;
-      setIsTransitioning(true);
-      transitioningRef.current = true;
       setCurrentSlide(prev => (prev + 1) % len);
-      setTimeout(() => { setIsTransitioning(false); transitioningRef.current = false; }, 1400);
     }, 5000);
   }, []);
 
   const goToNext = useCallback(() => {
-    if (transitioningRef.current || bannerCountRef.current <= 1) return;
-    setIsTransitioning(true);
-    transitioningRef.current = true;
+    if (bannerCountRef.current <= 1) return;
     setCurrentSlide(prev => (prev + 1) % bannerCountRef.current);
-    setTimeout(() => { setIsTransitioning(false); transitioningRef.current = false; }, 1400);
     startInterval();
   }, [startInterval]);
 
   const goToPrev = useCallback(() => {
-    if (transitioningRef.current || bannerCountRef.current <= 1) return;
-    setIsTransitioning(true);
-    transitioningRef.current = true;
+    if (bannerCountRef.current <= 1) return;
     setCurrentSlide(prev => (prev - 1 + bannerCountRef.current) % bannerCountRef.current);
-    setTimeout(() => { setIsTransitioning(false); transitioningRef.current = false; }, 1400);
     startInterval();
   }, [startInterval]);
 
   const goToSlide = useCallback((index) => {
-    if (transitioningRef.current) return;
-    setCurrentSlide(prev => {
-      if (index === prev) return prev;
-      setIsTransitioning(true);
-      transitioningRef.current = true;
-      setTimeout(() => { setIsTransitioning(false); transitioningRef.current = false; }, 1400);
-      startInterval();
-      return index;
-    });
+    setCurrentSlide(index);
+    startInterval();
   }, [startInterval]);
 
-  // ── Touch swipe for mobile ──
-  const touchStartX = useRef(0);
-  const touchEndX = useRef(0);
-  const handleTouchStart = useCallback((e) => {
-    touchStartX.current = e.touches[0].clientX;
-    touchEndX.current = e.touches[0].clientX;
+  // ── Touch/Mouse drag for Daraz-style sliding ──
+  const handleDragStart = useCallback((clientX) => {
+    isDragging.current = true;
+    dragStartX.current = clientX;
+    dragCurrentX.current = clientX;
+    if (intervalRef.current) clearInterval(intervalRef.current);
   }, []);
-  const handleTouchMove = useCallback((e) => {
-    touchEndX.current = e.touches[0].clientX;
+
+  const handleDragMove = useCallback((clientX) => {
+    if (!isDragging.current) return;
+    dragCurrentX.current = clientX;
+    const diff = dragCurrentX.current - dragStartX.current;
+    setDragOffset(diff);
   }, []);
-  const handleTouchEnd = useCallback(() => {
-    const diff = touchStartX.current - touchEndX.current;
-    if (Math.abs(diff) > 50) {
-      if (diff > 0) goToNext();
-      else goToPrev();
-    }
-  }, [goToNext, goToPrev]);
+
+  const handleDragEnd = useCallback(() => {
+    if (!isDragging.current) return;
+    isDragging.current = false;
+    const diff = dragCurrentX.current - dragStartX.current;
+    const threshold = sliderRef.current ? sliderRef.current.offsetWidth * 0.15 : 80;
+    if (diff < -threshold) goToNext();
+    else if (diff > threshold) goToPrev();
+    setDragOffset(0);
+    startInterval();
+  }, [goToNext, goToPrev, startInterval]);
+
+  // Touch events
+  const handleTouchStart = useCallback((e) => handleDragStart(e.touches[0].clientX), [handleDragStart]);
+  const handleTouchMove = useCallback((e) => handleDragMove(e.touches[0].clientX), [handleDragMove]);
+  const handleTouchEnd = useCallback(() => handleDragEnd(), [handleDragEnd]);
+
+  // Mouse events
+  const handleMouseDown = useCallback((e) => { e.preventDefault(); handleDragStart(e.clientX); }, [handleDragStart]);
+  const handleMouseMove = useCallback((e) => handleDragMove(e.clientX), [handleDragMove]);
+  const handleMouseUp = useCallback(() => handleDragEnd(), [handleDragEnd]);
+  const handleMouseLeave = useCallback(() => { if (isDragging.current) handleDragEnd(); }, [handleDragEnd]);
 
   // Auto-advance hero slides
   useEffect(() => {
@@ -373,25 +377,42 @@ export default function Home() {
         </section>
       ) : (
         /* ── Billboard Hero ── */
-        <section id="hero-billboard" className="hero-billboard" style={{ position: 'relative', width: '100%', overflow: 'hidden' }}
+        <section id="hero-billboard" className="hero-billboard" ref={sliderRef}
+          style={{ position: 'relative', width: '100%', overflow: 'hidden', cursor: isDragging.current ? 'grabbing' : 'grab' }}
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
+          onMouseDown={handleMouseDown}
+          onMouseMove={handleMouseMove}
+          onMouseUp={handleMouseUp}
+          onMouseLeave={handleMouseLeave}
         >
 
-          {/* LAYER 1 — Banner Image with crossfade */}
-          <AnimatePresence mode="sync">
-            <motion.img
-              key={`banner-img-${currentSlide}`}
-              src={activeBanner?.image}
-              alt={activeBanner?.title || 'Banner'}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 1.4, ease: 'easeInOut' }}
-              style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center' }}
-            />
-          </AnimatePresence>
+          {/* LAYER 1 — Horizontal sliding banner strip */}
+          <div style={{
+            display: 'flex',
+            width: `${homeBanners.length * 100}%`,
+            transform: `translateX(calc(-${currentSlide * (100 / homeBanners.length)}% + ${dragOffset}px))`,
+            transition: isDragging.current ? 'none' : 'transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+            willChange: 'transform',
+          }}>
+            {homeBanners.map((banner, i) => (
+              <img
+                key={i}
+                src={banner.image}
+                alt={banner.title || 'Banner'}
+                draggable={false}
+                style={{
+                  width: `${100 / homeBanners.length}%`,
+                  height: '100%', objectFit: 'cover', objectPosition: 'center',
+                  position: 'absolute', top: 0,
+                  left: `${(i * 100) / homeBanners.length}%`,
+                  pointerEvents: 'none',
+                  userSelect: 'none',
+                }}
+              />
+            ))}
+          </div>
 
           {/* LAYER 2 — Dark Gradient Overlays */}
           <div className="hero-overlay-lr" style={{
