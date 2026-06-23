@@ -36,13 +36,25 @@ const NAV_LINKS = [
 // ─── Notification Bell ────────────────────────────────────────────────────────
 function NotificationBell() {
   const [open, setOpen] = useState(false);
-  const { notifications, unreadCount, markAllRead, markRead } = useAdminStore();
+  const { notifications, unreadCount, markAllRead, markRead, fetchNotifications, refreshNotifications } = useAdminStore();
   const ref = useRef(null);
 
   useEffect(() => {
     const handler = (e) => { if (ref.current && !ref.current.contains(e.target)) setOpen(false); };
     document.addEventListener('mousedown', handler);
     return () => document.removeEventListener('mousedown', handler);
+  }, []);
+
+  // Fetch real notifications on first open
+  useEffect(() => {
+    if (open) fetchNotifications();
+  }, [open]);
+
+  // Auto-refresh every 2 minutes
+  useEffect(() => {
+    fetchNotifications();
+    const interval = setInterval(() => { refreshNotifications(); fetchNotifications(); }, 120000);
+    return () => clearInterval(interval);
   }, []);
 
   return (
@@ -61,13 +73,19 @@ function NotificationBell() {
         <div className="absolute right-0 top-full mt-2 w-80 bg-white rounded-sm shadow-2xl border border-[#E8E8E4] overflow-hidden z-50">
           <div className="flex items-center justify-between px-4 py-3 border-b border-[#E8E8E4]">
             <p className="font-bold text-[#111111] text-sm">Notifications</p>
-            {unreadCount > 0 && (
-              <button onClick={markAllRead} className="text-xs font-medium hover:underline" style={{ color: CORAL }}>
-                Mark all read
-              </button>
-            )}
+            <div className="flex items-center gap-3">
+              <button onClick={() => { refreshNotifications(); fetchNotifications(); }} className="text-xs font-medium text-[#9E9E9E] hover:text-[#111111]" title="Refresh">↻</button>
+              {unreadCount > 0 && (
+                <button onClick={markAllRead} className="text-xs font-medium hover:underline" style={{ color: CORAL }}>
+                  Mark all read
+                </button>
+              )}
+            </div>
           </div>
           <div className="max-h-72 overflow-y-auto">
+            {notifications.length === 0 && (
+              <p className="text-sm text-[#9E9E9E] text-center py-6">Loading...</p>
+            )}
             {notifications.map((n) => (
               <button key={n.id} onClick={() => markRead(n.id)}
                 className={`w-full text-left px-4 py-3 border-b border-[#E8E8E4] hover:bg-[#F8F8F6] transition-colors ${!n.read ? 'bg-[#F8F8F6]/60' : ''}`}>
