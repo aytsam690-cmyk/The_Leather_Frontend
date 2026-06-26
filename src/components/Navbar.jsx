@@ -10,12 +10,7 @@ import useAuthStore from '../store/authStore';
 import useSettingsStore from '../store/settingsStore';
 import { getCategories, searchProducts } from '../services/api';
 
-const FALLBACK_CATEGORIES = [
-  { name: 'Electronics', sub: ['Phones', 'Laptops', 'Cameras', 'Audio'] },
-  { name: 'Fashion', sub: ['Men', 'Women', 'Kids', 'Accessories'] },
-  { name: 'Home & Living', sub: ['Furniture', 'Decor', 'Kitchen', 'Bedding'] },
-  { name: 'Sports', sub: ['Fitness', 'Outdoor', 'Team Sports', 'Water Sports'] },
-];
+
 
 const navLinks = [
   { label: 'Home', path: '/' },
@@ -202,17 +197,22 @@ export default function Navbar() {
       .then(data => {
         const items = Array.isArray(data) ? data : [];
         if (items.length > 0) {
-          setCategories(items.map(c => ({
+          // Build parent-child tree
+          const parents = items.filter(c => !c.parentCategory);
+          const children = items.filter(c => c.parentCategory);
+          setCategories(parents.map(c => ({
             name: c.name,
             slug: c.slug,
-            sub: c.children?.map(ch => ch.name) || [],
+            sub: children
+              .filter(ch => ch.parentCategory === c._id || ch.parentCategory?.toString() === c._id?.toString())
+              .map(ch => ({ name: ch.name, slug: ch.slug })),
           })));
         } else {
-          setCategories(FALLBACK_CATEGORIES);
+          setCategories([]);
         }
       })
       .catch(() => {
-        setCategories(FALLBACK_CATEGORIES);
+        setCategories([]);
       });
   }, []);
 
@@ -407,9 +407,9 @@ export default function Navbar() {
                             {cat.sub.length > 0 && (
                               <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 4 }}>
                                 {cat.sub.map((s) => (
-                                  <li key={s}>
+                                  <li key={s.name || s}>
                                     <Link
-                                      to={`/products?category=${encodeURIComponent(s)}`}
+                                      to={`/products?category=${encodeURIComponent(s.name || s)}`}
                                       onClick={() => setMegaMenu(false)}
                                       style={{
                                         fontSize: 13,
@@ -421,7 +421,7 @@ export default function Navbar() {
                                       onMouseEnter={e => { e.currentTarget.style.color = '#F5F0E8'; }}
                                       onMouseLeave={e => { e.currentTarget.style.color = '#A89880'; }}
                                     >
-                                      {s}
+                                      {s.name || s}
                                     </Link>
                                   </li>
                                 ))}
