@@ -142,10 +142,12 @@ function App() {
 
   // Update document title as soon as settings load
   useEffect(() => {
-    if (settings?.siteName) {
+    if (settings?.metaTags?.title) {
+      document.title = settings.metaTags.title;
+    } else if (settings?.siteName) {
       document.title = settings.siteName;
     }
-  }, [settings?.siteName]);
+  }, [settings?.siteName, settings?.metaTags?.title]);
 
   // Dynamically update the raw DOM favicon so it reflects immediately
   // (Helmet can be slow with link tags)
@@ -174,22 +176,26 @@ function App() {
 
   const faviconUrl = settings?.favicon || settings?.logo;
 
+  const pageTitle = settings?.metaTags?.title || siteName;
+  const pageDescription = settings?.metaTags?.description || `Shop premium products at ${siteName}. Quality guaranteed with free delivery.`;
+
   return (
     <ErrorBoundary>
     <BrowserRouter>
       <Helmet>
-        <title>{siteName}</title>
-        <meta name="description" content={`Shop premium products at ${siteName}. Quality guaranteed with free delivery.`} />
-        <meta property="og:title" content={siteName} />
-        <meta property="og:description" content={`Shop premium products at ${siteName}. Quality guaranteed with free delivery.`} />
+        <title>{pageTitle}</title>
+        <meta name="description" content={pageDescription} />
+        {settings?.metaTags?.keywords && <meta name="keywords" content={settings.metaTags.keywords} />}
+        <meta property="og:title" content={pageTitle} />
+        <meta property="og:description" content={pageDescription} />
         <meta property="og:type" content="website" />
         <meta property="og:url" content={window.location.origin} />
         <meta property="og:site_name" content={siteName} />
         <meta property="og:locale" content="en_US" />
         <meta property="og:image" content={settings?.metaTags?.ogImage || `${window.location.origin}/og-image.png`} />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={siteName} />
-        <meta name="twitter:description" content={`Shop premium products at ${siteName}. Quality guaranteed with free delivery.`} />
+        <meta name="twitter:title" content={pageTitle} />
+        <meta name="twitter:description" content={pageDescription} />
         <meta name="twitter:image" content={settings?.metaTags?.ogImage || `${window.location.origin}/og-image.png`} />
         {faviconUrl && <link rel="icon" type="image/png" href={faviconUrl} />}
         {faviconUrl && <link rel="apple-touch-icon" href={faviconUrl} />}
@@ -199,7 +205,7 @@ function App() {
           name: siteName,
           url: window.location.origin,
           logo: settings?.logo || `${window.location.origin}/og-image.png`,
-          description: `Shop premium products at ${siteName}. Quality guaranteed with free delivery across Pakistan.`,
+          description: pageDescription,
           contactPoint: settings?.contactInfo?.phone ? {
             '@type': 'ContactPoint',
             telephone: settings.contactInfo.phone,
