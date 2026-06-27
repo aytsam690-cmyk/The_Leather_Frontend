@@ -385,6 +385,8 @@ export default function Home() {
               key={`banner-img-${currentSlide}`}
               src={activeBanner?.image}
               alt={activeBanner?.title || 'Banner'}
+              fetchPriority="high"
+              decoding="sync"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
