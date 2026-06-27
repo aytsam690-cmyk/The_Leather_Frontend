@@ -217,8 +217,8 @@ function App() {
       </Helmet>
       <Suspense fallback={<PageLoader />}>
         <Routes>
-          <Route path="/admin/login" element={<AdminLogin />} />
-          <Route path="/admin" element={<AdminProtectedRoute />}>
+          <Route path="/aytsam-abdullah/login" element={<AdminLogin />} />
+          <Route path="/aytsam-abdullah" element={<AdminProtectedRoute />}>
             <Route element={<AdminLayout />}>
               <Route index element={<Navigate to="dashboard" replace />} />
               <Route path="dashboard"  element={<Dashboard />} />

@@ -40,7 +40,7 @@ export default function AdminLogin() {
         { _id: data._id, name: data.name, email: data.email, role: data.role },
         data.accessToken || data.token
       );
-      navigate('/admin/dashboard', { replace: true });
+      navigate('/aytsam-abdullah/dashboard', { replace: true });
     } catch (err) {
       setError(err.response?.data?.message || 'Invalid secret key. Access denied.');
     }

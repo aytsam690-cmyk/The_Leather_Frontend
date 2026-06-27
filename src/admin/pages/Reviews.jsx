@@ -19,8 +19,8 @@ export default function Reviews() {
 
   useEffect(() => {
     setBreadcrumbs([
-      { label: 'Dashboard', path: '/admin' },
-      { label: 'Reviews', path: '/admin/reviews' }
+      { label: 'Dashboard', path: '/aytsam-abdullah' },
+      { label: 'Reviews', path: '/aytsam-abdullah/reviews' }
     ]);
     fetchReviews();
     adminApi.get('/products').then(res => setProducts(res.data?.products || res.data || [])).catch(() => {});

@@ -272,7 +272,7 @@ export default function Orders() {
   const PER_PAGE = 10;
 
   useEffect(() => {
-    setBreadcrumbs([{ label:'Dashboard', path:'/admin' }, { label:'Orders', path:'/admin/orders' }]);
+    setBreadcrumbs([{ label:'Dashboard', path:'/aytsam-abdullah' }, { label:'Orders', path:'/aytsam-abdullah/orders' }]);
     getAdminOrders()
       .then((data) => {
         const items = data?.orders || data || [];

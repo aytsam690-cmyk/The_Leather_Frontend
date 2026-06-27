@@ -133,7 +133,7 @@ export default function Banners() {
   const [dragOverId, setDragOverId] = useState(null);
 
   useEffect(() => {
-    setBreadcrumbs([{ label:'Dashboard', path:'/admin' }, { label:'Banners', path:'/admin/banners' }]);
+    setBreadcrumbs([{ label:'Dashboard', path:'/aytsam-abdullah' }, { label:'Banners', path:'/aytsam-abdullah/banners' }]);
     loadBanners();
   }, []);
 

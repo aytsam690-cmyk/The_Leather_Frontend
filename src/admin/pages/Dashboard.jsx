@@ -164,7 +164,7 @@ function RecentOrdersTable({ orders }) {
     <div className="bg-white rounded-sm border border-[#E8E8E4] overflow-hidden">
       <div className="flex items-center justify-between px-5 py-4 border-b border-[#E8E8E4]">
         <h3 className="font-bold text-[#111111]">Recent Orders</h3>
-        <Link to="/admin/orders" className="text-xs font-semibold flex items-center gap-1 hover:underline"
+        <Link to="/aytsam-abdullah/orders" className="text-xs font-semibold flex items-center gap-1 hover:underline"
           style={{ color: CORAL }}>
           View All <ArrowRight size={12} />
         </Link>
@@ -223,7 +223,7 @@ export default function Dashboard() {
   const { formatPrice } = useCurrency();
 
   useEffect(() => {
-    setBreadcrumbs([{ label: 'Dashboard', path: '/admin' }]);
+    setBreadcrumbs([{ label: 'Dashboard', path: '/aytsam-abdullah' }]);
 
     // Load all dashboard data from backend in parallel
     Promise.allSettled([
@@ -303,17 +303,17 @@ export default function Dashboard() {
     <div className="space-y-6">
       {/* Quick Actions */}
       <div className="flex flex-wrap gap-3">
-        <Link to="/admin/products"
+        <Link to="/aytsam-abdullah/products"
           className="flex items-center gap-2 px-4 py-2.5 rounded-sm text-sm font-semibold text-white transition-all hover:opacity-90 hover:shadow-lg"
           style={{ background: CORAL }}>
           + Add Product
         </Link>
-        <Link to="/admin/orders"
+        <Link to="/aytsam-abdullah/orders"
           className="flex items-center gap-2 px-4 py-2.5 rounded-sm text-sm font-semibold border-2 transition-all hover:bg-[#F8F8F6]"
           style={{ borderColor: CORAL, color: CORAL }}>
           View All Orders
         </Link>
-        <Link to="/admin/coupons"
+        <Link to="/aytsam-abdullah/coupons"
           className="flex items-center gap-2 px-4 py-2.5 rounded-sm text-sm font-semibold border-2 transition-all hover:bg-[#F8F8F6]"
           style={{ borderColor: CORAL, color: CORAL }}>
           + Add Coupon
@@ -359,7 +359,7 @@ export default function Dashboard() {
                 <h3 className="font-bold text-[#111111] text-sm flex items-center gap-2">
                   <AlertTriangle size={15} className="text-amber-500" /> Low Stock Alerts
                 </h3>
-                <Link to="/admin/products" className="text-xs font-medium hover:underline" style={{ color: CORAL }}>
+                <Link to="/aytsam-abdullah/products" className="text-xs font-medium hover:underline" style={{ color: CORAL }}>
                   Update
                 </Link>
               </div>

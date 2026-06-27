@@ -243,7 +243,7 @@ export default function Customers() {
   };
 
   useEffect(() => {
-    setBreadcrumbs([{ label:'Dashboard', path:'/admin' }, { label:'Customers', path:'/admin/customers' }]);
+    setBreadcrumbs([{ label:'Dashboard', path:'/aytsam-abdullah' }, { label:'Customers', path:'/aytsam-abdullah/customers' }]);
     refreshCustomers();
   }, []);
 

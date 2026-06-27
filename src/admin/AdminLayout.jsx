@@ -22,15 +22,15 @@ function useIsDesktop() {
 }
 
 const NAV_LINKS = [
-  { path: '/admin',          label: 'Dashboard',  icon: LayoutDashboard, end: true },
-  { path: '/admin/products', label: 'Products',   icon: Package },
-  { path: '/admin/orders',   label: 'Orders',     icon: ShoppingCart },
-  { path: '/admin/customers',label: 'Customers',  icon: Users },
-  { path: '/admin/categories',label:'Categories', icon: FolderTree },
-  { path: '/admin/coupons',  label: 'Coupons',    icon: Tag },
-  { path: '/admin/reviews',  label: 'Reviews',    icon: Star },
-  { path: '/admin/banners',  label: 'Banners',    icon: Image },
-  { path: '/admin/settings', label: 'Settings',   icon: Settings },
+  { path: '/aytsam-abdullah',          label: 'Dashboard',  icon: LayoutDashboard, end: true },
+  { path: '/aytsam-abdullah/products', label: 'Products',   icon: Package },
+  { path: '/aytsam-abdullah/orders',   label: 'Orders',     icon: ShoppingCart },
+  { path: '/aytsam-abdullah/customers',label: 'Customers',  icon: Users },
+  { path: '/aytsam-abdullah/categories',label:'Categories', icon: FolderTree },
+  { path: '/aytsam-abdullah/coupons',  label: 'Coupons',    icon: Tag },
+  { path: '/aytsam-abdullah/reviews',  label: 'Reviews',    icon: Star },
+  { path: '/aytsam-abdullah/banners',  label: 'Banners',    icon: Image },
+  { path: '/aytsam-abdullah/settings', label: 'Settings',   icon: Settings },
 ];
 
 // ─── Notification Bell ────────────────────────────────────────────────────────
@@ -111,7 +111,7 @@ function Sidebar({ collapsed, onToggle, mobileOpen, onMobileClose }) {
   const { user, logout } = useAdminAuthStore();
   const navigate = useNavigate();
 
-  const handleLogout = () => { logout(); navigate('/admin/login'); };
+  const handleLogout = () => { logout(); navigate('/aytsam-abdullah/login'); };
 
   return (
     <>
@@ -130,7 +130,7 @@ function Sidebar({ collapsed, onToggle, mobileOpen, onMobileClose }) {
         {/* Logo */}
         <div className="flex items-center justify-between px-4 py-5 border-b border-[#E8E8E4] shrink-0">
           {!collapsed && (
-            <Link to="/admin" className="text-lg font-black text-[#111111]">
+            <Link to="/aytsam-abdullah" className="text-lg font-black text-[#111111]">
               Admin<span style={{ color: CORAL }}>.</span>Panel
             </Link>
           )}
@@ -271,12 +271,12 @@ function Header({ collapsed, onMobileOpen }) {
           </button>
           {userMenu && (
             <div className="absolute right-0 top-full mt-2 w-44 bg-white rounded-sm shadow-2xl border border-[#E8E8E4] overflow-hidden z-50">
-              <Link to="/admin/settings" onClick={() => setUserMenu(false)}
+              <Link to="/aytsam-abdullah/settings" onClick={() => setUserMenu(false)}
                 className="flex items-center gap-2 px-4 py-3 text-sm text-[#6B6B6B] hover:bg-[#F8F8F6] transition-colors">
                 <User size={14} /> Profile
               </Link>
               <hr className="border-[#E8E8E4]" />
-              <button onClick={() => { logout(); navigate('/admin/login'); }}
+              <button onClick={() => { logout(); navigate('/aytsam-abdullah/login'); }}
                 className="w-full flex items-center gap-2 px-4 py-3 text-sm text-[#9B2226] hover:bg-[#FEF2F2] transition-colors">
                 <LogOut size={14} /> Logout
               </button>

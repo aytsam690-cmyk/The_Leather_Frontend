@@ -340,7 +340,7 @@ export default function Products() {
   const PER_PAGE = 10;
 
   useEffect(() => {
-    setBreadcrumbs([{ label:'Dashboard', path:'/admin' }, { label:'Products', path:'/admin/products' }]);
+    setBreadcrumbs([{ label:'Dashboard', path:'/aytsam-abdullah' }, { label:'Products', path:'/aytsam-abdullah/products' }]);
     loadProducts();
     // Also load real categories for the form
     getAdminCategories()

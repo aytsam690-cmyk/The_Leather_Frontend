@@ -159,7 +159,7 @@ export default function Coupons() {
   const [confirmDelete, setConfirmDelete] = useState(null);
 
   useEffect(() => {
-    setBreadcrumbs([{ label:'Dashboard', path:'/admin' }, { label:'Coupons', path:'/admin/coupons' }]);
+    setBreadcrumbs([{ label:'Dashboard', path:'/aytsam-abdullah' }, { label:'Coupons', path:'/aytsam-abdullah/coupons' }]);
     loadCoupons();
   }, []);
 

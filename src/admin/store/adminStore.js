@@ -85,7 +85,7 @@ const useAdminStore = create((set, get) => ({
   // Reset so next open fetches fresh data
   refreshNotifications: () => set({ notificationsLoaded: false, notifications: [] }),
 
-  breadcrumbs: [{ label: 'Home', path: '/admin' }],
+  breadcrumbs: [{ label: 'Home', path: '/aytsam-abdullah' }],
   setBreadcrumbs: (crumbs) => set({ breadcrumbs: crumbs }),
 }));
 

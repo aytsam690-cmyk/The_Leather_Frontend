@@ -430,7 +430,7 @@ export default function Settings() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setBreadcrumbs([{ label:'Dashboard', path:'/admin' }, { label:'Settings', path:'/admin/settings' }]);
+    setBreadcrumbs([{ label:'Dashboard', path:'/aytsam-abdullah' }, { label:'Settings', path:'/aytsam-abdullah/settings' }]);
     // Load saved settings from backend
     getSettings()
       .then(data => {

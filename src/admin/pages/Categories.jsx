@@ -210,7 +210,7 @@ export default function Categories() {
   const [dragOverId, setDragOverId] = useState(null);
 
   useEffect(() => {
-    setBreadcrumbs([{ label: 'Dashboard', path: '/admin' }, { label: 'Categories', path: '/admin/categories' }]);
+    setBreadcrumbs([{ label: 'Dashboard', path: '/aytsam-abdullah' }, { label: 'Categories', path: '/aytsam-abdullah/categories' }]);
     loadCategories();
   }, []);
 
