@@ -147,6 +147,33 @@ function App() {
     }
   }, [settings?.siteName]);
 
+  // Dynamically update the raw DOM favicon so it reflects immediately
+  // (Helmet can be slow with link tags)
+  useEffect(() => {
+    const faviconUrl = settings?.favicon || settings?.logo;
+    if (faviconUrl) {
+      // Update or create the main favicon link
+      let link = document.querySelector("link[rel='icon']");
+      if (!link) {
+        link = document.createElement('link');
+        link.rel = 'icon';
+        document.head.appendChild(link);
+      }
+      link.href = faviconUrl;
+
+      // Update or create apple-touch-icon
+      let appleLink = document.querySelector("link[rel='apple-touch-icon']");
+      if (!appleLink) {
+        appleLink = document.createElement('link');
+        appleLink.rel = 'apple-touch-icon';
+        document.head.appendChild(appleLink);
+      }
+      appleLink.href = faviconUrl;
+    }
+  }, [settings?.favicon, settings?.logo]);
+
+  const faviconUrl = settings?.favicon || settings?.logo;
+
   return (
     <ErrorBoundary>
     <BrowserRouter>
@@ -164,7 +191,8 @@ function App() {
         <meta name="twitter:title" content={siteName} />
         <meta name="twitter:description" content={`Shop premium products at ${siteName}. Quality guaranteed with free delivery.`} />
         <meta name="twitter:image" content={settings?.metaTags?.ogImage || `${window.location.origin}/og-image.png`} />
-        {settings?.logo && <link rel="icon" href={settings.logo} />}
+        {faviconUrl && <link rel="icon" type="image/png" href={faviconUrl} />}
+        {faviconUrl && <link rel="apple-touch-icon" href={faviconUrl} />}
         <script type="application/ld+json">{JSON.stringify({
           '@context': 'https://schema.org',
           '@type': 'Organization',
