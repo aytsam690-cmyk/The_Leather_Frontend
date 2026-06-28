@@ -9,7 +9,6 @@ import { getSettings, updateSettings, uploadImage } from '../adminApi';
 const CORAL = '#111111';
 const TABS = [
   { id:'general',  label:'General',      icon: Globe },
-  { id:'shipping', label:'Shipping',     icon: Truck },
   { id:'contact',  label:'Contact Info', icon: Phone },
   { id:'seo',      label:'SEO Defaults', icon: Search },
   { id:'promo',    label:'Promo Banner', icon: Megaphone },
@@ -94,25 +93,6 @@ function GeneralTab({ onSave, settings }) {
             {CURRENCIES.map(c => <option key={c}>{c}</option>)}
           </select>
         </Field>
-      </div>
-      <button onClick={() => onSave(form)} className="px-6 py-2.5 rounded-sm text-sm font-semibold text-white hover:opacity-90 transition-all" style={{ background: CORAL }}>Save Settings</button>
-    </div>
-  );
-}
-
-// ─── Shipping Tab ─────────────────────────────────────────────────────────────
-function ShippingTab({ onSave, settings }) {
-  const [form, setForm] = useState({
-    shippingCost: settings.shippingCost ?? 8.99,
-    freeShippingAbove: settings.freeShippingAbove ?? 50,
-  });
-  const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
-
-  return (
-    <div className="space-y-5">
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-        <Field label="Default Shipping Cost ($)"><input type="number" className={inputCls} value={form.shippingCost} onChange={e => set('shippingCost', e.target.value)} /></Field>
-        <Field label="Free Shipping Threshold ($)"><input type="number" className={inputCls} value={form.freeShippingAbove} onChange={e => set('freeShippingAbove', e.target.value)} /></Field>
       </div>
       <button onClick={() => onSave(form)} className="px-6 py-2.5 rounded-sm text-sm font-semibold text-white hover:opacity-90 transition-all" style={{ background: CORAL }}>Save Settings</button>
     </div>
@@ -479,7 +459,6 @@ export default function Settings() {
         {/* Tab content */}
         <div className="flex-1 bg-white rounded-sm border border-[#E8E8E4] p-6">
           {activeTab === 'general'  && <GeneralTab  onSave={handleSave} settings={settings} />}
-          {activeTab === 'shipping' && <ShippingTab onSave={handleSave} settings={settings} />}
           {activeTab === 'contact'  && <ContactTab  onSave={handleSave} settings={settings} />}
           {activeTab === 'seo'      && <SeoTab      onSave={handleSave} settings={settings} />}
           {activeTab === 'promo'    && <PromoBannerTab onSave={handleSave} settings={settings} />}
