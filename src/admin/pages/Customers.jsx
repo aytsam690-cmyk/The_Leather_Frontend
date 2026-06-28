@@ -86,7 +86,7 @@ function CustomerDrawer({ customer, onClose, onRefresh }) {
     }
   };
 
-  const avgOrder = customer.orders > 0 ? Math.round(customer.spent / customer.orders) : 0;
+  const avgOrder = customer.ordersCount > 0 ? Math.round(customer.spent / customer.ordersCount) : 0;
 
   return (
     <>
@@ -140,7 +140,7 @@ function CustomerDrawer({ customer, onClose, onRefresh }) {
           {/* S2 — Stats */}
           <div className="grid grid-cols-3 gap-3">
             {[
-              { label:'Total Orders', value: customer.orders },
+              { label:'Total Orders', value: customer.ordersCount || 0 },
               { label:'Total Spent',  value: formatPrice(customer.spent) },
               { label:'Avg Order',    value: formatPrice(avgOrder) },
             ].map((s) => (
@@ -164,7 +164,7 @@ function CustomerDrawer({ customer, onClose, onRefresh }) {
                   </tr>
                 </thead>
                 <tbody>
-                  {(customer.orders || []).length > 0 ? (customer.orders || []).map((o, i) => {
+                  {(customer.orderHistory || []).length > 0 ? (customer.orderHistory || []).map((o, i) => {
                     const sc = STATUS_CFG[o.orderStatus || o.status] || STATUS_CFG.pending;
                     return (
                       <tr key={i} className="border-t border-[#E8E8E4] hover:bg-[#F8F8F6]/50 transition-colors">
@@ -231,8 +231,10 @@ export default function Customers() {
         const items = Array.isArray(data) ? data : (data?.customers || []);
         setCustomers(items.map((c, i) => ({
           id: c._id, _id: c._id, name: c.name || 'Guest', email: c.email || '—',
-          phone: c.phone || '—', orders: c.totalOrders || 0,
-          spent: c.totalSpent || 0,
+          phone: c.phone || '—', 
+          ordersCount: Number(c.totalOrders || c.orders?.length || 0),
+          orderHistory: Array.isArray(c.orders) ? c.orders : [],
+          spent: Number(c.totalSpent || 0),
           joined: c.createdAt ? new Date(c.createdAt).toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' }) : '—',
           status: c.isGuest ? 'guest' : (c.isActive !== false ? 'active' : 'inactive'),
           isGuest: c.isGuest || false,
@@ -255,7 +257,7 @@ export default function Customers() {
       return matchSearch && matchStatus;
     })
     .sort((a, b) => {
-      if (sortBy === 'most-orders') return b.orders - a.orders;
+      if (sortBy === 'most-orders') return (b.ordersCount || 0) - (a.ordersCount || 0);
       if (sortBy === 'highest-spend') return b.spent - a.spent;
       return b.id - a.id; // newest
     });
@@ -359,7 +361,7 @@ export default function Customers() {
                       </div>
                     </td>
                     <td className="px-4 py-3 text-sm text-[#6B6B6B] whitespace-nowrap">{c.phone}</td>
-                    <td className="px-4 py-3 text-sm font-semibold text-[#111111] text-center">{c.orders}</td>
+                    <td className="px-4 py-3 text-sm font-semibold text-[#111111] text-center">{c.ordersCount || 0}</td>
                     <td className="px-4 py-3 text-sm font-semibold text-[#111111]">{formatPrice(c.spent)}</td>
                     <td className="px-4 py-3 text-xs text-[#9E9E9E] whitespace-nowrap">{c.joined}</td>
                     <td className="px-4 py-3">
