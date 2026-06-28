@@ -8,6 +8,7 @@ import useSettingsStore from './store/settingsStore';
 import Navbar from './components/Navbar';
 import CartDrawer from './components/CartDrawer';
 import WhatsAppButton from './components/WhatsAppButton';
+import Footer from './components/Footer';
 import Home from './pages/Home';
 import ProtectedRoute from './components/ProtectedRoute';
 
@@ -22,6 +23,8 @@ const ForgotPassword = lazy(() => import('./pages/ForgotPassword'));
 const ResetPassword = lazy(() => import('./pages/ResetPassword'));
 const About = lazy(() => import('./pages/About'));
 const TrackOrder = lazy(() => import('./pages/TrackOrder'));
+const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy'));
+const TermsConditions = lazy(() => import('./pages/TermsConditions'));
 
 // ─── Lazy-loaded admin pages (never loaded for regular visitors) ─────────────
 const AdminLayout = lazy(() => import('./admin/AdminLayout'));
@@ -111,6 +114,8 @@ function CustomerRoutes() {
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password/:token" element={<ResetPassword />} />
           <Route path="/checkout"     element={<Checkout />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/terms-conditions" element={<TermsConditions />} />
           <Route path="/account"      element={<ProtectedRoute><Account defaultTab="profile" /></ProtectedRoute>} />
           <Route path="/profile"      element={<ProtectedRoute><Account defaultTab="profile" /></ProtectedRoute>} />
           <Route path="/orders"       element={<ProtectedRoute><Account defaultTab="orders" /></ProtectedRoute>} />
@@ -233,11 +238,14 @@ function App() {
             </Route>
           </Route>
           <Route path="/*" element={
-            <div style={{ minHeight: '100vh', background: '#FFFFFF', color: '#111111', fontFamily: "'DM Sans', sans-serif", overflowX: 'hidden', width: '100%' }}>
+            <div style={{ minHeight: '100vh', background: '#FFFFFF', color: '#111111', fontFamily: "'DM Sans', sans-serif", overflowX: 'hidden', width: '100%', display: 'flex', flexDirection: 'column' }}>
               <Navbar />
               <CartDrawer />
               <WhatsAppButton />
-              <CustomerRoutes />
+              <div style={{ flex: 1 }}>
+                <CustomerRoutes />
+              </div>
+              <Footer />
             </div>
           } />
         </Routes>
