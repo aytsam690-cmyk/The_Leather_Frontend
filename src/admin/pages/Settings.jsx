@@ -329,7 +329,7 @@ function FooterTab({ onSave, settings }) {
     footerColumns: settings.footerColumns?.length > 0 ? settings.footerColumns : [
       { title: 'Shop', links: [{ label: 'All Products', url: '/products' }] },
       { title: 'Help', links: [{ label: 'Track Order', url: '/track-order' }] },
-      { title: 'Account', links: [{ label: 'My Profile', url: '/account' }] },
+      { title: 'Legal', links: [{ label: 'Privacy Policy', url: '/privacy-policy' }, { label: 'Terms & Conditions', url: '/terms-conditions' }] },
     ],
     footerCopyright: settings.footerCopyright || '',
     footerBottomText: settings.footerBottomText || '',
