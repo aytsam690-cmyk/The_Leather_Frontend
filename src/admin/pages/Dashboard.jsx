@@ -277,7 +277,7 @@ export default function Dashboard() {
           date: o.createdAt ? new Date(o.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '',
           items: o.items?.length || o.itemCount || 0,
           total: o.total || o.totalAmount || 0,
-          status: o.status || 'pending',
+          status: o.orderStatus || o.status || 'pending',
         })));
       }
 
