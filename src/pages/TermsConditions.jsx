@@ -100,8 +100,8 @@ export default function TermsConditions() {
             </h2>
             <p style={{ fontFamily: S.dm, fontSize: 15, color: '#A89880', lineHeight: 1.8, fontWeight: 300, margin: 0 }}>
               If you have any questions about our Terms & Conditions, please contact us at{' '}
-              <a href={`mailto:${settings?.contactInfo?.email || 'support@store.com'}`} style={{ color: S.gold, textDecoration: 'none' }}>
-                {settings?.contactInfo?.email || 'support@store.com'}
+              <a href={`mailto:${settings?.contactInfo?.email || 'crafthidstore@gmail.com'}`} style={{ color: S.gold, textDecoration: 'none' }}>
+                {settings?.contactInfo?.email || 'crafthidstore@gmail.com'}
               </a>.
             </p>
           </div>
