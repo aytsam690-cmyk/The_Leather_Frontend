@@ -15,3 +15,12 @@ createRoot(document.getElementById('root')).render(
     </ErrorBoundary>
   </StrictMode>
 );
+
+// Hide the inline loading screen once React has painted
+requestAnimationFrame(() => {
+  const loader = document.getElementById('root-loader');
+  if (loader) {
+    loader.classList.add('hide');
+    setTimeout(() => loader.remove(), 400);
+  }
+});

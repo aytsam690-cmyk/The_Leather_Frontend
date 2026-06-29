@@ -257,6 +257,29 @@ export default function Home() {
 
   // ── Fetch data ──
   useEffect(() => {
+    // Banners are LCP-critical — fetch first and preload the hero image
+    setBannersLoading(true);
+    getBanners()
+      .then((data) => {
+        const items = Array.isArray(data) ? data : [];
+        const heroBanners = items.filter(b => b.position === 'Home Hero' && b.isActive !== false);
+        setHomeBanners(heroBanners);
+        setPromoBanners(items.filter(b => b.position === 'Promotional Strip' && b.isActive !== false));
+
+        // Preload the first hero image for instant LCP
+        if (heroBanners[0]?.image) {
+          const link = document.createElement('link');
+          link.rel = 'preload';
+          link.as = 'image';
+          link.href = heroBanners[0].image;
+          link.fetchPriority = 'high';
+          document.head.appendChild(link);
+        }
+      })
+      .catch(() => {})
+      .finally(() => setBannersLoading(false));
+
+    // Non-critical data — load in parallel but after banners
     getFeaturedProducts()
       .then((data) => {
         const items = Array.isArray(data) ? data : (data?.products || []);
@@ -289,16 +312,6 @@ export default function Home() {
         }
       })
       .catch(() => {});
-
-    setBannersLoading(true);
-    getBanners()
-      .then((data) => {
-        const items = Array.isArray(data) ? data : [];
-        setHomeBanners(items.filter(b => b.position === 'Home Hero' && b.isActive !== false));
-        setPromoBanners(items.filter(b => b.position === 'Promotional Strip' && b.isActive !== false));
-      })
-      .catch(() => {})
-      .finally(() => setBannersLoading(false));
   }, []);
 
   // ── Drag scroll ──
