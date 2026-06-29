@@ -391,8 +391,7 @@ export default function Home() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 1.4, ease: 'easeInOut' }}
-              className="hero-image"
-              style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }}
+              style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center' }}
             />
           </AnimatePresence>
 
@@ -728,10 +727,6 @@ export default function Home() {
       {/* ── Responsive + Hero styles ─────────────────────────────────────────── */}
       <style>{`
         /* Hero billboard layout */
-        .hero-image {
-          object-fit: cover;
-          object-position: center;
-        }
         .hero-billboard {
           height: 100vh;
           min-height: 600px;
@@ -759,18 +754,12 @@ export default function Home() {
         }
 
         @media (max-width: 1024px) {
-          .hero-image {
-            object-fit: contain !important;
-            object-position: top center !important;
-          }
           .hero-billboard {
-            height: 85vh !important;
-            min-height: 550px !important;
-            background-color: #0D0D0B !important;
+            height: 75vh !important;
+            min-height: 500px !important;
           }
           .hero-content-wrap {
-            padding: 24px 20px !important;
-            justify-content: flex-end !important;
+            padding: 40px 24px !important;
           }
           .hero-headline {
             font-size: 42px !important;
