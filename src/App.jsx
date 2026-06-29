@@ -25,6 +25,7 @@ const About = lazy(() => import('./pages/About'));
 const TrackOrder = lazy(() => import('./pages/TrackOrder'));
 const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy'));
 const TermsConditions = lazy(() => import('./pages/TermsConditions'));
+const ReturnPolicy = lazy(() => import('./pages/ReturnPolicy'));
 const Contact = lazy(() => import('./pages/Contact'));
 
 // ─── Lazy-loaded admin pages (never loaded for regular visitors) ─────────────
@@ -117,6 +118,7 @@ function CustomerRoutes() {
           <Route path="/checkout"     element={<Checkout />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/terms-conditions" element={<TermsConditions />} />
+          <Route path="/return-policy" element={<ReturnPolicy />} />
           <Route path="/contact"      element={<Contact />} />
           <Route path="/account"      element={<ProtectedRoute><Account defaultTab="profile" /></ProtectedRoute>} />
           <Route path="/profile"      element={<ProtectedRoute><Account defaultTab="profile" /></ProtectedRoute>} />
