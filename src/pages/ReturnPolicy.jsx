@@ -93,7 +93,7 @@ export default function ReturnPolicy() {
             <p style={{ fontFamily: S.dm, fontSize: 15, color: '#A89880', lineHeight: 1.8, fontWeight: 300, margin: 0 }}>
               To initiate a return, please send us a message on WhatsApp:{' '}
               <a 
-                href={settings?.contactInfo?.whatsappNumber ? \`https://wa.me/\${settings.contactInfo.whatsappNumber.replace(/[^0-9]/g, '')}\` : '#'} 
+                href={settings?.contactInfo?.whatsappNumber ? `https://wa.me/${settings.contactInfo.whatsappNumber.replace(/[^0-9]/g, '')}` : '#'} 
                 target="_blank" 
                 rel="noreferrer"
                 style={{ color: S.gold, textDecoration: 'none', fontWeight: 500 }}
