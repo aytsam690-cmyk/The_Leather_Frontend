@@ -6,57 +6,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="canonical" href="https://www.crafthid.com" />
 
-    <!-- Preconnect to API server so banner images load faster -->
-    <link rel="preconnect" href="https://api.crafthid.com" crossorigin />
-    <link rel="dns-prefetch" href="https://api.crafthid.com" />
-
-    <!-- Preconnect to Cloudinary / image CDN (common for product images) -->
+    <!-- Preconnect to API and image CDN so hero loads faster -->
     <link rel="preconnect" href="https://res.cloudinary.com" crossorigin />
     <link rel="dns-prefetch" href="https://res.cloudinary.com" />
 
-    <!-- Fonts — swap to non-blocking with media="print" trick -->
+    <!-- Fonts — non-blocking so they don't delay first paint -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Cormorant+Garamond:wght@400;500;600&display=swap" />
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Cormorant+Garamond:wght@400;500;600&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
     <noscript>
       <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Cormorant+Garamond:wght@400;500;600&display=swap" rel="stylesheet" />
     </noscript>
-
-    <!-- Inline critical CSS for instant first paint -->
-    <style>
-      *, *::before, *::after { box-sizing: border-box; }
-      html, body { margin: 0; padding: 0; background-color: #0D0D0B; font-family: 'DM Sans', sans-serif; color: #EAE6DF; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
-      #root-loader {
-        position: fixed; inset: 0; z-index: 99999;
-        background: #0D0D0B;
-        display: flex; flex-direction: column; align-items: center; justify-content: center;
-        transition: opacity 0.3s ease;
-      }
-      #root-loader.hide { opacity: 0; pointer-events: none; }
-      #root-loader .logo-text {
-        font-family: 'Cormorant Garamond', serif;
-        font-size: 28px; font-weight: 500; color: #F5F0E8;
-        letter-spacing: 0.14em; text-transform: uppercase;
-      }
-      #root-loader .bar {
-        width: 120px; height: 2px; background: rgba(255,255,255,0.1);
-        margin-top: 24px; border-radius: 1px; overflow: hidden; position: relative;
-      }
-      #root-loader .bar::after {
-        content: ''; position: absolute; inset: 0;
-        background: rgba(255,255,255,0.5);
-        animation: loader-slide 1.2s ease-in-out infinite;
-      }
-      @keyframes loader-slide { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
-    </style>
   </head>
   <body>
-    <!-- Instant loading screen — gives Google a fast FCP -->
-    <div id="root-loader">
-      <div class="logo-text">CRAFT HID</div>
-      <div class="bar"></div>
-    </div>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
