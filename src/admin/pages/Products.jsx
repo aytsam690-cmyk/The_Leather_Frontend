@@ -73,10 +73,23 @@ function ProductForm({ initial, saving, onCancel, onSave, categories }) {
     name:'', category:'', subcategory:'', brand:'', status:'active',
     price:'', comparePrice:'', costPrice:'', sku:'', barcode:'', stock:'', trackInventory:true,
     description:'', metaTitle:'', metaDescription:'', metaKeywords:'', slug:'',
-    images:[], variants:[], isFeatured: false,
+    images:[], variants:[], specs:{}, isFeatured: false,
   };
-  const [form, setForm] = useState({ ...defaults, ...(initial || {}), images: (initial?.images || []), variants: (initial?.variants || []) });
+  const [form, setForm] = useState({ ...defaults, ...(initial || {}), images: (initial?.images || []), variants: (initial?.variants || []), specs: (initial?.specs || {}) });
   const [variantRow, setVariantRow] = useState({ size:'', color:'', price:'', stock:'' });
+  const [specRow, setSpecRow] = useState({ key: '', value: '' });
+
+  const addSpec = () => {
+    if (!specRow.key || !specRow.value) return;
+    set('specs', { ...form.specs, [specRow.key]: specRow.value });
+    setSpecRow({ key: '', value: '' });
+  };
+
+  const removeSpec = (k) => {
+    const newSpecs = { ...form.specs };
+    delete newSpecs[k];
+    set('specs', newSpecs);
+  };
 
   const set = (key, val) => setForm(f => {
     const updated = { ...f, [key]: val };
@@ -246,6 +259,48 @@ function ProductForm({ initial, saving, onCancel, onSave, categories }) {
                     <td className="px-3 py-2">{v.stock}</td>
                     <td className="px-3 py-2">
                       <button onClick={() => set('variants', form.variants.filter((_,j) => j !== i))} className="text-[#9B2226] hover:text-[#9B2226]"><X size={14} /></button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </Section>
+
+      {/* Section 5.5 — Specifications */}
+      <Section title="Product Specifications">
+        <div className="grid grid-cols-2 gap-3 mb-3">
+          <div>
+            <label className={labelCls}>Name (e.g. Material)</label>
+            <input className={inputCls} value={specRow.key} onChange={e => setSpecRow(r => ({ ...r, key: e.target.value }))} placeholder="Specification Name" />
+          </div>
+          <div>
+            <label className={labelCls}>Value (e.g. 100% Leather)</label>
+            <input className={inputCls} value={specRow.value} onChange={e => setSpecRow(r => ({ ...r, value: e.target.value }))} placeholder="Specification Value" />
+          </div>
+        </div>
+        <button onClick={addSpec} className="text-sm font-semibold px-4 py-2 rounded-sm border-2 transition-all"
+          style={{ borderColor: CORAL, color: CORAL }}>
+          + Add Specification
+        </button>
+        {Object.keys(form.specs || {}).length > 0 && (
+          <div className="mt-3 rounded-sm overflow-hidden border border-[#D0D0CA]">
+            <table className="w-full text-sm">
+              <thead className="bg-[#F8F8F6]">
+                <tr>
+                  <th className="px-3 py-2 text-left text-xs font-semibold text-[#6B6B6B]">Name</th>
+                  <th className="px-3 py-2 text-left text-xs font-semibold text-[#6B6B6B]">Value</th>
+                  <th className="px-3 py-2"></th>
+                </tr>
+              </thead>
+              <tbody>
+                {Object.entries(form.specs).map(([k, v]) => (
+                  <tr key={k} className="border-t border-[#E8E8E4]">
+                    <td className="px-3 py-2 font-medium text-[#111111]">{k}</td>
+                    <td className="px-3 py-2 text-[#6B6B6B]">{v}</td>
+                    <td className="px-3 py-2 text-right">
+                      <button onClick={() => removeSpec(k)} className="text-[#9B2226] hover:text-[#9B2226]"><X size={14} /></button>
                     </td>
                   </tr>
                 ))}
@@ -464,6 +519,7 @@ export default function Products() {
           return match ? match._id : undefined;
         })(),
         variants: data.variants || [],
+        specs: data.specs || {},
         images: uploadedImages,
         metaTitle: data.metaTitle || data.name,
         metaDescription: data.metaDescription || '',
