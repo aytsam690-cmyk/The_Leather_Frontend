@@ -18,15 +18,13 @@ export default function middleware(request) {
       return Response.redirect(new URL('/', request.url), 302);
     }
 
-    // Rewrite the request to the backend's dynamic rendering endpoint
+    // Rewrite the request to the backend's dynamic rendering endpoint using Vercel's native rewrite header
     const backendUrl = 'http://20.244.38.147';
-    // Remove leading slash for the param
     const path = url.pathname.replace(/^\/+/, ''); 
     
-    return fetch(`${backendUrl}/bot-render/${path}`, {
+    return new Response(null, {
       headers: {
-        'x-forwarded-for': request.headers.get('x-forwarded-for') || '',
-        'user-agent': userAgent,
+        'x-middleware-rewrite': `${backendUrl}/bot-render/${path}`
       }
     });
   }
