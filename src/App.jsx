@@ -159,27 +159,15 @@ function App() {
   }, [settings?.siteName, settings?.metaTags?.title]);
 
   // Dynamically update the raw DOM favicon so it reflects immediately
-  // (Helmet can be slow with link tags)
+  // (Helmet can be slow with link tags and causes duplicates)
   useEffect(() => {
     const faviconUrl = settings?.favicon || settings?.logo;
     if (faviconUrl) {
-      // Update or create the main favicon link
-      let link = document.querySelector("link[rel='icon']");
-      if (!link) {
-        link = document.createElement('link');
-        link.rel = 'icon';
-        document.head.appendChild(link);
-      }
-      link.href = faviconUrl;
+      const link = document.getElementById('dynamic-favicon');
+      if (link) link.href = faviconUrl;
 
-      // Update or create apple-touch-icon
-      let appleLink = document.querySelector("link[rel='apple-touch-icon']");
-      if (!appleLink) {
-        appleLink = document.createElement('link');
-        appleLink.rel = 'apple-touch-icon';
-        document.head.appendChild(appleLink);
-      }
-      appleLink.href = faviconUrl;
+      const appleLink = document.getElementById('dynamic-apple-icon');
+      if (appleLink) appleLink.href = faviconUrl;
     }
   }, [settings?.favicon, settings?.logo]);
 
@@ -206,8 +194,6 @@ function App() {
         <meta name="twitter:title" content={pageTitle} />
         <meta name="twitter:description" content={pageDescription} />
         <meta name="twitter:image" content={settings?.metaTags?.ogImage || `${window.location.origin}/og-image.png`} />
-        {faviconUrl && <link rel="icon" type="image/png" href={faviconUrl} />}
-        {faviconUrl && <link rel="apple-touch-icon" href={faviconUrl} />}
         <script type="application/ld+json">{JSON.stringify({
           '@context': 'https://schema.org',
           '@type': 'Organization',
