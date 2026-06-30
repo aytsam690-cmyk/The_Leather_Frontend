@@ -261,10 +261,13 @@ function Gallery({ images }) {
 }
 
 
+import ImageUploader from '../components/ImageUploader';
+
 // ─── Product Reviews ─────────────────────────────────────────────────────────
 function ProductReviews({ product, reviews, onReviewSubmit }) {
   const { user } = useAuthStore();
   const [reviewForm, setReviewForm] = useState({ rating: 0, comment: '', phone: '' });
+  const [images, setImages] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [reviewMsg, setReviewMsg] = useState({ type: '', text: '' });
 
@@ -274,14 +277,22 @@ function ProductReviews({ product, reviews, onReviewSubmit }) {
     if (!user && !reviewForm.phone.trim()) { setReviewMsg({ type: 'error', text: 'Please enter your phone number' }); return; }
     setIsSubmitting(true);
     setReviewMsg({ type: '', text: '' });
+    
+    const formData = new FormData();
+    formData.append('rating', reviewForm.rating);
+    formData.append('comment', reviewForm.comment);
+    if (!user) formData.append('phone', reviewForm.phone);
+    images.forEach(img => formData.append('images', img));
+
     try {
       if (user) {
-        await addReview(product._id, { rating: reviewForm.rating, comment: reviewForm.comment });
+        await addReview(product._id, formData);
       } else {
-        await addGuestReview(product._id, { rating: reviewForm.rating, comment: reviewForm.comment, phone: reviewForm.phone });
+        await addGuestReview(product._id, formData);
       }
       setReviewMsg({ type: 'success', text: 'Review submitted! It will appear once approved.' });
       setReviewForm({ rating: 0, comment: '', phone: '' });
+      setImages([]);
       if (onReviewSubmit) onReviewSubmit();
     } catch (err) {
       setReviewMsg({ type: 'error', text: err.response?.data?.message || 'Failed to submit review' });
@@ -304,12 +315,8 @@ function ProductReviews({ product, reviews, onReviewSubmit }) {
               {/* Summary */}
               {reviews.length > 0 && (
                 <div style={{
-                  display: 'flex',
-                  gap: 24,
-                  alignItems: 'center',
-                  paddingBottom: 20,
-                  borderBottom: '1px solid #2C2C26',
-                  flexWrap: 'wrap',
+                  display: 'flex', gap: 24, alignItems: 'center', paddingBottom: 20,
+                  borderBottom: '1px solid #2C2C26', flexWrap: 'wrap',
                 }}>
                   {/* Left: big score */}
                   <div style={{ textAlign: 'center' }}>
@@ -327,13 +334,7 @@ function ProductReviews({ product, reviews, onReviewSubmit }) {
                       <div key={star} style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                         <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: '#6B6055', width: 16, textAlign: 'right' }}>{star}</span>
                         <div style={{ flex: 1, height: 6, background: '#1C1C17', border: '1px solid #2C2C26', borderRadius: 9999, overflow: 'hidden' }}>
-                          <div style={{
-                            height: '100%',
-                            width: reviews.length ? `${(count / reviews.length) * 100}%` : '0%',
-                            background: '#C9A96E',
-                            borderRadius: 9999,
-                            transition: 'width 0.6s ease',
-                          }} />
+                          <div style={{ height: '100%', width: reviews.length ? `${(count / reviews.length) * 100}%` : '0%', background: '#C9A96E', borderRadius: 9999, transition: 'width 0.6s ease' }} />
                         </div>
                         <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 11, color: '#6B6055', width: 16 }}>{count}</span>
                       </div>
@@ -352,14 +353,7 @@ function ProductReviews({ product, reviews, onReviewSubmit }) {
                   reviews.map((r, idx) => (
                     <div key={r.id || r._id || idx} style={{ paddingTop: 20, paddingBottom: 20, borderBottom: '1px solid #2C2C26' }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-                        <div style={{
-                          width: 40, height: 40, borderRadius: 2,
-                          background: '#1C1C17', border: '1px solid #2C2C26',
-                          fontFamily: "'DM Sans', sans-serif", fontWeight: 500,
-                          color: '#F5F0E8', fontSize: 14,
-                          display: 'flex', alignItems: 'center', justifyContent: 'center',
-                          flexShrink: 0,
-                        }}>
+                        <div style={{ width: 40, height: 40, borderRadius: 2, background: '#1C1C17', border: '1px solid #2C2C26', fontFamily: "'DM Sans', sans-serif", fontWeight: 500, color: '#F5F0E8', fontSize: 14, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                           {(r.user?.name || r.name || 'A')[0].toUpperCase()}
                         </div>
                         <div>
@@ -377,6 +371,13 @@ function ProductReviews({ product, reviews, onReviewSubmit }) {
                       <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: '#A89880', lineHeight: 1.7, marginTop: 12 }}>
                         {r.comment}
                       </p>
+                      {r.images && r.images.length > 0 && (
+                        <div style={{ display: 'flex', gap: 8, marginTop: 12 }}>
+                          {r.images.map((img, i) => (
+                            <img key={img.publicId || i} src={img.url} alt="review attachment" style={{ width: 64, height: 64, objectFit: 'cover', borderRadius: 2, border: '1px solid #2C2C26' }} />
+                          ))}
+                        </div>
+                      )}
                     </div>
                   ))
                 )}
@@ -391,86 +392,37 @@ function ProductReviews({ product, reviews, onReviewSubmit }) {
                 {/* Phone number for guests */}
                 {!user && (
                   <div style={{ marginBottom: 16 }}>
-                    <label style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 10, fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#6B6055', display: 'block', marginBottom: 6 }}>
-                      Your Phone Number
-                    </label>
-                    <input
-                      type="tel"
-                      value={reviewForm.phone}
-                      onChange={e => setReviewForm(f => ({ ...f, phone: e.target.value }))}
-                      placeholder="Enter phone number used in your order"
-                      style={{
-                        width: '100%', boxSizing: 'border-box',
-                        background: '#1C1C17', border: '1px solid #2C2C26',
-                        borderRadius: 2, padding: '12px 16px',
-                        fontFamily: "'DM Sans', sans-serif", fontSize: 14,
-                        color: '#F5F0E8', outline: 'none',
-                        transition: 'border-color 0.2s',
-                      }}
-                      onFocus={e => { e.target.style.borderColor = '#C9A96E'; }}
-                      onBlur={e => { e.target.style.borderColor = '#2C2C26'; }}
-                    />
-                    <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 11, color: '#6B6055', marginTop: 6 }}>
-                      We'll fetch your name from your order automatically
-                    </p>
+                    <label style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 10, fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#6B6055', display: 'block', marginBottom: 6 }}>Your Phone Number</label>
+                    <input type="tel" value={reviewForm.phone} onChange={e => setReviewForm(f => ({ ...f, phone: e.target.value }))} placeholder="Enter phone number used in your order" style={{ width: '100%', boxSizing: 'border-box', background: '#1C1C17', border: '1px solid #2C2C26', borderRadius: 2, padding: '12px 16px', fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: '#F5F0E8', outline: 'none', transition: 'border-color 0.2s' }} onFocus={e => { e.target.style.borderColor = '#C9A96E'; }} onBlur={e => { e.target.style.borderColor = '#2C2C26'; }} />
+                    <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 11, color: '#6B6055', marginTop: 6 }}>We'll fetch your name from your order automatically</p>
                   </div>
                 )}
 
                 {/* Star selector */}
                 <div style={{ marginBottom: 16 }}>
-                  <label style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 10, fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#6B6055', display: 'block', marginBottom: 8 }}>
-                    Your Rating
-                  </label>
+                  <label style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 10, fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#6B6055', display: 'block', marginBottom: 8 }}>Your Rating</label>
                   <StarInput value={reviewForm.rating} onChange={r => setReviewForm(f => ({ ...f, rating: r }))} />
                 </div>
 
                 {/* Comment */}
                 <div style={{ marginBottom: 16 }}>
-                  <label style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 10, fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#6B6055', display: 'block', marginBottom: 6 }}>
-                    Your Review
-                  </label>
-                  <textarea
-                    value={reviewForm.comment}
-                    onChange={e => setReviewForm(f => ({ ...f, comment: e.target.value }))}
-                    placeholder="Share your experience with this product..."
-                    rows={4}
-                    style={{
-                      width: '100%', boxSizing: 'border-box',
-                      background: '#1C1C17', border: '1px solid #2C2C26',
-                      borderRadius: 2, padding: '12px 16px',
-                      fontFamily: "'DM Sans', sans-serif", fontSize: 14,
-                      color: '#F5F0E8', outline: 'none', resize: 'vertical',
-                      transition: 'border-color 0.2s',
-                    }}
-                    onFocus={e => { e.target.style.borderColor = '#C9A96E'; }}
-                    onBlur={e => { e.target.style.borderColor = '#2C2C26'; }}
-                  />
+                  <label style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 10, fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#6B6055', display: 'block', marginBottom: 6 }}>Your Review</label>
+                  <textarea value={reviewForm.comment} onChange={e => setReviewForm(f => ({ ...f, comment: e.target.value }))} placeholder="Share your experience with this product..." rows={4} style={{ width: '100%', boxSizing: 'border-box', background: '#1C1C17', border: '1px solid #2C2C26', borderRadius: 2, padding: '12px 16px', fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: '#F5F0E8', outline: 'none', resize: 'vertical', transition: 'border-color 0.2s' }} onFocus={e => { e.target.style.borderColor = '#C9A96E'; }} onBlur={e => { e.target.style.borderColor = '#2C2C26'; }} />
+                </div>
+
+                {/* Images */}
+                <div style={{ marginBottom: 24 }}>
+                  <label style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 10, fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#6B6055', display: 'block', marginBottom: 8 }}>Photos (Optional)</label>
+                  <ImageUploader images={images} setImages={setImages} maxImages={3} maxSizeMB={3} />
                 </div>
 
                 {reviewMsg.text && (
-                  <p style={{
-                    fontFamily: "'DM Sans', sans-serif", fontSize: 13, marginBottom: 16,
-                    color: reviewMsg.type === 'error' ? '#C0392B' : '#2D6A4F',
-                  }}>
+                  <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, marginBottom: 16, color: reviewMsg.type === 'error' ? '#C0392B' : '#2D6A4F' }}>
                     {reviewMsg.text}
                   </p>
                 )}
 
-                <button
-                  onClick={handleSubmitReview}
-                  disabled={isSubmitting}
-                  style={{
-                    background: isSubmitting ? '#3D3D34' : '#F5F0E8',
-                    border: 'none', borderRadius: 2,
-                    color: '#0D0D0B', padding: '12px 28px',
-                    fontFamily: "'DM Sans', sans-serif", fontSize: 13, fontWeight: 500,
-                    textTransform: 'uppercase', letterSpacing: '0.06em',
-                    cursor: isSubmitting ? 'not-allowed' : 'pointer',
-                    transition: 'background 0.2s',
-                  }}
-                  onMouseEnter={e => { if (!isSubmitting) e.currentTarget.style.background = '#C9A96E'; }}
-                  onMouseLeave={e => { if (!isSubmitting) e.currentTarget.style.background = '#F5F0E8'; }}
-                >
+                <button onClick={handleSubmitReview} disabled={isSubmitting} style={{ background: isSubmitting ? '#3D3D34' : '#F5F0E8', border: 'none', borderRadius: 2, color: '#0D0D0B', padding: '12px 28px', fontFamily: "'DM Sans', sans-serif", fontSize: 13, fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.06em', cursor: isSubmitting ? 'not-allowed' : 'pointer', transition: 'background 0.2s' }} onMouseEnter={e => { if (!isSubmitting) e.currentTarget.style.background = '#C9A96E'; }} onMouseLeave={e => { if (!isSubmitting) e.currentTarget.style.background = '#F5F0E8'; }}>
                   {isSubmitting ? 'Submitting…' : 'Submit Review'}
                 </button>
               </div>

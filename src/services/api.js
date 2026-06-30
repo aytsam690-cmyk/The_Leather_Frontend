@@ -103,8 +103,9 @@ export const getFilters = (category) => api.get('/filters', { params: { category
 
 
 // Reviews
-export const addReview = (productId, data) => api.post(`/reviews/${productId}`, data).then((r) => r.data);
-export const addGuestReview = (productId, data) => api.post(`/reviews/guest/${productId}`, data).then((r) => r.data);
+export const getFeaturedReviews = () => api.get('/reviews/featured').then((r) => r.data);
+export const addReview = (productId, data) => api.post(`/reviews/${productId}`, data, { headers: { 'Content-Type': data instanceof FormData ? 'multipart/form-data' : 'application/json' } }).then((r) => r.data);
+export const addGuestReview = (productId, data) => api.post(`/reviews/guest/${productId}`, data, { headers: { 'Content-Type': data instanceof FormData ? 'multipart/form-data' : 'application/json' } }).then((r) => r.data);
 
 // Banners
 export const getBanners = () => api.get('/banners').then((r) => r.data);

@@ -2,8 +2,8 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { getFeaturedProducts, getCategories, getBanners } from '../services/api';
+import { ChevronLeft, ChevronRight, Star } from 'lucide-react';
+import { getFeaturedProducts, getCategories, getBanners, getFeaturedReviews } from '../services/api';
 
 import useSettingsStore from '../store/settingsStore';
 import ProductCard from '../components/ProductCard';
@@ -168,6 +168,7 @@ export default function Home() {
   const [categories, setCategories] = useState([]);
   const [homeBanners, setHomeBanners] = useState([]);
   const [promoBanners, setPromoBanners] = useState([]);
+  const [featuredReviews, setFeaturedReviews] = useState([]);
   const [bannersLoading, setBannersLoading] = useState(true);
   const dragRef = useRef(null);
   const isDragging = useRef(false);
@@ -310,6 +311,12 @@ export default function Home() {
             count: c.productCount || 0, slug: c.slug,
           })));
         }
+      })
+      .catch(() => {});
+
+    getFeaturedReviews()
+      .then((data) => {
+        if (Array.isArray(data)) setFeaturedReviews(data);
       })
       .catch(() => {});
   }, []);
@@ -729,6 +736,67 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* ══════════════════════════════════════════════════════════════════════
+          TESTIMONIALS CAROUSEL
+      ═══════════════════════════════════════════════════════════════════════ */}
+      {featuredReviews.length > 0 && (
+        <section style={{ padding: 'clamp(48px, 8vw, 64px) 0', background: '#0D0D0B' }}>
+          <div className="home-container" style={{ maxWidth: 1280, margin: '0 auto', padding: '0 16px' }}>
+            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.45 }} style={{ textAlign: 'center', marginBottom: 40 }}>
+              <p style={{ fontFamily: S.dm, fontSize: 11, fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.12em', color: S.gold, marginBottom: 12 }}>What They Say</p>
+              <h2 style={{ fontFamily: S.cm, fontSize: 'clamp(28px, 5vw, 40px)', fontWeight: 500, color: S.gold, lineHeight: 1.1, margin: 0 }}>Loved by Customers</h2>
+            </motion.div>
+
+            <div
+              className="drag-scroll"
+              style={{ display: 'flex', gap: 24, overflowX: 'auto', paddingBottom: 16, scrollSnapType: 'x mandatory' }}
+            >
+              {featuredReviews.map((review, i) => (
+                <motion.div key={review._id || i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1, duration: 0.4 }} 
+                  style={{ flexShrink: 0, width: 'clamp(280px, 70vw, 400px)', scrollSnapAlign: 'start' }}>
+                  <div style={{
+                    background: '#1C1C17', border: '1px solid #2C2C26', borderRadius: 4,
+                    padding: 'clamp(20px, 4vw, 32px)', height: '100%', display: 'flex', flexDirection: 'column',
+                  }}>
+                    <div style={{ display: 'flex', gap: 4, marginBottom: 16 }}>
+                      {[1,2,3,4,5].map(s => (
+                        <Star key={s} size={14} fill={s <= review.rating ? '#C9A96E' : 'none'} stroke={s <= review.rating ? '#C9A96E' : '#6B6055'} />
+                      ))}
+                    </div>
+                    <p style={{ fontFamily: S.dm, fontSize: 'clamp(14px, 2vw, 16px)', color: '#F5F0E8', lineHeight: 1.6, fontWeight: 300, flex: 1, fontStyle: 'italic', marginBottom: 24 }}>
+                      "{review.comment}"
+                    </p>
+                    {/* Review Images */}
+                    {review.images && review.images.length > 0 && (
+                      <div style={{ display: 'flex', gap: 8, marginBottom: 20 }}>
+                        {review.images.map((img, idx) => (
+                          <div key={idx} style={{ width: 48, height: 48, borderRadius: 2, overflow: 'hidden', border: '1px solid #2C2C26' }}>
+                            <img src={img.url} alt="review" style={{ width: '100%', height: '100%', objectFit: 'cover' }} loading="lazy" />
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginTop: 'auto' }}>
+                      <div style={{ width: 40, height: 40, borderRadius: '50%', background: '#0D0D0B', border: '1px solid #2C2C26', display: 'flex', alignItems: 'center', justifyContent: 'center', color: S.gold, fontFamily: S.dm, fontWeight: 600, fontSize: 14 }}>
+                        {review.name ? review.name.charAt(0).toUpperCase() : 'A'}
+                      </div>
+                      <div>
+                        <p style={{ fontFamily: S.dm, fontSize: 14, fontWeight: 600, color: '#F5F0E8', margin: 0 }}>{review.name || 'Anonymous'}</p>
+                        {review.product && (
+                          <Link to={`/product/${review.product.slug}`} style={{ fontFamily: S.dm, fontSize: 12, color: '#6B6055', textDecoration: 'none', margin: '2px 0 0', display: 'inline-block' }}>
+                            On {review.product.name}
+                          </Link>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* ══════════════════════════════════════════════════════════════════════
           PROMO POPUP — Sale countdown (editable from Admin → Settings → Promo Banner)
