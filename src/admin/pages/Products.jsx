@@ -184,7 +184,7 @@ function ProductForm({ initial, saving, onCancel, onSave, categories }) {
           onClick={() => document.getElementById('img-upload').click()}>
           <Upload size={32} className="mx-auto mb-3 text-[#9E9E9E]" />
           <p className="text-sm font-semibold text-[#6B6B6B]">Drop images here or click to browse</p>
-          <p className="text-xs text-[#9E9E9E] mt-1">PNG, JPG, WEBP — Max 5MB each</p>
+          <p className="text-xs text-[#9E9E9E] mt-1">PNG, JPG, WEBP — Max 5MB each (Recommended: 800x800px)</p>
           {/* Uploads to Cloudinary: fetch POST to https://api.cloudinary.com/v1_1/${VITE_CLOUDINARY_CLOUD_NAME}/image/upload with FormData */}
           <input id="img-upload" type="file" multiple accept="image/*" className="hidden"
             onChange={e => {

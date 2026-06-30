@@ -167,7 +167,7 @@ function CategoryForm({ initial, allCats, onSave, onCancel }) {
           <div className="border-2 border-dashed border-[#D0D0CA] rounded-sm p-6 text-center cursor-pointer hover:border-[#C9A96E] transition-colors"
             onClick={() => document.getElementById('cat-img').click()}>
             <Upload size={24} className="mx-auto mb-2 text-[#9E9E9E]" />
-            <p className="text-xs text-[#9E9E9E]">Drop image or click to browse</p>
+            <p className="text-xs text-[#9E9E9E]">Drop image or click to browse (Recommended: 600x600px)</p>
             <input id="cat-img" type="file" accept="image/*" className="hidden"
               onChange={e => { const f = e.target.files[0]; if (f) { set('image', URL.createObjectURL(f)); set('imageFile', f); } }} />
           </div>

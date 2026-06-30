@@ -50,7 +50,7 @@ function BannerModal({ initial, onSave, onClose }) {
             <div className="border-2 border-dashed border-[#D0D0CA] rounded-sm h-32 flex flex-col items-center justify-center cursor-pointer hover:border-[#C9A96E] transition-colors"
               onClick={() => document.getElementById('banner-img').click()}>
               <Upload size={24} className="mb-2 text-[#9E9E9E]" />
-              <p className="text-xs text-[#9E9E9E]">Drop image or click to browse</p>
+              <p className="text-xs text-[#9E9E9E]">Drop image or click to browse (Recommended: 1920x800px)</p>
               <input id="banner-img" type="file" accept="image/*" className="hidden"
                 onChange={e => { 
                   const f = e.target.files[0]; 

@@ -637,7 +637,7 @@ export default function Home() {
                       </div>
                       <div style={{ padding: '14px 16px', textAlign: 'center' }}>
                         <p style={{ fontFamily: S.dm, fontSize: 13, fontWeight: 500, color: '#F5F0E8', margin: 0 }}>{cat.name}</p>
-                        <p style={{ fontFamily: S.dm, fontSize: 11, color: '#6B6055', margin: '3px 0 0' }}>{cat.count} Products</p>
+                        <p style={{ fontFamily: S.dm, fontSize: 11, color: '#6B6055', margin: '3px 0 0' }}>{cat.count} {cat.count === 1 ? 'Product' : 'Products'}</p>
                       </div>
                     </div>
                   </Link>

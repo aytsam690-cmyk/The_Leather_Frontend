@@ -74,6 +74,7 @@ function GeneralTab({ onSave, settings }) {
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
         <div>
           <UploadZone label="Site Logo" preview={form.logo} onUpload={v => set('logo', v)} />
+          <p className="text-xs text-[#9E9E9E] mt-1">Recommended size: 200x50px</p>
           <p className="text-xs text-[#9E9E9E] mt-1">Displayed in the navbar/header of your website</p>
           {form.logo && (
             <button onClick={() => set('logo', '')} className="text-xs text-[#9B2226] hover:underline cursor-pointer bg-transparent border-none mt-1">Remove logo</button>
@@ -293,6 +294,7 @@ function PromoBannerTab({ onSave, settings }) {
       </div>
 
       <UploadZone label="Background Image (optional)" preview={form.image} onUpload={v => set('image', v)} />
+      <p className="text-xs text-[#9E9E9E] mt-1">Recommended size: 1920x200px</p>
       {form.image && (
         <button onClick={() => set('image', '')} className="text-xs text-[#9B2226] hover:underline cursor-pointer bg-transparent border-none">Remove background image</button>
       )}
