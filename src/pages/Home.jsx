@@ -407,8 +407,8 @@ export default function Home() {
           }}>Browse Products</Link>
         </section>
       ) : (
-        /* ── Billboard Hero ── */
-        <section id="hero-billboard" className="hero-billboard" style={{ position: 'relative', width: '100%', overflow: 'hidden' }}
+        /* 🎨 Billboard Hero 🎨 */
+        <section id="hero-billboard" className="hero-billboard" style={{ position: 'relative', width: '100%', height: '100vh', minHeight: 600, overflow: 'hidden' }}
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
