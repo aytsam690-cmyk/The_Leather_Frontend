@@ -553,6 +553,7 @@ export default function Home() {
               <div className="hero-arrows-desktop" style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                 <button
                   onClick={goToPrev}
+                  aria-label="Previous Slide"
                   style={{
                     width: 44, height: 44,
                     border: '1px solid rgba(255,255,255,0.3)', borderRadius: 2,
@@ -567,6 +568,7 @@ export default function Home() {
                 </button>
                 <button
                   onClick={goToNext}
+                  aria-label="Next Slide"
                   style={{
                     width: 44, height: 44,
                     border: '1px solid rgba(255,255,255,0.3)', borderRadius: 2,
