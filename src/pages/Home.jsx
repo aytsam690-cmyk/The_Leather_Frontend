@@ -259,64 +259,67 @@ export default function Home() {
 
   // ── Fetch data ──
   useEffect(() => {
+    // Banners are LCP-critical — fetch first and preload the hero image
     setBannersLoading(true);
+    getBanners()
+      .then((data) => {
+        const items = Array.isArray(data) ? data : [];
+        const heroBanners = items.filter(b => b.position === 'Home Hero' && b.isActive !== false);
+        setHomeBanners(heroBanners);
+        setPromoBanners(items.filter(b => b.position === 'Promotional Strip' && b.isActive !== false));
 
-    Promise.all([
-      getBanners().catch(() => []),
-      getFeaturedProducts().catch(() => ({ products: [] })),
-      getCategories().catch(() => []),
-      getReviews('?limit=5').catch(() => [])
-    ]).then(([bannerData, featuredData, catData, reviewData]) => {
-      // 1. Process Banners
-      const items = Array.isArray(bannerData) ? bannerData : [];
-      const heroBanners = items.filter(b => b.position === 'Home Hero' && b.isActive !== false);
-      setHomeBanners(heroBanners);
-      setPromoBanners(items.filter(b => b.position === 'Promotional Strip' && b.isActive !== false));
+        // Preload the first hero image for instant LCP
+        if (heroBanners[0]?.image) {
+          const link = document.createElement('link');
+          link.rel = 'preload';
+          link.as = 'image';
+          link.href = heroBanners[0].image;
+          link.fetchPriority = 'high';
+          document.head.appendChild(link);
+        }
+      })
+      .catch(() => {})
+      .finally(() => setBannersLoading(false));
 
-      if (heroBanners[0]?.image) {
-        const link = document.createElement('link');
-        link.rel = 'preload';
-        link.as = 'image';
-        link.href = heroBanners[0].image;
-        link.fetchPriority = 'high';
-        document.head.appendChild(link);
-      }
+    // Non-critical data — load in parallel but after banners
+    getFeaturedProducts()
+      .then((data) => {
+        const items = Array.isArray(data) ? data : (data?.products || []);
+        if (items.length > 0) {
+          setFeaturedProducts(items.map((p, i) => {
+            const firstImage = p.images?.[0]?.url || p.images?.[0];
+            return {
+              id: p._id, _id: p._id, slug: p.slug, name: p.name,
+              price: p.price, comparePrice: p.comparePrice,
+              rating: p.ratings?.average || p.rating || 0,
+              reviews: p.ratings?.count || p.numReviews || 0,
+              bg: firstImage ? `url(${firstImage}) center/cover no-repeat` : GRADIENTS[i % GRADIENTS.length],
+              badge: p.comparePrice > p.price ? `${Math.round((1 - p.price / p.comparePrice) * 100)}% OFF` : 'New',
+              images: p.images || [], brand: p.brand, category: p.category, ratings: p.ratings,
+            };
+          }));
+        }
+      })
+      .catch(() => {});
 
-      // 2. Process Featured
-      const prodItems = Array.isArray(featuredData) ? featuredData : (featuredData?.products || []);
-      if (prodItems.length > 0) {
-        setFeaturedProducts(prodItems.map((p, i) => {
-          const firstImage = p.images?.[0]?.url || p.images?.[0];
-          return {
-            id: p._id, _id: p._id, slug: p.slug, name: p.name,
-            price: p.price, comparePrice: p.comparePrice,
-            rating: p.ratings?.average || p.rating || 0,
-            reviews: p.ratings?.count || p.numReviews || 0,
-            bg: firstImage ? `url(${firstImage}) center/cover no-repeat` : GRADIENTS[i % GRADIENTS.length],
-            badge: p.comparePrice > p.price ? `${Math.round((1 - p.price / p.comparePrice) * 100)}% OFF` : 'New',
-            images: p.images || [], brand: p.brand, category: p.category, ratings: p.ratings,
-          };
-        }));
-      }
+    getCategories()
+      .then((data) => {
+        const items = Array.isArray(data) ? data : [];
+        if (items.length > 0) {
+          setCategories(items.map((c, i) => ({
+            name: c.name, image: c.image || null,
+            bg: c.image ? `url(${c.image}) center/cover no-repeat` : GRADIENTS[i % GRADIENTS.length],
+            count: c.productCount || 0, slug: c.slug,
+          })));
+        }
+      })
+      .catch(() => {});
 
-      // 3. Process Categories
-      const catItems = Array.isArray(catData) ? catData : [];
-      if (catItems.length > 0) {
-        setCategories(catItems.map((c, i) => ({
-          name: c.name, image: c.image || null,
-          bg: c.image ? `url(${c.image}) center/cover no-repeat` : GRADIENTS[i % GRADIENTS.length],
-          count: c.productCount || 0, slug: c.slug,
-        })));
-      }
-
-      // 4. Process Reviews
-      const revItems = Array.isArray(reviewData) ? reviewData : [];
-      if (revItems.length > 0) {
-        setFeaturedReviews(revItems.filter(r => r.rating >= 4));
-      }
-    }).finally(() => {
-      setBannersLoading(false);
-    });
+    getFeaturedReviews()
+      .then((data) => {
+        if (Array.isArray(data)) setFeaturedReviews(data);
+      })
+      .catch(() => {});
   }, []);
 
   // ── Drag scroll ──
