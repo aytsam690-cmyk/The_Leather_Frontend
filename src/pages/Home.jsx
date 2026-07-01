@@ -338,17 +338,17 @@ export default function Home() {
   return (
     <div style={{ background: '#0D0D0B', minHeight: '100vh' }}>
       <Helmet>
-        <title>{settings?.siteName || 'Store'} — Premium Products</title>
-        <meta name="description" content={`Discover premium products curated just for you at ${settings?.siteName || 'our store'}. Quality you can feel, style you can trust.`} />
+        <title>{settings?.metaTags?.title || `${settings?.siteName || 'Store'} - Premium Products`}</title>
+        <meta name="description" content={settings?.metaTags?.description || `Discover premium products curated just for you at ${settings?.siteName || 'our store'}. Quality you can feel, style you can trust.`} />
         <link rel="canonical" href={window.location.origin + window.location.pathname} />
-        <meta property="og:title" content={`${settings?.siteName || 'Store'} — Premium Products`} />
-        <meta property="og:description" content={`Discover premium products curated just for you at ${settings?.siteName || 'our store'}. Quality you can feel, style you can trust.`} />
+        <meta property="og:title" content={settings?.metaTags?.title || `${settings?.siteName || 'Store'} - Premium Products`} />
+        <meta property="og:description" content={settings?.metaTags?.description || `Discover premium products curated just for you at ${settings?.siteName || 'our store'}. Quality you can feel, style you can trust.`} />
         <meta property="og:url" content={window.location.origin} />
-        <meta property="og:image" content={settings?.logo || ''} />
+        <meta property="og:image" content={settings?.metaTags?.ogImage || settings?.logo || ''} />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={`${settings?.siteName || 'Store'} — Premium Products`} />
-        <meta name="twitter:description" content={`Discover premium products curated just for you at ${settings?.siteName || 'our store'}. Quality you can feel, style you can trust.`} />
-        <meta name="twitter:image" content={settings?.logo || ''} />
+        <meta name="twitter:title" content={settings?.metaTags?.title || `${settings?.siteName || 'Store'} - Premium Products`} />
+        <meta name="twitter:description" content={settings?.metaTags?.description || `Discover premium products curated just for you at ${settings?.siteName || 'our store'}. Quality you can feel, style you can trust.`} />
+        <meta name="twitter:image" content={settings?.metaTags?.ogImage || settings?.logo || ''} />
         <script type="application/ld+json">{JSON.stringify({
           '@context': 'https://schema.org',
           '@type': 'WebSite',
