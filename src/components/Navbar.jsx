@@ -626,6 +626,7 @@ export default function Navbar() {
                   onClick={() => setSearchOpen(!searchOpen)}
                   style={iconBtnStyle}
                   className="navbar-search-toggle"
+                  aria-label="Toggle Search"
                   onMouseEnter={e => { e.currentTarget.style.borderColor = '#C9A96E'; e.currentTarget.style.color = '#F5F0E8'; }}
                   onMouseLeave={e => { e.currentTarget.style.borderColor = '#2C2C26'; e.currentTarget.style.color = '#A89880'; }}
                 >

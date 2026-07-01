@@ -45,7 +45,7 @@ export default function Footer() {
                 else IconComponent = <span style={{ fontSize: 13, fontWeight: 600 }}>{s.platform.charAt(0).toUpperCase()}</span>;
 
                 return (
-                  <a key={s.platform} href={s.url} target="_blank" rel="noopener noreferrer" style={{
+                  <a key={s.platform} aria-label={s.platform} href={s.url} target="_blank" rel="noopener noreferrer" style={{
                     width: 36, height: 36, minWidth: 44, minHeight: 44, border: '1px solid #2C2C26', borderRadius: 2,
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                     color: '#6B6055', background: 'transparent', cursor: 'pointer',
