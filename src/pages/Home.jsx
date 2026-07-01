@@ -591,7 +591,6 @@ export default function Home() {
       {/* ══════════════════════════════════════════════════════════════════════
           PROMO STRIP
       ═══════════════════════════════════════════════════════════════════════ */}
-      <div className="below-fold-wrapper">
       {promoBanners.length > 0 && (
         <div style={{ background: '#1C1C17', borderTop: '1px solid #2C2C26', borderBottom: '1px solid #2C2C26', padding: '14px 0', overflow: 'hidden' }}>
           <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 24px', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 8 }}>
@@ -661,10 +660,7 @@ export default function Home() {
               ))}
             </div>
           </div>
-          <style>{`
-        .below-fold-wrapper { min-height: 150vh; }
-        @media (max-width: 1024px) { .below-fold-wrapper { min-height: 0; } }
-.cat-card:hover .cat-img { transform: scale(1.05); }`}</style>
+          <style>{`.cat-card:hover .cat-img { transform: scale(1.05); }`}</style>
         </section>
       )}
 
@@ -821,8 +817,6 @@ export default function Home() {
           PROMO POPUP — Sale countdown (editable from Admin → Settings → Promo Banner)
       ═══════════════════════════════════════════════════════════════════════ */}
       <PromoPopup settings={settings} />
-      </div>
-
 
 
 
