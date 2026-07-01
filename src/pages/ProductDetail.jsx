@@ -161,7 +161,7 @@ function Gallery({ images }) {
               onMouseLeave={e => { if (i !== active) e.currentTarget.style.borderColor = 'transparent'; }}
             >
               {img.url ? (
-                <img src={optimizeImage(img.url, 200)} alt={img.alt || 'thumb'} loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                <img src={optimizeImage(img.url, 200)} alt={img.alt || `${product.name} Thumbnail ${i + 1}`} loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               ) : (
                 <div style={{ width: '100%', height: '100%', background: img.bg || '#2C2C26' }} />
               )}
@@ -188,7 +188,7 @@ function Gallery({ images }) {
           >
             <div style={{ position: 'relative', maxWidth: '88vw', maxHeight: '88vh' }} onClick={e => e.stopPropagation()}>
               {images[active]?.url ? (
-                <img src={optimizeImage(images[active].url, 1200)} alt="zoom" style={{ maxHeight: '88vh', maxWidth: '88vw', objectFit: 'contain' }} />
+                <img src={optimizeImage(images[active].url, 1200)} alt={`${product.name} - Detailed View ${active + 1}`} style={{ maxHeight: '88vh', maxWidth: '88vw', objectFit: 'contain' }} />
               ) : (
                 <div style={{ width: 600, height: 600, maxWidth: '90vw', maxHeight: '90vh', background: images[active]?.bg || '#1C1C17', borderRadius: 2 }} />
               )}
@@ -549,16 +549,18 @@ export default function ProductDetail() {
           "@context": "https://schema.org",
           "@type": "Product",
           "name": product.name,
-          "description": product.description?.slice(0, 500) || '',
-          "image": product.images?.[0]?.url || '',
-          "brand": { "@type": "Brand", "name": settings?.siteName || 'Store' },
+          "description": product.metaDescription || product.description?.slice(0, 500) || '',
+          "image": product.images?.map(img => img.url) || [],
+          "brand": { "@type": "Brand", "name": settings?.siteName || 'CRAFT HID' },
           "sku": product._id,
+          "category": typeof product.category === 'object' ? product.category?.name : product.category,
           "offers": {
             "@type": "Offer",
             "price": product.price,
             "priceCurrency": settings?.currency || 'PKR',
             "availability": product.stock > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
-            "url": window.location.origin + `/products/${product.slug || product._id}`
+            "url": window.location.origin + `/products/${product.slug || product._id}`,
+            "itemCondition": "https://schema.org/NewCondition"
           },
           ...(product.ratings?.count > 0 ? {
             "aggregateRating": {

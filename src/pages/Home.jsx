@@ -350,18 +350,32 @@ export default function Home() {
         <meta name="twitter:title" content={settings?.metaTags?.title || `${settings?.siteName || 'Store'} - Premium Products`} />
         <meta name="twitter:description" content={settings?.metaTags?.description || `Discover premium products curated just for you at ${settings?.siteName || 'our store'}. Quality you can feel, style you can trust.`} />
         <meta name="twitter:image" content={settings?.metaTags?.ogImage || settings?.logo || ''} />
-        <script type="application/ld+json">{JSON.stringify({
-          '@context': 'https://schema.org',
-          '@type': 'WebSite',
-          name: settings?.siteName || 'CRAFT HID',
-          url: window.location.origin,
-          description: `Discover premium products at ${settings?.siteName || 'CRAFT HID'}.`,
-          potentialAction: {
-            '@type': 'SearchAction',
-            target: `${window.location.origin}/products?keyword={search_term_string}`,
-            'query-input': 'required name=search_term_string'
+        <script type="application/ld+json">{JSON.stringify([
+          {
+            '@context': 'https://schema.org',
+            '@type': 'WebSite',
+            name: settings?.siteName || 'CRAFT HID',
+            url: window.location.origin,
+            description: `Discover premium products at ${settings?.siteName || 'CRAFT HID'}.`,
+            potentialAction: {
+              '@type': 'SearchAction',
+              target: `${window.location.origin}/products?keyword={search_term_string}`,
+              'query-input': 'required name=search_term_string'
+            }
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            "name": settings?.siteName || 'CRAFT HID',
+            "url": window.location.origin,
+            "logo": settings?.logo || `${window.location.origin}/logo.png`,
+            "sameAs": [
+              settings?.socialLinks?.facebook || '',
+              settings?.socialLinks?.instagram || '',
+              settings?.socialLinks?.twitter || ''
+            ].filter(Boolean)
           }
-        })}</script>
+        ])}</script>
       </Helmet>
 
       {/* ══════════════════════════════════════════════════════════════════════
@@ -773,7 +787,7 @@ export default function Home() {
                       <div style={{ display: 'flex', gap: 8, marginBottom: 20 }}>
                         {review.images.map((img, idx) => (
                           <div key={idx} style={{ width: 48, height: 48, borderRadius: 2, overflow: 'hidden', border: '1px solid #2C2C26' }}>
-                            <img src={optimizeImage(img.url, 100)} alt="review" style={{ width: '100%', height: '100%', objectFit: 'cover' }} loading="lazy" />
+                            <img src={optimizeImage(img.url, 100)} alt={`Customer review photo for ${review.product?.name || 'product'}`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} loading="lazy" />
                           </div>
                         ))}
                       </div>
