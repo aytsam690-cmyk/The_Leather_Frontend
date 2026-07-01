@@ -9,7 +9,7 @@
         {
           "type": "header",
           "key": "user-agent",
-          "value": "(?i).*(bot|crawler|spider|crawling|googlebot|bingbot|yandexbot|duckduckbot|slurp|facebookexternalhit|twitterbot|whatsapp).*"
+          "value": ".*(bot|Bot|crawler|Crawler|spider|Spider|crawling|googlebot|bingbot|yandexbot|duckduckbot|slurp|facebookexternalhit|twitterbot|whatsapp|WhatsApp|LinkedInBot|Slackbot).*"
         }
       ],
       "destination": "http://20.244.38.147/bot-render/$1"
