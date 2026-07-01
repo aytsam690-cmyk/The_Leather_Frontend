@@ -638,6 +638,7 @@ export default function Navbar() {
               {/* Cart */}
               <button
                 onClick={openCart}
+                aria-label="View Cart"
                 style={iconBtnStyle}
                 onMouseEnter={e => { e.currentTarget.style.borderColor = '#C9A96E'; e.currentTarget.style.color = '#F5F0E8'; }}
                 onMouseLeave={e => { e.currentTarget.style.borderColor = '#2C2C26'; e.currentTarget.style.color = '#A89880'; }}
@@ -710,6 +711,7 @@ export default function Navbar() {
               {/* Hamburger */}
               <button
                 onClick={() => setMobileOpen(!mobileOpen)}
+                aria-label="Open Menu"
                 style={iconBtnStyle}
                 className="navbar-hamburger"
                 onMouseEnter={e => { e.currentTarget.style.borderColor = '#C9A96E'; e.currentTarget.style.color = '#F5F0E8'; }}
