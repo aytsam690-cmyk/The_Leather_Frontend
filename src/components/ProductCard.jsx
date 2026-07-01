@@ -5,6 +5,7 @@ import { ShoppingCart } from 'lucide-react';
 import useCartStore from '../store/cartStore';
 
 import { useCurrency } from '../utils/currency';
+import { optimizeImage } from '../utils/cloudinary';
 
 function Stars({ rating }) {
   return (
@@ -40,7 +41,8 @@ export default function ProductCard({ product, onBuyNow }) {
 
 
 
-  const imageUrl = product.images?.[0]?.url || product.images?.[0];
+  const rawImageUrl = product.images?.[0]?.url || product.images?.[0];
+  const imageUrl = optimizeImage(rawImageUrl, 600);
   const category = typeof product.category === 'object' ? product.category?.name : product.category;
 
   return (

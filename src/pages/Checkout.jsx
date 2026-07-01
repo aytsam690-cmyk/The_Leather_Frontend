@@ -8,6 +8,7 @@ import { ShieldCheck, MapPin, ArrowRight, ArrowLeft, Check, Package } from 'luci
 import useCartStore from '../store/cartStore';
 import useAuthStore from '../store/authStore';
 import { useCurrency } from '../utils/currency';
+import { optimizeImage } from '../utils/cloudinary';
 
 // ─── Confetti (CSS-based, unchanged logic) ────────────────────────────────────
 const confettiCSS = `
@@ -195,7 +196,7 @@ function OrderSidebar({ items, appliedCoupon }) {
           <div key={item.key} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '14px 0', borderBottom: '1px solid #2C2C26' }}>
             <div style={{ width: 56, height: 56, flexShrink: 0, border: '1px solid #2C2C26', borderRadius: 2, overflow: 'hidden', background: '#1C1C17' }}>
               {item.images?.[0]?.url ? (
-                <img src={item.images[0].url} alt={item.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                <img src={optimizeImage(item.images[0].url, 150)} alt={item.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               ) : (
                 <div style={{ width: '100%', height: '100%', background: item.bg || '#1C1C17' }} />
               )}
@@ -527,7 +528,7 @@ function ReviewOrder({ shipping, onBack, onNext }) {
             <div key={item.key} style={{ display: 'flex', gap: 16, padding: '16px 0', borderBottom: '1px solid #2C2C26', alignItems: 'center' }}>
               <div style={{ width: 64, height: 64, flexShrink: 0, border: '1px solid #2C2C26', borderRadius: 2, overflow: 'hidden', background: '#1C1C17' }}>
                 {item.images?.[0]?.url ? (
-                  <img src={item.images[0].url} alt={item.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  <img src={optimizeImage(item.images[0].url, 150)} alt={item.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                 ) : (
                   <div style={{ width: '100%', height: '100%', background: item.bg || '#1C1C17' }} />
                 )}

@@ -7,6 +7,7 @@ import { getFeaturedProducts, getCategories, getBanners, getFeaturedReviews } fr
 
 import useSettingsStore from '../store/settingsStore';
 import ProductCard from '../components/ProductCard';
+import { optimizeImage } from '../utils/cloudinary';
 
 // ─── Style tokens ─────────────────────────────────────────────────────────────
 const S = {
@@ -629,7 +630,7 @@ export default function Home() {
                     >
                       <div style={{ width: '100%', height: 140, overflow: 'hidden' }}>
                         {cat.image ? (
-                          <img src={cat.image} alt={cat.name} loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', transition: 'transform 0.3s ease' }}
+                          <img src={optimizeImage(cat.image, 300)} alt={cat.name} loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', transition: 'transform 0.3s ease' }}
                             className="cat-img" />
                         ) : (
                           <div style={{ width: '100%', height: '100%', background: GRADIENTS[i % GRADIENTS.length] }} />
@@ -772,7 +773,7 @@ export default function Home() {
                       <div style={{ display: 'flex', gap: 8, marginBottom: 20 }}>
                         {review.images.map((img, idx) => (
                           <div key={idx} style={{ width: 48, height: 48, borderRadius: 2, overflow: 'hidden', border: '1px solid #2C2C26' }}>
-                            <img src={img.url} alt="review" style={{ width: '100%', height: '100%', objectFit: 'cover' }} loading="lazy" />
+                            <img src={optimizeImage(img.url, 100)} alt="review" style={{ width: '100%', height: '100%', objectFit: 'cover' }} loading="lazy" />
                           </div>
                         ))}
                       </div>

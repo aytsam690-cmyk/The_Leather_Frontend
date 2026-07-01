@@ -9,6 +9,7 @@ import useCartStore from '../store/cartStore';
 import useAuthStore from '../store/authStore';
 import useSettingsStore from '../store/settingsStore';
 import { getCategories, searchProducts } from '../services/api';
+import { optimizeImage } from '../utils/cloudinary';
 
 
 
@@ -282,7 +283,7 @@ export default function Navbar() {
             {/* Logo */}
             <Link to="/" style={{ textDecoration: 'none', flexShrink: 0, display: 'flex', alignItems: 'center', gap: 12 }}>
               {settings?.logo && (
-                <img src={settings.logo} alt={settings.siteName || 'Store Logo'} style={{ maxHeight: '58px', maxWidth: '220px', width: 'auto', height: 'auto', objectFit: 'contain' }} />
+                <img src={optimizeImage(settings.logo, 300)} alt={settings.siteName || 'Store Logo'} style={{ maxHeight: '58px', maxWidth: '220px', width: 'auto', height: 'auto', objectFit: 'contain' }} />
               )}
               <span style={{
                 fontFamily: "'Cormorant Garamond', serif",
@@ -602,7 +603,7 @@ export default function Navbar() {
                                   overflow: 'hidden',
                                 }}>
                                   {p.images?.[0]?.url
-                                    ? <img src={p.images[0].url} loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt={p.name} />
+                                    ? <img src={optimizeImage(p.images[0].url, 150)} loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt={p.name} />
                                     : <Package size={16} style={{ color: '#6B6055' }} />}
                                 </div>
                                 <div style={{ minWidth: 0 }}>

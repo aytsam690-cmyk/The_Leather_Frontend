@@ -9,6 +9,7 @@ import useAuthStore from '../store/authStore';
 
 import useSettingsStore from '../store/settingsStore';
 import { useCurrency } from '../utils/currency';
+import { optimizeImage } from '../utils/cloudinary';
 import ProductCard from '../components/ProductCard';
 
 
@@ -160,7 +161,7 @@ function Gallery({ images }) {
               onMouseLeave={e => { if (i !== active) e.currentTarget.style.borderColor = 'transparent'; }}
             >
               {img.url ? (
-                <img src={img.url} alt={img.alt || 'thumb'} loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                <img src={optimizeImage(img.url, 200)} alt={img.alt || 'thumb'} loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               ) : (
                 <div style={{ width: '100%', height: '100%', background: img.bg || '#2C2C26' }} />
               )}
@@ -187,7 +188,7 @@ function Gallery({ images }) {
           >
             <div style={{ position: 'relative', maxWidth: '88vw', maxHeight: '88vh' }} onClick={e => e.stopPropagation()}>
               {images[active]?.url ? (
-                <img src={images[active].url} alt="zoom" style={{ maxHeight: '88vh', maxWidth: '88vw', objectFit: 'contain' }} />
+                <img src={optimizeImage(images[active].url, 1200)} alt="zoom" style={{ maxHeight: '88vh', maxWidth: '88vw', objectFit: 'contain' }} />
               ) : (
                 <div style={{ width: 600, height: 600, maxWidth: '90vw', maxHeight: '90vh', background: images[active]?.bg || '#1C1C17', borderRadius: 2 }} />
               )}
@@ -374,7 +375,7 @@ function ProductReviews({ product, reviews, onReviewSubmit }) {
                       {r.images && r.images.length > 0 && (
                         <div style={{ display: 'flex', gap: 8, marginTop: 12 }}>
                           {r.images.map((img, i) => (
-                            <img key={img.publicId || i} src={img.url} alt="review attachment" style={{ width: 64, height: 64, objectFit: 'cover', borderRadius: 2, border: '1px solid #2C2C26' }} />
+                            <img key={img.publicId || i} src={optimizeImage(img.url, 100)} alt="review attachment" style={{ width: 64, height: 64, objectFit: 'cover', borderRadius: 2, border: '1px solid #2C2C26' }} />
                           ))}
                         </div>
                       )}

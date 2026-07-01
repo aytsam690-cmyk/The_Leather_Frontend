@@ -5,6 +5,7 @@ import { X, ShoppingBag, Shield, Truck, Banknote } from 'lucide-react';
 import useCartStore from '../store/cartStore';
 import { validateCoupon } from '../services/api';
 import { useCurrency } from '../utils/currency';
+import { optimizeImage } from '../utils/cloudinary';
 
 // ─── Cart Item ────────────────────────────────────────────────────────────────
 function CartItem({ item }) {
@@ -33,7 +34,7 @@ function CartItem({ item }) {
         overflow: 'hidden', background: '#1C1C17',
       }}>
         {item.images?.[0]?.url ? (
-          <img src={item.images[0].url} alt={item.name} loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+          <img src={optimizeImage(item.images[0].url, 150)} alt={item.name} loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
         ) : item.bg?.startsWith('url') ? (
           <div style={{ width: '100%', height: '100%', background: item.bg, backgroundSize: 'cover', backgroundPosition: 'center' }} />
         ) : (
