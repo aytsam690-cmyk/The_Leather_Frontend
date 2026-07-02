@@ -158,21 +158,6 @@ function App() {
     }
   }, [settings?.siteName, settings?.metaTags?.title]);
 
-  // Dynamically update the raw DOM favicon so it reflects immediately
-  // (Helmet can be slow with link tags and causes duplicates)
-  useEffect(() => {
-    const faviconUrl = settings?.favicon || settings?.logo;
-    if (faviconUrl) {
-      const link = document.getElementById('dynamic-favicon');
-      if (link) link.href = faviconUrl;
-
-      const appleLink = document.getElementById('dynamic-apple-icon');
-      if (appleLink) appleLink.href = faviconUrl;
-    }
-  }, [settings?.favicon, settings?.logo]);
-
-  const faviconUrl = settings?.favicon || settings?.logo;
-
   const pageTitle = settings?.metaTags?.title || siteName;
   const pageDescription = settings?.metaTags?.description || `Shop premium products at ${siteName}. Quality guaranteed with free delivery.`;
 

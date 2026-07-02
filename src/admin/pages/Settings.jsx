@@ -64,27 +64,19 @@ function GeneralTab({ onSave, settings }) {
   const [form, setForm] = useState({
     siteName: settings.siteName || 'Store',
     logo: settings.logo || '',
-    favicon: settings.favicon || '',
     currency: settings.currency || 'USD',
   });
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
   return (
     <div className="space-y-5">
       <Field label="Site Name"><input className={inputCls} value={form.siteName} onChange={e => set('siteName', e.target.value)} /></Field>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+      <div className="grid grid-cols-1 gap-5">
         <div>
           <UploadZone label="Site Logo" preview={form.logo} onUpload={v => set('logo', v)} />
           <p className="text-xs text-[#9E9E9E] mt-1">Recommended size: 200x50px</p>
           <p className="text-xs text-[#9E9E9E] mt-1">Displayed in the navbar/header of your website</p>
           {form.logo && (
             <button onClick={() => set('logo', '')} className="text-xs text-[#9B2226] hover:underline cursor-pointer bg-transparent border-none mt-1">Remove logo</button>
-          )}
-        </div>
-        <div>
-          <UploadZone label="Favicon (Tab Icon)" preview={form.favicon} onUpload={v => set('favicon', v)} />
-          <p className="text-xs text-[#9E9E9E] mt-1">Small icon shown in browser tabs &amp; Google search results. Recommended: square image (512×512px)</p>
-          {form.favicon && (
-            <button onClick={() => set('favicon', '')} className="text-xs text-[#9B2226] hover:underline cursor-pointer bg-transparent border-none mt-1">Remove favicon</button>
           )}
         </div>
       </div>
