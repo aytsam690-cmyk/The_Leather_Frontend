@@ -255,7 +255,7 @@ export default function TrackOrder() {
       <Helmet>
         <title>Track Order — {settings?.siteName || 'Store'}</title>
         <meta name="description" content="Track your orders by entering your phone number." />
-        <link rel="canonical" href={window.location.origin + window.location.pathname} />
+        <link rel="canonical" href={`https://www.crafthid.com${window.location.pathname}`} />
         <meta property="og:title" content={`Track Order — ${settings?.siteName || 'Store'}`} />
         <meta property="og:description" content="Track your orders by entering your phone number." />
         <meta property="og:url" content={window.location.origin + '/track-order'} />

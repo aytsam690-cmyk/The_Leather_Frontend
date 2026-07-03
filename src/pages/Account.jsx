@@ -449,7 +449,7 @@ export default function Account({ defaultTab = 'profile' }) {
     <Helmet>
       <title>{`My Account | ${siteName}`}</title>
       <meta name="description" content={`Manage your ${siteName} account, orders, and wishlist.`} />
-      <link rel="canonical" href={window.location.origin + '/account'} />
+      <link rel="canonical" href={"https://www.crafthid.com/account"} />
       <meta property="og:title" content={`My Account | ${siteName}`} />
       <meta property="og:description" content={`Manage your ${siteName} account, orders, and wishlist.`} />
       <meta property="og:url" content={window.location.origin + '/account'} />

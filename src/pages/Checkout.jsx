@@ -870,7 +870,7 @@ export default function Checkout() {
     <Helmet>
       <title>{`Checkout | ${siteName}`}</title>
       <meta name="description" content={`Complete your order securely at ${siteName}.`} />
-      <link rel="canonical" href={window.location.origin + '/checkout'} />
+      <link rel="canonical" href={"https://www.crafthid.com/checkout"} />
       <meta property="og:title" content={`Checkout | ${siteName}`} />
       <meta property="og:description" content={`Complete your order securely at ${siteName}.`} />
       <meta property="og:url" content={window.location.origin + '/checkout'} />

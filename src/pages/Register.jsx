@@ -138,7 +138,7 @@ export default function Register() {
     <Helmet>
       <title>{`Create Account | ${siteName}`}</title>
       <meta name="description" content={`Create your ${siteName} account for exclusive offers and easy checkout.`} />
-      <link rel="canonical" href={window.location.origin + '/register'} />
+      <link rel="canonical" href={"https://www.crafthid.com/register"} />
       <meta property="og:title" content={`Create Account | ${siteName}`} />
       <meta property="og:description" content={`Create your ${siteName} account for exclusive offers and easy checkout.`} />
       <meta property="og:url" content={window.location.origin + '/register'} />

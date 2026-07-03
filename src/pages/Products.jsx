@@ -407,7 +407,7 @@ export default function Products() {
         <Helmet>
           <title>{filters.search ? `Search: ${filters.search}` : filters.category !== 'All' ? `${filters.category} Products` : 'All Products'} — {settings?.siteName || 'Store'}</title>
           <meta name="description" content="Browse our extensive collection of products. Filter by category, brand, price, and more." />
-          <link rel="canonical" href={window.location.origin + window.location.pathname} />
+          <link rel="canonical" href={`https://www.crafthid.com${window.location.pathname}`} />
           <meta property="og:title" content={`${filters.search ? `Search: ${filters.search}` : filters.category !== 'All' ? `${filters.category} Products` : 'All Products'} — ${settings?.siteName || 'Store'}`} />
           <meta property="og:description" content="Browse our extensive collection of products. Filter by category, brand, price, and more." />
           <meta property="og:url" content={window.location.origin + '/products'} />

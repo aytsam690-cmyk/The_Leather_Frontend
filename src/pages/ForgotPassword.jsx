@@ -37,7 +37,7 @@ export default function ForgotPassword() {
     <Helmet>
       <title>{`Forgot Password | ${siteName}`}</title>
       <meta name="description" content={`Reset your ${siteName} account password.`} />
-      <link rel="canonical" href={window.location.origin + '/forgot-password'} />
+      <link rel="canonical" href={"https://www.crafthid.com/forgot-password"} />
       <meta property="og:title" content={`Forgot Password | ${siteName}`} />
       <meta property="og:description" content={`Reset your ${siteName} account password.`} />
       <meta property="og:url" content={window.location.origin + '/forgot-password'} />

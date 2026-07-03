@@ -125,7 +125,7 @@ export default function ResetPassword() {
     <Helmet>
       <title>{`Reset Password | ${siteName}`}</title>
       <meta name="description" content={`Set a new password for your ${siteName} account.`} />
-      <link rel="canonical" href={window.location.origin + '/reset-password'} />
+      <link rel="canonical" href={"https://www.crafthid.com/reset-password"} />
       <meta property="og:title" content={`Reset Password | ${siteName}`} />
       <meta property="og:description" content={`Set a new password for your ${siteName} account.`} />
       <meta property="og:url" content={window.location.origin + '/reset-password'} />

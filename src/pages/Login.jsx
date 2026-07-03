@@ -116,7 +116,7 @@ export default function Login() {
     <Helmet>
       <title>{`Login | ${siteName}`}</title>
       <meta name="description" content={`Log in to your ${siteName} account to track orders and manage your profile.`} />
-      <link rel="canonical" href={window.location.origin + '/login'} />
+      <link rel="canonical" href={"https://www.crafthid.com/login"} />
       <meta property="og:title" content={`Login | ${siteName}`} />
       <meta property="og:description" content={`Log in to your ${siteName} account to track orders and manage your profile.`} />
       <meta property="og:url" content={window.location.origin + '/login'} />

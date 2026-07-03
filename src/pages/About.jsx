@@ -51,7 +51,7 @@ export default function About() {
       <Helmet>
         <title>About Us — {siteName}</title>
         <meta name="description" content={`Learn about ${siteName} — our story, values, and commitment to bringing you premium products with exceptional quality.`} />
-        <link rel="canonical" href={window.location.origin + window.location.pathname} />
+        <link rel="canonical" href={`https://www.crafthid.com${window.location.pathname}`} />
         <meta property="og:title" content={`About Us — ${siteName}`} />
         <meta property="og:description" content={`Learn about ${siteName} — our story, values, and commitment to bringing you premium products with exceptional quality.`} />
         <meta property="og:url" content={window.location.origin + '/about'} />

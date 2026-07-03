@@ -341,7 +341,7 @@ export default function Home() {
       <Helmet>
         <title>{settings?.metaTags?.title || `${settings?.siteName || 'Store'} - Premium Products`}</title>
         <meta name="description" content={settings?.metaTags?.description || `Discover premium products curated just for you at ${settings?.siteName || 'our store'}. Quality you can feel, style you can trust.`} />
-        <link rel="canonical" href={window.location.origin + window.location.pathname} />
+        <link rel="canonical" href={`https://www.crafthid.com${window.location.pathname}`} />
         <meta property="og:title" content={settings?.metaTags?.title || `${settings?.siteName || 'Store'} - Premium Products`} />
         <meta property="og:description" content={settings?.metaTags?.description || `Discover premium products curated just for you at ${settings?.siteName || 'our store'}. Quality you can feel, style you can trust.`} />
         <meta property="og:url" content={window.location.origin} />
