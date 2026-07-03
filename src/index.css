@@ -38,6 +38,8 @@
 
 html {
   scroll-behavior: smooth;
+  /* Reserves scrollbar space on desktop from first frame — prevents desktop-only CLS */
+  scrollbar-gutter: stable;
 }
 
 html, body {
