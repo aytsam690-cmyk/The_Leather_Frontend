@@ -282,9 +282,12 @@ export default function Navbar() {
 
             {/* Logo */}
             <Link to="/" style={{ textDecoration: 'none', flexShrink: 0, display: 'flex', alignItems: 'center', gap: 12 }}>
-              {settings?.logo && (
-                <img src={optimizeImage(settings.logo, 300)} alt={settings.siteName || 'Store Logo'} style={{ maxHeight: '58px', maxWidth: '220px', width: 'auto', height: 'auto', objectFit: 'contain' }} />
-              )}
+              {/* Fixed 58px height container reserved always — prevents CLS when logo loads from API */}
+              <div style={{ height: '58px', display: 'flex', alignItems: 'center' }}>
+                {settings?.logo && (
+                  <img src={optimizeImage(settings.logo, 300)} alt={settings.siteName || 'Store Logo'} width="220" height="58" style={{ maxHeight: '58px', maxWidth: '220px', width: 'auto', height: 'auto', objectFit: 'contain' }} />
+                )}
+              </div>
               <span style={{
                 fontFamily: "'Cormorant Garamond', serif",
                 fontSize: 'clamp(18px, 4vw, 28px)',
@@ -295,7 +298,7 @@ export default function Navbar() {
                 lineHeight: 1,
                 whiteSpace: 'nowrap',
               }}>
-                {settings?.siteName || 'LUXE STORE'}
+                {settings?.siteName || 'CRAFT HID'}
               </span>
             </Link>
 
