@@ -284,7 +284,7 @@ export default function Products() {
     if (sort !== 'newest') params.set('sort', sort);
     if (page > 1) params.set('page', page);
     setSearchParams(params, { replace: true });
-  }, [filters, sort, page, setSearchParams, availableFilters]);
+  }, [filters, sort, page, setSearchParams]);
 
   // Handle URL changes from external navigation (e.g., Navbar)
   useEffect(() => {
