@@ -498,13 +498,28 @@ export default function ProductDetail() {
   }, [id]);
 
   // ── Loading state ──
-  if (loading || !product) {
+  if (loading) {
     return (
       <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#0D0D0B' }}>
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16 }}>
           <div style={{ width: 40, height: 40, border: '2px solid #2C2C26', borderTopColor: '#C9A96E', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
           <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: '#6B6055' }}>Loading product…</p>
           <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+        </div>
+      </div>
+    );
+  }
+
+  // ── Not found state ──
+  if (!product) {
+    return (
+      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#0D0D0B' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16 }}>
+          <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 24, color: '#C9A96E' }}>Product Not Found</p>
+          <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: '#6B6055' }}>The item you are looking for does not exist or has been removed.</p>
+          <Link to="/products" style={{ marginTop: 16, padding: '10px 24px', background: '#C9A96E', color: '#0D0D0B', textDecoration: 'none', borderRadius: 2, fontFamily: "'DM Sans', sans-serif", fontSize: 13, fontWeight: 500 }}>
+            Browse Products
+          </Link>
         </div>
       </div>
     );
