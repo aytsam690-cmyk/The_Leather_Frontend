@@ -283,53 +283,7 @@ export default function Navbar() {
             {/* Logo */}
             <Link to="/" style={{ textDecoration: 'none', flexShrink: 0, display: 'flex', alignItems: 'center', gap: 12 }}>
               {settings?.logo && (
-                <motion.div
-                  style={{ position: 'relative', width: 52, height: 52, flexShrink: 0 }}
-                  whileHover="hover"
-                  initial="rest"
-                >
-                  {/* Slow spinning outer glow ring */}
-                  <motion.div
-                    style={{
-                      position: 'absolute',
-                      inset: -3,
-                      borderRadius: '50%',
-                      background: 'conic-gradient(from 0deg, #C9A96E, #f0d080, #C9A96E, #8a6a30, #C9A96E)',
-                      zIndex: 0,
-                    }}
-                    animate={{ rotate: 360 }}
-                    transition={{ duration: 8, repeat: Infinity, ease: 'linear' }}
-                  />
-                  {/* Dark mask ring to create the border effect */}
-                  <div style={{
-                    position: 'absolute',
-                    inset: 0,
-                    borderRadius: '50%',
-                    background: '#0D0D0B',
-                    zIndex: 1,
-                    margin: 2,
-                  }} />
-                  {/* Logo image */}
-                  <motion.img
-                    src={optimizeImage(settings.logo, 120)}
-                    alt={settings.siteName || 'Store Logo'}
-                    style={{
-                      position: 'absolute',
-                      inset: 0,
-                      width: '100%',
-                      height: '100%',
-                      objectFit: 'contain',
-                      borderRadius: '50%',
-                      zIndex: 2,
-                      padding: 2,
-                    }}
-                    variants={{
-                      rest: { scale: 1, filter: 'drop-shadow(0 0 0px #C9A96E)' },
-                      hover: { scale: 1.08, filter: 'drop-shadow(0 0 8px #C9A96E)' },
-                    }}
-                    transition={{ duration: 0.3 }}
-                  />
-                </motion.div>
+                <img src={optimizeImage(settings.logo, 300)} alt={settings.siteName || 'Store Logo'} style={{ maxHeight: '58px', maxWidth: '220px', width: 'auto', height: 'auto', objectFit: 'contain' }} />
               )}
               <span style={{
                 fontFamily: "'Cormorant Garamond', serif",
@@ -344,7 +298,6 @@ export default function Navbar() {
                 {settings?.siteName || 'LUXE STORE'}
               </span>
             </Link>
-
 
             {/* Desktop Nav Links */}
             <div style={{ display: 'flex', alignItems: 'center', gap: 4 }} className="navbar-desktop-links">
