@@ -312,7 +312,7 @@ export default function Navbar() {
               </div>
 
               <button
-                className="flex w-11 h-11 items-center justify-center border border-[#2C2C26] rounded-sm text-[#A89880] bg-transparent cursor-pointer transition-all duration-200 relative flex-shrink-0 hover:border-[#C9A96E] hover:text-[#F5F0E8]"
+                className="navbar-cart-icon flex w-11 h-11 items-center justify-center border border-[#2C2C26] rounded-sm text-[#A89880] bg-transparent cursor-pointer transition-all duration-200 relative flex-shrink-0 hover:border-[#C9A96E] hover:text-[#F5F0E8]"
                 onClick={openCart}
                 aria-label="View Cart"
               >
