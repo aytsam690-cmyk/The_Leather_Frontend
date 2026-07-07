@@ -162,7 +162,6 @@ export default function ProductCard({ product, onBuyNow }) {
                     objectFit: 'cover',
                     display: 'block',
                     transition: 'transform 700ms ease-out, opacity 400ms ease',
-                    opacity: 0,
                     zIndex: 2,
                   }}
                   className="product-card-img-hover"
@@ -336,6 +335,8 @@ export default function ProductCard({ product, onBuyNow }) {
 
       {/* Scoped hover styles */}
       <style>{`
+        .product-card-img.has-hover { opacity: 1; }
+        .product-card-img-hover { opacity: 0; }
         .group:hover .product-card-img { transform: scale(1.05); }
         .group:hover .product-card-img.has-hover { opacity: 0; }
         .group:hover .product-card-img-hover { transform: scale(1.05); opacity: 1; }
