@@ -34,15 +34,72 @@ export default function ProductCard({ product, onBuyNow }) {
   const handleAddToCart = (e) => {
     e.preventDefault();
     e.stopPropagation();
+
+    // Fly-to-cart animation
+    const cardImg = e.currentTarget.closest('.group')?.querySelector('.product-card-img');
+    const cartIcon = document.querySelector('.navbar-cart-icon');
+
+    if (cardImg && cartIcon) {
+      const imgRect = cardImg.getBoundingClientRect();
+      const cartRect = cartIcon.getBoundingClientRect();
+
+      // Create a flying image element
+      const flyingImg = document.createElement('img');
+      flyingImg.src = cardImg.src;
+      flyingImg.style.position = 'fixed';
+      flyingImg.style.top = imgRect.top + 'px';
+      flyingImg.style.left = imgRect.left + 'px';
+      flyingImg.style.width = imgRect.width + 'px';
+      flyingImg.style.height = imgRect.height + 'px';
+      flyingImg.style.objectFit = 'cover';
+      flyingImg.style.borderRadius = '2px';
+      flyingImg.style.zIndex = '9999';
+      // X-axis transition (linear), transform (scale down), opacity (fade out)
+      flyingImg.style.transition = 'left 0.8s linear, transform 0.8s ease, opacity 0.6s ease 0.2s';
+
+      // Create a wrapper for the Y-axis (gravity arc)
+      const yContainer = document.createElement('div');
+      yContainer.style.position = 'fixed';
+      yContainer.style.top = imgRect.top + 'px';
+      yContainer.style.left = imgRect.left + 'px';
+      yContainer.style.zIndex = '9999';
+      // Y-axis transition (ease-in simulates gravity)
+      yContainer.style.transition = 'top 0.8s cubic-bezier(0.5, -0.5, 1, 1)';
+
+      // Adjust positions for animation
+      flyingImg.style.position = 'static'; // Relative to container
+      yContainer.appendChild(flyingImg);
+      document.body.appendChild(yContainer);
+
+      // Trigger reflow
+      void yContainer.offsetWidth;
+
+      // Animate
+      yContainer.style.top = (cartRect.top + cartRect.height / 2 - 20) + 'px';
+      flyingImg.style.left = (cartRect.left - imgRect.left + cartRect.width / 2 - 20) + 'px';
+      flyingImg.style.transform = 'scale(0.1)';
+      flyingImg.style.opacity = '0';
+
+      // Cleanup
+      setTimeout(() => {
+        if (document.body.contains(yContainer)) {
+          document.body.removeChild(yContainer);
+        }
+      }, 800);
+    }
+
     addItem(product, 1);
     setClicked(true);
     setTimeout(() => setClicked(false), 1500);
   };
 
-
-
   const rawImageUrl = product.images?.[0]?.url || product.images?.[0];
   const imageUrl = optimizeImage(rawImageUrl, 600);
+  
+  // Second image for hover swap
+  const rawImageUrl2 = product.images?.[1]?.url || product.images?.[1];
+  const imageUrl2 = rawImageUrl2 ? optimizeImage(rawImageUrl2, 600) : null;
+
   const category = typeof product.category === 'object' ? product.category?.name : product.category;
 
   return (
@@ -75,19 +132,43 @@ export default function ProductCard({ product, onBuyNow }) {
 
           {/* Product image */}
           {imageUrl ? (
-            <img
-              src={imageUrl}
-              alt={product.name}
-              loading="lazy"
-              style={{
-                width: '100%',
-                height: '100%',
-                objectFit: 'cover',
-                display: 'block',
-                transition: 'transform 700ms ease-out',
-              }}
-              className="product-card-img"
-            />
+            <>
+              <img
+                src={imageUrl}
+                alt={product.name}
+                loading="lazy"
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover',
+                  display: 'block',
+                  transition: 'transform 700ms ease-out, opacity 400ms ease',
+                  position: 'relative',
+                  zIndex: 1,
+                }}
+                className={`product-card-img ${imageUrl2 ? 'has-hover' : ''}`}
+              />
+              {imageUrl2 && (
+                <img
+                  src={imageUrl2}
+                  alt={`${product.name} alternate view`}
+                  loading="lazy"
+                  style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                    display: 'block',
+                    transition: 'transform 700ms ease-out, opacity 400ms ease',
+                    opacity: 0,
+                    zIndex: 2,
+                  }}
+                  className="product-card-img-hover"
+                />
+              )}
+            </>
           ) : (
             <div style={{
               width: '100%',
@@ -256,6 +337,8 @@ export default function ProductCard({ product, onBuyNow }) {
       {/* Scoped hover styles */}
       <style>{`
         .group:hover .product-card-img { transform: scale(1.05); }
+        .group:hover .product-card-img.has-hover { opacity: 0; }
+        .group:hover .product-card-img-hover { transform: scale(1.05); opacity: 1; }
         .group:hover .quick-add-bar { transform: translateY(0) !important; }
 
         /* Mobile-first card sizing (2-col layout) */

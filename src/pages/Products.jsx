@@ -561,9 +561,24 @@ export default function Products() {
                 >Clear Filters</button>
               </div>
             ) : (
-              <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-5">
-                {paginated.map((p) => <ProductCard key={p._id} product={p} />)}
-              </div>
+              <motion.div
+                className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-5"
+                initial="hidden"
+                animate="visible"
+                variants={{ visible: { transition: { staggerChildren: 0.08 } } }}
+              >
+                {paginated.map((p) => (
+                  <motion.div
+                    key={p._id}
+                    variants={{
+                      hidden: { opacity: 0, y: 30 },
+                      visible: { opacity: 1, y: 0, transition: { duration: 0.4 } }
+                    }}
+                  >
+                    <ProductCard product={p} />
+                  </motion.div>
+                ))}
+              </motion.div>
             )}
 
             {/* Pagination */}
