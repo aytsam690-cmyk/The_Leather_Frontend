@@ -637,6 +637,7 @@ export default function Navbar() {
 
               {/* Cart */}
               <button
+                className="navbar-cart-icon"
                 onClick={openCart}
                 aria-label="View Cart"
                 style={iconBtnStyle}
