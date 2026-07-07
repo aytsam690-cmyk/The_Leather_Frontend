@@ -1,32 +1,32 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { getProduct, addReview, addGuestReview } from '../services/api';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ShoppingCart, Star, X, ChevronLeft, ChevronRight, Share2, Check, Truck, Shield } from 'lucide-react';
+import { ShoppingCart, Star, X, ChevronLeft, ChevronRight, Share2, Check, Truck, RefreshCw, Shield } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
 import useCartStore from '../store/cartStore';
 import useAuthStore from '../store/authStore';
+
 import useSettingsStore from '../store/settingsStore';
 import { useCurrency } from '../utils/currency';
 import { optimizeImage } from '../utils/cloudinary';
 import ProductCard from '../components/ProductCard';
-import ImageUploader from '../components/ImageUploader';
+
+
+
 
 // ─── Stars ───────────────────────────────────────────────────────────────────
 function StarInput({ value, onChange }) {
   const [hovered, setHovered] = useState(0);
   return (
-    <div className="flex gap-2">
+    <div style={{ display: 'flex', gap: 8 }}>
       {[1, 2, 3, 4, 5].map((s) => (
-        <button
-          key={s}
-          type="button"
-          onMouseEnter={() => setHovered(s)}
-          onMouseLeave={() => setHovered(0)}
+        <button key={s} type="button" className="star-input"
+          onMouseEnter={() => setHovered(s)} onMouseLeave={() => setHovered(0)}
           onClick={() => onChange(s)}
-          className="bg-transparent border-none cursor-pointer p-0"
-        >
-          <Star size={28} fill={(hovered || value) >= s ? '#C9A96E' : 'none'} stroke={(hovered || value) >= s ? '#C9A96E' : '#D0D0CA'} />
+          style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
+          <Star size={28} fill={(hovered || value) >= s ? '#C9A96E' : 'none'}
+            stroke={(hovered || value) >= s ? '#C9A96E' : '#D0D0CA'} />
         </button>
       ))}
     </div>
@@ -35,9 +35,9 @@ function StarInput({ value, onChange }) {
 
 function StarDisplay({ rating, size = 14 }) {
   return (
-    <div className="flex gap-0.5">
+    <div style={{ display: 'flex', gap: 2 }}>
       {[1, 2, 3, 4, 5].map((s) => (
-        <span key={s} style={{ fontSize: size }} className={s <= Math.round(rating) ? 'text-[#C9A96E]' : 'text-[#E8E8E4]'}>
+        <span key={s} style={{ fontSize: size, color: s <= Math.round(rating) ? '#C9A96E' : '#E8E8E4' }}>
           {s <= Math.round(rating) ? '★' : '☆'}
         </span>
       ))}
@@ -46,21 +46,43 @@ function StarDisplay({ rating, size = 14 }) {
 }
 
 // ─── Image Gallery ───────────────────────────────────────────────────────────
-function Gallery({ images, productName }) {
+function Gallery({ images }) {
   const [active, setActive] = useState(0);
   const [direction, setDirection] = useState(0);
   const [lightboxOpen, setLightboxOpen] = useState(false);
 
   const slideVariants = {
-    enter: (dir) => ({ x: dir > 0 ? '100%' : '-100%', opacity: 0 }),
-    center: { zIndex: 1, x: 0, opacity: 1 },
-    exit: (dir) => ({ zIndex: 0, x: dir < 0 ? '100%' : '-100%', opacity: 0 }),
+    enter: (dir) => ({
+      x: dir > 0 ? '100%' : '-100%',
+      opacity: 0,
+    }),
+    center: {
+      zIndex: 1,
+      x: 0,
+      opacity: 1,
+    },
+    exit: (dir) => ({
+      zIndex: 0,
+      x: dir < 0 ? '100%' : '-100%',
+      opacity: 0,
+    }),
   };
 
   return (
     <>
       <div>
-        <div className="relative aspect-square bg-[#1C1C17] border border-[#2C2C26] rounded-sm overflow-hidden cursor-zoom-in group">
+        {/* Main image */}
+        <div
+          style={{
+            position: 'relative',
+            aspectRatio: '1/1',
+            background: '#1C1C17',
+            border: '1px solid #2C2C26',
+            borderRadius: 2,
+            overflow: 'hidden',
+            cursor: 'zoom-in',
+          }}
+        >
           <AnimatePresence initial={false} custom={direction}>
             <motion.div
               key={active}
@@ -70,19 +92,22 @@ function Gallery({ images, productName }) {
               animate="center"
               exit="exit"
               transition={{ x: { type: 'spring', stiffness: 300, damping: 30 }, opacity: { duration: 0.2 } }}
-              className="absolute inset-0 touch-pan-y"
+              style={{ position: 'absolute', inset: 0, touchAction: 'pan-y' }}
               drag="x"
               dragConstraints={{ left: 0, right: 0 }}
               dragElastic={1}
               onDragEnd={(e, { offset }) => {
                 const swipe = offset.x;
                 if (swipe < -40) {
+                  // Swiped left -> next
                   setDirection(1);
                   setActive(a => (a + 1) % images.length);
                 } else if (swipe > 40) {
+                  // Swiped right -> prev
                   setDirection(-1);
                   setActive(a => (a - 1 + images.length) % images.length);
                 } else {
+                  // Small or no movement -> treat as click
                   setLightboxOpen(true);
                 }
               }}
@@ -91,19 +116,31 @@ function Gallery({ images, productName }) {
                 <img
                   src={images[active].url}
                   alt={images[active].alt || 'Product'}
-                  className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105 pointer-events-none"
+                  style={{
+                    width: '100%', height: '100%', objectFit: 'cover',
+                    transition: 'transform 700ms ease-out',
+                    pointerEvents: 'none',
+                  }}
+                  className="gallery-main-img"
                 />
               ) : (
-                <div className="w-full h-full" style={{ background: images[active]?.bg || '#F8F8F6' }} />
+                <div style={{ width: '100%', height: '100%', background: images[active]?.bg || '#F8F8F6' }} />
               )}
             </motion.div>
           </AnimatePresence>
-          <div className="absolute bottom-3 right-3 font-dm text-[10px] uppercase tracking-[0.08em] text-[#9E9E9E] bg-white/90 px-2 py-1 rounded-sm">
+          <div style={{
+            position: 'absolute', bottom: 12, right: 12,
+            fontFamily: "'DM Sans', sans-serif", fontSize: 10,
+            textTransform: 'uppercase', letterSpacing: '0.08em',
+            color: '#9E9E9E', background: 'rgba(255,255,255,0.9)',
+            padding: '4px 8px', borderRadius: 2,
+          }}>
             Click to zoom
           </div>
         </div>
 
-        <div className="flex gap-3 mt-4 overflow-x-auto pb-1">
+        {/* Thumbnails */}
+        <div style={{ display: 'flex', gap: 12, marginTop: 16, overflowX: 'auto', paddingBottom: 4 }}>
           {images.map((img, i) => (
             <button
               key={i}
@@ -111,18 +148,29 @@ function Gallery({ images, productName }) {
                 setDirection(i > active ? 1 : -1);
                 setActive(i);
               }}
-              className={`w-14 h-14 sm:w-16 sm:h-16 shrink-0 rounded-sm overflow-hidden cursor-pointer bg-[#1C1C17] p-0 transition-colors duration-200 border-2 ${i === active ? 'border-[#C9A96E]' : 'border-transparent hover:border-[#3D3D34]'}`}
+              className="pd-thumb"
+              style={{
+                width: 64, height: 64, flexShrink: 0,
+                borderRadius: 2, overflow: 'hidden',
+                border: i === active ? '2px solid #C9A96E' : '2px solid transparent',
+                cursor: 'pointer', background: '#1C1C17',
+                transition: 'border-color 0.2s ease',
+                padding: 0,
+              }}
+              onMouseEnter={e => { if (i !== active) e.currentTarget.style.borderColor = '#3D3D34'; }}
+              onMouseLeave={e => { if (i !== active) e.currentTarget.style.borderColor = 'transparent'; }}
             >
               {img.url ? (
-                <img src={optimizeImage(img.url, 200)} alt={img.alt || `${productName} Thumbnail ${i + 1}`} loading="lazy" className="w-full h-full object-cover" />
+                <img src={optimizeImage(img.url, 200)} alt={img.alt || `${product.name} Thumbnail ${i + 1}`} loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               ) : (
-                <div className="w-full h-full" style={{ background: img.bg || '#2C2C26' }} />
+                <div style={{ width: '100%', height: '100%', background: img.bg || '#2C2C26' }} />
               )}
             </button>
           ))}
         </div>
       </div>
 
+      {/* Lightbox */}
       <AnimatePresence>
         {lightboxOpen && (
           <motion.div
@@ -130,45 +178,91 @@ function Gallery({ images, productName }) {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="fixed inset-0 bg-[#111111]/95 z-[100] flex items-center justify-center"
+            style={{
+              position: 'fixed', inset: 0,
+              background: 'rgba(17,17,17,0.96)',
+              zIndex: 100,
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+            }}
             onClick={() => setLightboxOpen(false)}
           >
-            <div className="relative max-w-[88vw] max-h-[88vh]" onClick={e => e.stopPropagation()}>
+            <div style={{ position: 'relative', maxWidth: '88vw', maxHeight: '88vh' }} onClick={e => e.stopPropagation()}>
               {images[active]?.url ? (
-                <img src={optimizeImage(images[active].url, 1200)} alt={`${productName} - Detailed View ${active + 1}`} className="max-h-[88vh] max-w-[88vw] object-contain" />
+                <img src={optimizeImage(images[active].url, 1200)} alt={`${product.name} - Detailed View ${active + 1}`} style={{ maxHeight: '88vh', maxWidth: '88vw', objectFit: 'contain' }} />
               ) : (
-                <div className="w-[600px] h-[600px] max-w-[90vw] max-h-[90vh] rounded-sm" style={{ background: images[active]?.bg || '#1C1C17' }} />
+                <div style={{ width: 600, height: 600, maxWidth: '90vw', maxHeight: '90vh', background: images[active]?.bg || '#1C1C17', borderRadius: 2 }} />
               )}
             </div>
 
+            {/* Close */}
             <button
               onClick={() => setLightboxOpen(false)}
-              className="absolute top-6 right-6 w-11 h-11 border border-[#333] rounded-sm bg-transparent text-white cursor-pointer flex items-center justify-center transition-colors duration-200 hover:border-white"
+              style={{
+                position: 'absolute', top: 24, right: 24,
+                width: 44, height: 44,
+                border: '1px solid #333333', borderRadius: 2,
+                background: 'transparent', color: '#FFFFFF',
+                cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                transition: 'border-color 0.2s',
+              }}
+              onMouseEnter={e => { e.currentTarget.style.borderColor = '#FFFFFF'; }}
+              onMouseLeave={e => { e.currentTarget.style.borderColor = '#333333'; }}
             >
               <X size={18} />
             </button>
 
+            {/* Prev */}
             <button
-              onClick={() => { setDirection(-1); setActive(a => Math.max(0, a - 1)); }}
+              onClick={() => {
+                setDirection(-1);
+                setActive(a => Math.max(0, a - 1));
+              }}
               disabled={active === 0}
-              className={`absolute left-6 top-1/2 -translate-y-1/2 w-11 h-11 border border-[#333] rounded-sm bg-transparent text-white flex items-center justify-center transition-colors duration-200 hover:border-white ${active === 0 ? 'opacity-30 cursor-not-allowed' : 'cursor-pointer'}`}
+              style={{
+                position: 'absolute', left: 24, top: '50%', transform: 'translateY(-50%)',
+                width: 44, height: 44,
+                border: '1px solid #333333', borderRadius: 2,
+                background: 'transparent', color: '#FFFFFF',
+                cursor: active === 0 ? 'not-allowed' : 'pointer',
+                opacity: active === 0 ? 0.3 : 1,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                transition: 'border-color 0.2s',
+              }}
             >
               <ChevronLeft size={18} />
             </button>
 
+            {/* Next */}
             <button
-              onClick={() => { setDirection(1); setActive(a => Math.min(images.length - 1, a + 1)); }}
+              onClick={() => {
+                setDirection(1);
+                setActive(a => Math.min(images.length - 1, a + 1));
+              }}
               disabled={active === images.length - 1}
-              className={`absolute right-6 top-1/2 -translate-y-1/2 w-11 h-11 border border-[#333] rounded-sm bg-transparent text-white flex items-center justify-center transition-colors duration-200 hover:border-white ${active === images.length - 1 ? 'opacity-30 cursor-not-allowed' : 'cursor-pointer'}`}
+              style={{
+                position: 'absolute', right: 24, top: '50%', transform: 'translateY(-50%)',
+                width: 44, height: 44,
+                border: '1px solid #333333', borderRadius: 2,
+                background: 'transparent', color: '#FFFFFF',
+                cursor: active === images.length - 1 ? 'not-allowed' : 'pointer',
+                opacity: active === images.length - 1 ? 0.3 : 1,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                transition: 'border-color 0.2s',
+              }}
             >
               <ChevronRight size={18} />
             </button>
           </motion.div>
         )}
       </AnimatePresence>
+
+      <style>{`.gallery-main-img:hover { transform: scale(1.05); }`}</style>
     </>
   );
 }
+
+
+import ImageUploader from '../components/ImageUploader';
 
 // ─── Product Reviews ─────────────────────────────────────────────────────────
 function ProductReviews({ product, reviews, onReviewSubmit }) {
@@ -208,6 +302,7 @@ function ProductReviews({ product, reviews, onReviewSubmit }) {
     }
   };
 
+  // Rating distribution
   const ratingDist = [5, 4, 3, 2, 1].map(r => ({
     star: r,
     count: reviews.filter(rv => Math.round(rv.rating) === r).length,
@@ -215,114 +310,128 @@ function ProductReviews({ product, reviews, onReviewSubmit }) {
   const avgRating = reviews.length ? (reviews.reduce((s, r) => s + r.rating, 0) / reviews.length).toFixed(1) : (product.ratings?.average || 0).toFixed(1);
 
   return (
-    <div>
-      <h3 className="font-cormorant text-[24px] font-medium text-[#F5F0E8] mb-4">Customer Reviews</h3>
+    <div style={{ marginTop: 0, paddingTop: 0 }}>
+      <h3 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 24, fontWeight: 500, color: '#F5F0E8', marginBottom: 16 }}>Customer Reviews</h3>
 
-      {reviews.length > 0 && (
-        <div className="flex gap-6 items-center pb-5 border-b border-[#2C2C26] flex-wrap">
-          <div className="text-center">
-            <div className="font-cormorant text-[clamp(48px,10vw,64px)] font-medium text-[#F5F0E8] leading-none">
-              {avgRating}
-            </div>
-            <StarDisplay rating={parseFloat(avgRating)} size={16} />
-            <p className="font-dm text-[12px] text-[#6B6055] mt-1.5">
-              Based on {reviews.length} reviews
-            </p>
-          </div>
-          <div className="flex-1 min-w-[200px] flex flex-col gap-2">
-            {ratingDist.map(({ star, count }) => (
-              <div key={star} className="flex items-center gap-3">
-                <span className="font-dm text-[12px] text-[#6B6055] w-4 text-right">{star}</span>
-                <div className="flex-1 h-1.5 bg-[#1C1C17] border border-[#2C2C26] rounded-full overflow-hidden">
-                  <div className="h-full bg-[#C9A96E] transition-all duration-600 ease-out" style={{ width: reviews.length ? `${(count / reviews.length) * 100}%` : '0%' }} />
-                </div>
-                <span className="font-dm text-[11px] text-[#6B6055] w-4">{count}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      <div>
-        {reviews.length === 0 ? (
-          <p className="font-dm text-[14px] text-[#6B6055] py-4">
-            No reviews yet. Be the first to review this product!
-          </p>
-        ) : (
-          reviews.map((r, idx) => (
-            <div key={r.id || r._id || idx} className="py-5 border-b border-[#2C2C26]">
-              <div className="flex items-center gap-4">
-                <div className="w-10 h-10 rounded-sm bg-[#1C1C17] border border-[#2C2C26] font-dm font-medium text-[#F5F0E8] text-[14px] flex items-center justify-center shrink-0">
-                  {(r.user?.name || r.name || 'A')[0].toUpperCase()}
-                </div>
-                <div>
-                  <p className="font-dm text-[14px] font-medium text-[#F5F0E8] m-0">
-                    {r.user?.name || r.name || 'Anonymous'}
-                  </p>
-                </div>
-                <p className="font-dm text-[12px] text-[#6B6055] ml-auto">
-                  {r.date || new Date(r.createdAt).toLocaleDateString()}
-                </p>
-              </div>
-              <div className="mt-2.5">
-                <StarDisplay rating={r.rating} size={13} />
-              </div>
-              <p className="font-dm text-[13px] text-[#A89880] leading-[1.7] mt-3">
-                {r.comment}
-              </p>
-              {r.images && r.images.length > 0 && (
-                <div className="flex gap-2 mt-3">
-                  {r.images.map((img, i) => (
-                    <img key={img.publicId || i} src={optimizeImage(img.url, 100)} alt="review attachment" className="w-16 h-16 object-cover rounded-sm border border-[#2C2C26]" />
-                  ))}
+              {/* Summary */}
+              {reviews.length > 0 && (
+                <div style={{
+                  display: 'flex', gap: 24, alignItems: 'center', paddingBottom: 20,
+                  borderBottom: '1px solid #2C2C26', flexWrap: 'wrap',
+                }}>
+                  {/* Left: big score */}
+                  <div style={{ textAlign: 'center' }}>
+                    <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(48px, 10vw, 64px)', fontWeight: 500, color: '#F5F0E8', lineHeight: 1 }}>
+                      {avgRating}
+                    </div>
+                    <StarDisplay rating={parseFloat(avgRating)} size={16} />
+                    <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: '#6B6055', marginTop: 6 }}>
+                      Based on {reviews.length} reviews
+                    </p>
+                  </div>
+                  {/* Right: bars */}
+                  <div style={{ flex: 1, minWidth: 200, display: 'flex', flexDirection: 'column', gap: 8 }}>
+                    {ratingDist.map(({ star, count }) => (
+                      <div key={star} style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                        <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: '#6B6055', width: 16, textAlign: 'right' }}>{star}</span>
+                        <div style={{ flex: 1, height: 6, background: '#1C1C17', border: '1px solid #2C2C26', borderRadius: 9999, overflow: 'hidden' }}>
+                          <div style={{ height: '100%', width: reviews.length ? `${(count / reviews.length) * 100}%` : '0%', background: '#C9A96E', borderRadius: 9999, transition: 'width 0.6s ease' }} />
+                        </div>
+                        <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 11, color: '#6B6055', width: 16 }}>{count}</span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               )}
-            </div>
-          ))
-        )}
-      </div>
 
-      <div className="mt-6 border-t border-[#2C2C26] pt-6">
-        <h3 className="font-cormorant text-[28px] font-medium text-[#F5F0E8] mb-4">
-          Write a Review
-        </h3>
+              {/* Review list */}
+              <div>
+                {reviews.length === 0 ? (
+                  <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: '#6B6055', padding: '16px 0' }}>
+                    No reviews yet. Be the first to review this product!
+                  </p>
+                ) : (
+                  reviews.map((r, idx) => (
+                    <div key={r.id || r._id || idx} style={{ paddingTop: 20, paddingBottom: 20, borderBottom: '1px solid #2C2C26' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+                        <div style={{ width: 40, height: 40, borderRadius: 2, background: '#1C1C17', border: '1px solid #2C2C26', fontFamily: "'DM Sans', sans-serif", fontWeight: 500, color: '#F5F0E8', fontSize: 14, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                          {(r.user?.name || r.name || 'A')[0].toUpperCase()}
+                        </div>
+                        <div>
+                          <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, fontWeight: 500, color: '#F5F0E8', margin: 0 }}>
+                            {r.user?.name || r.name || 'Anonymous'}
+                          </p>
+                        </div>
+                        <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: '#6B6055', marginLeft: 'auto' }}>
+                          {r.date || new Date(r.createdAt).toLocaleDateString()}
+                        </p>
+                      </div>
+                      <div style={{ marginTop: 10 }}>
+                        <StarDisplay rating={r.rating} size={13} />
+                      </div>
+                      <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: '#A89880', lineHeight: 1.7, marginTop: 12 }}>
+                        {r.comment}
+                      </p>
+                      {r.images && r.images.length > 0 && (
+                        <div style={{ display: 'flex', gap: 8, marginTop: 12 }}>
+                          {r.images.map((img, i) => (
+                            <img key={img.publicId || i} src={optimizeImage(img.url, 100)} alt="review attachment" style={{ width: 64, height: 64, objectFit: 'cover', borderRadius: 2, border: '1px solid #2C2C26' }} />
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  ))
+                )}
+              </div>
 
-        {!user && (
-          <div className="mb-4">
-            <label className="font-dm text-[10px] font-medium uppercase tracking-[0.08em] text-[#6B6055] block mb-1.5">Your Phone Number</label>
-            <input type="tel" value={reviewForm.phone} onChange={e => setReviewForm(f => ({ ...f, phone: e.target.value }))} placeholder="Enter phone number used in your order" className="w-full box-border bg-[#1C1C17] border border-[#2C2C26] rounded-sm px-4 py-3 font-dm text-[14px] text-[#F5F0E8] outline-none transition-colors duration-200 focus:border-[#C9A96E]" />
-            <p className="font-dm text-[11px] text-[#6B6055] mt-1.5">We'll fetch your name from your order automatically</p>
-          </div>
-        )}
+              {/* Write Review Form */}
+              <div style={{ marginTop: 24, borderTop: '1px solid #2C2C26', paddingTop: 24 }}>
+                <h3 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 28, fontWeight: 500, color: '#F5F0E8', marginBottom: 16 }}>
+                  Write a Review
+                </h3>
 
-        <div className="mb-4">
-          <label className="font-dm text-[10px] font-medium uppercase tracking-[0.08em] text-[#6B6055] block mb-2">Your Rating</label>
-          <StarInput value={reviewForm.rating} onChange={r => setReviewForm(f => ({ ...f, rating: r }))} />
-        </div>
+                {/* Phone number for guests */}
+                {!user && (
+                  <div style={{ marginBottom: 16 }}>
+                    <label style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 10, fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#6B6055', display: 'block', marginBottom: 6 }}>Your Phone Number</label>
+                    <input type="tel" value={reviewForm.phone} onChange={e => setReviewForm(f => ({ ...f, phone: e.target.value }))} placeholder="Enter phone number used in your order" style={{ width: '100%', boxSizing: 'border-box', background: '#1C1C17', border: '1px solid #2C2C26', borderRadius: 2, padding: '12px 16px', fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: '#F5F0E8', outline: 'none', transition: 'border-color 0.2s' }} onFocus={e => { e.target.style.borderColor = '#C9A96E'; }} onBlur={e => { e.target.style.borderColor = '#2C2C26'; }} />
+                    <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 11, color: '#6B6055', marginTop: 6 }}>We'll fetch your name from your order automatically</p>
+                  </div>
+                )}
 
-        <div className="mb-4">
-          <label className="font-dm text-[10px] font-medium uppercase tracking-[0.08em] text-[#6B6055] block mb-1.5">Your Review</label>
-          <textarea value={reviewForm.comment} onChange={e => setReviewForm(f => ({ ...f, comment: e.target.value }))} placeholder="Share your experience with this product..." rows={4} className="w-full box-border bg-[#1C1C17] border border-[#2C2C26] rounded-sm px-4 py-3 font-dm text-[14px] text-[#F5F0E8] outline-none resize-y transition-colors duration-200 focus:border-[#C9A96E]" />
-        </div>
+                {/* Star selector */}
+                <div style={{ marginBottom: 16 }}>
+                  <label style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 10, fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#6B6055', display: 'block', marginBottom: 8 }}>Your Rating</label>
+                  <StarInput value={reviewForm.rating} onChange={r => setReviewForm(f => ({ ...f, rating: r }))} />
+                </div>
 
-        <div className="mb-6">
-          <label className="font-dm text-[10px] font-medium uppercase tracking-[0.08em] text-[#6B6055] block mb-2">Photos (Optional)</label>
-          <ImageUploader images={images} setImages={setImages} maxImages={3} maxSizeMB={3} />
-        </div>
+                {/* Comment */}
+                <div style={{ marginBottom: 16 }}>
+                  <label style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 10, fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#6B6055', display: 'block', marginBottom: 6 }}>Your Review</label>
+                  <textarea value={reviewForm.comment} onChange={e => setReviewForm(f => ({ ...f, comment: e.target.value }))} placeholder="Share your experience with this product..." rows={4} style={{ width: '100%', boxSizing: 'border-box', background: '#1C1C17', border: '1px solid #2C2C26', borderRadius: 2, padding: '12px 16px', fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: '#F5F0E8', outline: 'none', resize: 'vertical', transition: 'border-color 0.2s' }} onFocus={e => { e.target.style.borderColor = '#C9A96E'; }} onBlur={e => { e.target.style.borderColor = '#2C2C26'; }} />
+                </div>
 
-        {reviewMsg.text && (
-          <p className={`font-dm text-[13px] mb-4 ${reviewMsg.type === 'error' ? 'text-[#C0392B]' : 'text-[#2D6A4F]'}`}>
-            {reviewMsg.text}
-          </p>
-        )}
+                {/* Images */}
+                <div style={{ marginBottom: 24 }}>
+                  <label style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 10, fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#6B6055', display: 'block', marginBottom: 8 }}>Photos (Optional)</label>
+                  <ImageUploader images={images} setImages={setImages} maxImages={3} maxSizeMB={3} />
+                </div>
 
-        <button onClick={handleSubmitReview} disabled={isSubmitting} className={`bg-[#F5F0E8] border-none rounded-sm text-[#0D0D0B] px-7 py-3 font-dm text-[13px] font-medium uppercase tracking-[0.06em] transition-colors duration-200 ${isSubmitting ? 'bg-[#3D3D34] cursor-not-allowed' : 'cursor-pointer hover:bg-[#C9A96E]'}`}>
-          {isSubmitting ? 'Submitting…' : 'Submit Review'}
-        </button>
-      </div>
+                {reviewMsg.text && (
+                  <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, marginBottom: 16, color: reviewMsg.type === 'error' ? '#C0392B' : '#2D6A4F' }}>
+                    {reviewMsg.text}
+                  </p>
+                )}
+
+                <button onClick={handleSubmitReview} disabled={isSubmitting} style={{ background: isSubmitting ? '#3D3D34' : '#F5F0E8', border: 'none', borderRadius: 2, color: '#0D0D0B', padding: '12px 28px', fontFamily: "'DM Sans', sans-serif", fontSize: 13, fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.06em', cursor: isSubmitting ? 'not-allowed' : 'pointer', transition: 'background 0.2s' }} onMouseEnter={e => { if (!isSubmitting) e.currentTarget.style.background = '#C9A96E'; }} onMouseLeave={e => { if (!isSubmitting) e.currentTarget.style.background = '#F5F0E8'; }}>
+                  {isSubmitting ? 'Submitting…' : 'Submit Review'}
+                </button>
+              </div>
     </div>
   );
 }
+
+
 
 // ─── Main Component ───────────────────────────────────────────────────────────
 export default function ProductDetail() {
@@ -342,8 +451,10 @@ export default function ProductDetail() {
   const { addItem } = useCartStore();
   const navigate = useNavigate();
 
+
   const DEFAULT_GRADIENT = 'linear-gradient(135deg,#667eea,#764ba2)';
 
+  // ── Fetch logic unchanged ──
   useEffect(() => {
     const fetchProduct = async () => {
       setLoading(true);
@@ -386,30 +497,34 @@ export default function ProductDetail() {
     fetchProduct();
   }, [id]);
 
+  // ── Loading state ──
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#0D0D0B]">
-        <div className="flex flex-col items-center gap-4">
-          <div className="w-10 h-10 border-2 border-[#2C2C26] border-t-[#C9A96E] rounded-full animate-spin" />
-          <p className="font-dm text-[13px] text-[#6B6055]">Loading product…</p>
+      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#0D0D0B' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16 }}>
+          <div style={{ width: 40, height: 40, border: '2px solid #2C2C26', borderTopColor: '#C9A96E', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
+          <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: '#6B6055' }}>Loading product…</p>
+          <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
         </div>
       </div>
     );
   }
 
+  // ── Not found state ──
   if (!product) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#0D0D0B]">
-        <div className="flex flex-col items-center gap-4">
-          <p className="font-cormorant text-[24px] text-[#C9A96E]">Product Not Found</p>
-          <p className="font-dm text-[14px] text-[#6B6055]">The item you are looking for does not exist or has been removed.</p>
-          <Link to="/products" className="mt-4 px-6 py-2.5 bg-[#C9A96E] text-[#0D0D0B] no-underline rounded-sm font-dm text-[13px] font-medium transition-colors hover:bg-[#A07840]">
+      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#0D0D0B' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16 }}>
+          <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 24, color: '#C9A96E' }}>Product Not Found</p>
+          <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: '#6B6055' }}>The item you are looking for does not exist or has been removed.</p>
+          <Link to="/products" style={{ marginTop: 16, padding: '10px 24px', background: '#C9A96E', color: '#0D0D0B', textDecoration: 'none', borderRadius: 2, fontFamily: "'DM Sans', sans-serif", fontSize: 13, fontWeight: 500 }}>
             Browse Products
           </Link>
         </div>
       </div>
     );
   }
+
 
   const discountPct = product.comparePrice > product.price
     ? Math.round(((product.comparePrice - product.price) / product.comparePrice) * 100)
@@ -431,97 +546,168 @@ export default function ProductDetail() {
   const relatedSlides = Math.ceil(relatedProducts.length / ITEMS_PER_SLIDE);
 
   return (
-    <div className="bg-[#0D0D0B] min-h-screen pt-24">
+    <div style={{ background: '#0D0D0B', minHeight: '100vh', paddingTop: 96 }}>
       <Helmet>
         <title>{product.metaTitle || product.name} | {settings?.siteName || 'Store'}</title>
         <meta name="description" content={product.metaDescription || product.description?.slice(0, 155) || `Buy ${product.name} at ${settings?.siteName || 'our store'}`} />
         {product.metaKeywords && <meta name="keywords" content={product.metaKeywords} />}
         <link rel="canonical" href={`https://www.crafthid.com${window.location.pathname}`} />
+        <meta property="og:title" content={`${product.metaTitle || product.name} | ${settings?.siteName || 'Store'}`} />
+        <meta property="og:description" content={product.metaDescription || product.description?.slice(0, 155) || ''} />
+        <meta property="og:type" content="product" />
+        <meta property="og:url" content={window.location.origin + `/products/${product.slug || product._id}`} />
+        {product.images?.[0]?.url && <meta property="og:image" content={product.images[0].url} />}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={product.metaTitle || product.name} />
+        {product.images?.[0]?.url && <meta name="twitter:image" content={product.images[0].url} />}
+        <script type="application/ld+json">{JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Product",
+          "name": product.name,
+          "description": product.metaDescription || product.description?.slice(0, 500) || '',
+          "image": product.images?.map(img => img.url) || [],
+          "brand": { "@type": "Brand", "name": settings?.siteName || 'CRAFT HID' },
+          "sku": product._id,
+          "category": typeof product.category === 'object' ? product.category?.name : product.category,
+          "offers": {
+            "@type": "Offer",
+            "price": product.price,
+            "priceCurrency": settings?.currency || 'PKR',
+            "availability": product.stock > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
+            "url": window.location.origin + `/products/${product.slug || product._id}`,
+            "itemCondition": "https://schema.org/NewCondition"
+          },
+          ...(product.ratings?.count > 0 ? {
+            "aggregateRating": {
+              "@type": "AggregateRating",
+              "ratingValue": product.ratings.average,
+              "reviewCount": product.ratings.count
+            }
+          } : {})
+        })}</script>
       </Helmet>
 
-      <div className="max-w-[1280px] mx-auto px-4 sm:px-6 py-6 sm:py-8">
+      <div className="pd-container" style={{ maxWidth: 1280, margin: '0 auto', padding: '24px 16px' }}>
         {/* Breadcrumb */}
-        <div className="flex items-center gap-2 mb-5 overflow-hidden whitespace-nowrap text-ellipsis">
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 20, overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>
           {[{ label: 'Home', to: '/' }, { label: 'Products', to: '/products' }].map((item, i) => (
-            <span key={item.to} className="flex items-center gap-2">
-              <Link to={item.to} className="font-dm text-[12px] uppercase tracking-[0.06em] text-[#6B6055] no-underline transition-colors hover:text-[#F5F0E8]">
+            <span key={item.to} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <Link to={item.to} style={{
+                fontFamily: "'DM Sans', sans-serif", fontSize: 12,
+                textTransform: 'uppercase', letterSpacing: '0.06em',
+                color: '#6B6055', textDecoration: 'none', transition: 'color 0.2s',
+              }}
+                onMouseEnter={e => { e.currentTarget.style.color = '#F5F0E8'; }}
+                onMouseLeave={e => { e.currentTarget.style.color = '#6B6055'; }}
+              >
                 {item.label}
               </Link>
-              <span className="text-[#2C2C26] font-dm">/</span>
+              <span style={{ color: '#2C2C26', fontFamily: "'DM Sans', sans-serif" }}>/</span>
             </span>
           ))}
-          <span className="font-dm text-[12px] uppercase tracking-[0.06em] text-[#F5F0E8] overflow-hidden text-ellipsis whitespace-nowrap max-w-[50vw]">
+          <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#F5F0E8', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '50vw' }}>
             {product.name}
           </span>
         </div>
 
         {/* Two-column grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+        <div className="pd-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 32 }}>
           {/* LEFT: Gallery */}
-          <Gallery images={product.images} productName={product.name} />
+          <Gallery images={product.images} />
 
           {/* RIGHT: Product info */}
           <div>
-            <p className="font-dm text-[10px] uppercase tracking-[0.1em] text-[#6B6055] mb-3">
+            {/* Category / Brand */}
+            <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.1em', color: '#6B6055', marginBottom: 12 }}>
               {product.brand}
             </p>
 
-            <h1 className="font-cormorant text-[clamp(24px,5vw,40px)] font-medium text-[#F5F0E8] leading-[1.15] m-0">
+            {/* Name */}
+            <h1 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(24px, 5vw, 40px)', fontWeight: 500, color: '#F5F0E8', lineHeight: 1.15, margin: 0 }}>
               {product.name}
             </h1>
 
-            <div className="flex items-center gap-2.5 mt-3.5">
+            {/* Rating */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginTop: 14 }}>
               <StarDisplay rating={product.ratings.average} size={15} />
-              <span className="font-dm text-[12px] text-[#6B6055] cursor-pointer underline underline-offset-2">
+              <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: '#6B6055', cursor: 'pointer', textDecoration: 'underline', textUnderlineOffset: 2 }}>
                 ({product.ratings.count.toLocaleString()} reviews)
               </span>
             </div>
 
-            <div className="border-y border-[#2C2C26] py-3.5 mt-3.5 flex items-center gap-3 flex-wrap">
-              <span className={`font-dm text-[28px] font-semibold ${discountPct ? 'text-[#C9A96E]' : 'text-[#F5F0E8]'}`}>
+            {/* Price block */}
+            <div style={{ borderTop: '1px solid #2C2C26', borderBottom: '1px solid #2C2C26', padding: '14px 0', marginTop: 14, display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
+              <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 28, fontWeight: 600, color: discountPct ? '#C9A96E' : '#F5F0E8' }}>
                 {formatPrice(product.price)}
               </span>
               {product.comparePrice > product.price && (
                 <>
-                  <span className="font-dm text-[18px] text-[#6B6055] line-through">
+                  <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 18, color: '#6B6055', textDecoration: 'line-through' }}>
                     {formatPrice(product.comparePrice)}
                   </span>
-                  <span className="font-dm text-[12px] font-bold text-[#0D0D0B] bg-[#C9A96E] px-2.5 py-1 rounded-sm">
+                  <span style={{
+                    fontFamily: "'DM Sans', sans-serif", fontSize: 12, fontWeight: 700,
+                    color: '#0D0D0B', background: '#C9A96E',
+                    padding: '3px 10px', borderRadius: 2,
+                  }}>
                     {discountPct}% OFF
                   </span>
                 </>
               )}
             </div>
 
+            {/* Colors */}
             {product.colors.length > 0 && (
-              <div className="mt-4">
-                <label className="font-dm text-[10px] font-medium uppercase tracking-[0.08em] text-[#6B6055] block mb-2.5">
+              <div style={{ marginTop: 16 }}>
+                <label style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 10, fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#6B6055', display: 'block', marginBottom: 10 }}>
                   Colour: {product.colors[selectedColor]}
                 </label>
-                <div className="flex gap-2.5">
+                <div style={{ display: 'flex', gap: 10 }}>
                   {product.colors.map((c, i) => (
                     <button
                       key={i}
                       onClick={() => setSelectedColor(i)}
-                      className={`w-11 h-11 rounded-full border-2 border-transparent cursor-pointer transition-transform duration-150 hover:scale-110 ${selectedColor === i ? 'outline outline-2 outline-[#C9A96E] outline-offset-2' : 'outline-none'}`}
-                      style={{ background: c }}
+                      style={{
+                        width: 32, height: 32, borderRadius: '50%',
+                        background: c,
+                        border: '2px solid transparent',
+                        cursor: 'pointer',
+                        outline: selectedColor === i ? '2px solid #C9A96E' : 'none',
+                        outlineOffset: 3,
+                        transition: 'transform 0.15s ease',
+                        minWidth: 44, minHeight: 44,
+                      }}
+                      onMouseEnter={e => { e.currentTarget.style.transform = 'scale(1.1)'; }}
+                      onMouseLeave={e => { e.currentTarget.style.transform = 'scale(1)'; }}
                     />
                   ))}
                 </div>
               </div>
             )}
 
+            {/* Sizes */}
             {product.sizes.length > 0 && (
-              <div className="mt-3.5">
-                <label className="font-dm text-[10px] font-medium uppercase tracking-[0.08em] text-[#6B6055] block mb-2.5">
+              <div style={{ marginTop: 14 }}>
+                <label style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 10, fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#6B6055', display: 'block', marginBottom: 10 }}>
                   Size:
                 </label>
-                <div className="flex gap-2 flex-wrap">
+                <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
                   {product.sizes.map(s => (
                     <button
                       key={s}
                       onClick={() => setSelectedSize(s)}
-                      className={`border rounded-sm px-4 min-h-[44px] font-dm text-[13px] cursor-pointer transition-colors duration-150 ${selectedSize === s ? 'border-[#C9A96E] bg-[#C9A96E] text-[#0D0D0B]' : 'border-[#2C2C26] bg-transparent text-[#A89880] hover:border-[#3D3D34] hover:text-[#F5F0E8]'}`}
+                      style={{
+                        border: selectedSize === s ? '1px solid #C9A96E' : '1px solid #2C2C26',
+                        borderRadius: 2,
+                        padding: '10px 16px', minHeight: 44,
+                        fontFamily: "'DM Sans', sans-serif", fontSize: 13,
+                        background: selectedSize === s ? '#C9A96E' : 'transparent',
+                        color: selectedSize === s ? '#0D0D0B' : '#A89880',
+                        cursor: 'pointer',
+                        transition: 'all 0.15s ease',
+                      }}
+                      onMouseEnter={e => { if (selectedSize !== s) { e.currentTarget.style.borderColor = '#3D3D34'; e.currentTarget.style.color = '#F5F0E8'; } }}
+                      onMouseLeave={e => { if (selectedSize !== s) { e.currentTarget.style.borderColor = '#2C2C26'; e.currentTarget.style.color = '#A89880'; } }}
                     >
                       {s}
                     </button>
@@ -530,34 +716,47 @@ export default function ProductDetail() {
               </div>
             )}
 
-            <div className="mt-3.5">
-              <label className="font-dm text-[10px] font-medium uppercase tracking-[0.08em] text-[#6B6055] block mb-2.5">
+            {/* Quantity */}
+            <div style={{ marginTop: 14 }}>
+              <label style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 10, fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#6B6055', display: 'block', marginBottom: 10 }}>
                 Quantity:
               </label>
-              <div className="flex items-center border border-[#2C2C26] rounded-sm w-fit">
+              <div style={{ display: 'flex', alignItems: 'center', border: '1px solid #2C2C26', borderRadius: 2, width: 'fit-content' }}>
                 <button
                   onClick={() => setQty(q => Math.max(1, q - 1))}
-                  className="w-11 h-11 bg-transparent border-none cursor-pointer text-[#A89880] text-[18px] flex items-center justify-center transition-colors hover:text-[#F5F0E8] hover:bg-[#1C1C17]"
+                  style={{ width: 44, height: 44, background: 'transparent', border: 'none', cursor: 'pointer', color: '#A89880', fontSize: 18, display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.15s' }}
+                  onMouseEnter={e => { e.currentTarget.style.color = '#F5F0E8'; e.currentTarget.style.background = '#1C1C17'; }}
+                  onMouseLeave={e => { e.currentTarget.style.color = '#A89880'; e.currentTarget.style.background = 'transparent'; }}
                 >
                   −
                 </button>
-                <span className="w-12 text-center font-dm font-medium text-[#F5F0E8] text-[15px] border-x border-[#2C2C26]">
+                <span style={{ width: 48, textAlign: 'center', fontFamily: "'DM Sans', sans-serif", fontWeight: 500, color: '#F5F0E8', fontSize: 15, borderLeft: '1px solid #2C2C26', borderRight: '1px solid #2C2C26' }}>
                   {qty}
                 </span>
                 <button
                   onClick={() => setQty(q => Math.min(product.stock, q + 1))}
-                  className="w-11 h-11 bg-transparent border-none cursor-pointer text-[#A89880] text-[18px] flex items-center justify-center transition-colors hover:text-[#F5F0E8] hover:bg-[#1C1C17]"
+                  style={{ width: 44, height: 44, background: 'transparent', border: 'none', cursor: 'pointer', color: '#A89880', fontSize: 18, display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.15s' }}
+                  onMouseEnter={e => { e.currentTarget.style.color = '#F5F0E8'; e.currentTarget.style.background = '#1C1C17'; }}
+                  onMouseLeave={e => { e.currentTarget.style.color = '#A89880'; e.currentTarget.style.background = 'transparent'; }}
                 >
                   +
                 </button>
               </div>
             </div>
 
-            <p className={`font-dm text-[12px] uppercase tracking-[0.06em] mt-3 ${product.stock > 0 ? 'text-[#2D6A4F]' : 'text-[#C0392B]'}`}>
+            {/* Stock indicator */}
+            <p style={{
+              fontFamily: "'DM Sans', sans-serif", fontSize: 12,
+              textTransform: 'uppercase', letterSpacing: '0.06em',
+              color: product.stock > 0 ? '#2D6A4F' : '#C0392B',
+              marginTop: 12,
+            }}>
               {product.stock > 0 ? `● In Stock (${product.stock} left)` : '● Out of Stock'}
             </p>
 
-            <div className="mt-4 flex flex-col gap-2.5">
+            {/* Action buttons */}
+            <div style={{ marginTop: 16 }}>
+              {/* Add to cart */}
               <AnimatePresence mode="wait">
                 {addedAnim ? (
                   <motion.div
@@ -565,7 +764,13 @@ export default function ProductDetail() {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    className="w-full py-4 rounded-sm bg-[#2D6A4F] text-white font-dm text-[13px] font-medium uppercase tracking-[0.06em] flex items-center justify-center gap-2"
+                    style={{
+                      width: '100%', padding: '16px 0', borderRadius: 2,
+                      background: '#2D6A4F', color: '#FFFFFF',
+                      fontFamily: "'DM Sans', sans-serif", fontSize: 13, fontWeight: 500,
+                      textTransform: 'uppercase', letterSpacing: '0.06em',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+                    }}
                   >
                     <Check size={16} /> Added to Cart!
                   </motion.div>
@@ -574,24 +779,56 @@ export default function ProductDetail() {
                     key="add"
                     onClick={handleAddToCart}
                     disabled={product.stock === 0}
-                    className={`w-full py-4 rounded-sm border-none font-dm text-[13px] font-medium uppercase tracking-[0.06em] flex items-center justify-center gap-2 transition-colors duration-200 ${product.stock === 0 ? 'bg-[#3D3D34] text-[#0D0D0B] cursor-not-allowed' : 'bg-[#F5F0E8] text-[#0D0D0B] cursor-pointer hover:bg-[#C9A96E]'}`}
+                    style={{
+                      width: '100%', padding: '16px 0', borderRadius: 2,
+                      background: product.stock === 0 ? '#3D3D34' : '#F5F0E8',
+                      border: 'none', color: '#0D0D0B',
+                      fontFamily: "'DM Sans', sans-serif", fontSize: 13, fontWeight: 500,
+                      textTransform: 'uppercase', letterSpacing: '0.06em',
+                      cursor: product.stock === 0 ? 'not-allowed' : 'pointer',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+                      transition: 'background 0.2s ease',
+                    }}
+                    onMouseEnter={e => { if (product.stock > 0) e.currentTarget.style.background = '#C9A96E'; }}
+                    onMouseLeave={e => { if (product.stock > 0) e.currentTarget.style.background = '#F5F0E8'; }}
                   >
                     <ShoppingCart size={16} /> Add to Cart
                   </motion.button>
                 )}
               </AnimatePresence>
 
+              {/* Buy Now button */}
               <motion.button
                 onClick={handleBuyNow}
                 disabled={product.stock === 0}
                 whileTap={{ scale: 0.97 }}
-                className={`w-full py-4 rounded-sm border-none text-white font-dm text-[13px] font-medium uppercase tracking-[0.06em] flex items-center justify-center gap-2 transition-colors duration-200 ${product.stock === 0 ? 'bg-[#3D3D34] opacity-40 cursor-not-allowed' : 'bg-[#C9A96E] cursor-pointer hover:bg-[#A07840]'}`}
+                style={{
+                  width: '100%', padding: '16px 0', borderRadius: 2,
+                  background: product.stock === 0 ? '#3D3D34' : '#C9A96E',
+                  border: 'none', color: '#fff',
+                  fontFamily: "'DM Sans', sans-serif", fontSize: 13, fontWeight: 500,
+                  textTransform: 'uppercase', letterSpacing: '0.06em',
+                  cursor: product.stock === 0 ? 'not-allowed' : 'pointer',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+                  transition: 'background 0.2s ease',
+                  opacity: product.stock === 0 ? 0.4 : 1,
+                  marginTop: 10,
+                }}
+                onMouseEnter={e => { if (product.stock > 0) e.currentTarget.style.background = '#A07840'; }}
+                onMouseLeave={e => { if (product.stock > 0) e.currentTarget.style.background = '#C9A96E'; }}
               >
                 Buy Now
               </motion.button>
 
-              <div className="flex gap-3 mt-1">
-                <button
+              {/* Share */}
+              <div style={{ display: 'flex', gap: 12, marginTop: 12 }}>
+                <button style={{
+                  width: 44, height: 44, borderRadius: 2,
+                  border: '1px solid #2C2C26', background: 'transparent',
+                  color: '#A89880', cursor: 'pointer',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  transition: 'all 0.2s ease', flexShrink: 0,
+                }}
                   onClick={async () => {
                     const shareUrl = `${window.location.origin}/share/product/${product.slug}`;
                     const shareData = {
@@ -600,62 +837,84 @@ export default function ProductDetail() {
                       url: shareUrl,
                     };
                     try {
-                      if (navigator.share) await navigator.share(shareData);
-                      else {
+                      if (navigator.share) {
+                        await navigator.share(shareData);
+                      } else {
                         await navigator.clipboard.writeText(shareUrl);
                         alert('Link copied to clipboard!');
                       }
-                    } catch (err) {}
+                    } catch (err) {
+                      // User cancelled share or error
+                    }
                   }}
-                  className="w-11 h-11 shrink-0 rounded-sm border border-[#2C2C26] bg-transparent text-[#A89880] cursor-pointer flex items-center justify-center transition-colors duration-200 hover:border-[#E8E8E4] hover:text-[#6B6B6B]"
+                  onMouseLeave={e => { e.currentTarget.style.borderColor = '#E8E8E4'; e.currentTarget.style.color = '#6B6B6B'; }}
                 >
                   <Share2 size={15} />
                 </button>
               </div>
             </div>
 
-            <div className="border-t border-[#2C2C26] mt-4 pt-4 flex flex-col gap-2">
+
+
+            {/* Highlights */}
+            <div style={{ borderTop: '1px solid #2C2C26', marginTop: 16, paddingTop: 16, display: 'flex', flexDirection: 'column', gap: 8 }}>
               {[
                 { icon: <Check size={15} />, text: 'Free Delivery All Over Pakistan' },
                 { icon: <Truck size={15} />, text: 'Cash on delivery available nationwide' },
                 { icon: <Shield size={15} />, text: '100% authentic, sourced from brand' },
               ].map((item, i) => (
-                <div key={i} className="flex items-center gap-3">
-                  <span className="text-[#C9A96E] shrink-0">{item.icon}</span>
-                  <span className="font-dm text-[13px] text-[#A89880]">{item.text}</span>
+                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                  <span style={{ color: '#C9A96E', flexShrink: 0 }}>{item.icon}</span>
+                  <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: '#A89880' }}>{item.text}</span>
                 </div>
               ))}
             </div>
           </div>
         </div>
 
-        <div className="border-t border-[#2C2C26] mt-10" />
-        <section className="py-7">
+        {/* ── Reviews Section ── */}
+        <div style={{ borderTop: '1px solid #2C2C26' }} />
+        <section style={{ maxWidth: 1280, margin: '0 auto', padding: '28px 16px' }}>
           <ProductReviews product={product} reviews={reviews} onReviewSubmit={() => {}} />
         </section>
 
-        <div className="border-t border-[#2C2C26]" />
-        <section className="py-7">
-          <h3 className="font-cormorant text-[clamp(32px,5vw,40px)] font-medium text-[#F5F0E8] mb-4">
+        {/* ── Description Section ── */}
+        <div style={{ borderTop: '1px solid #2C2C26' }} />
+        <section style={{ maxWidth: 1280, margin: '0 auto', padding: '28px 16px' }}>
+          <h3 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(32px, 5vw, 40px)', fontWeight: 500, color: '#F5F0E8', marginBottom: 16 }}>
             Description
           </h3>
-          <p className="font-dm text-[14px] text-[#A89880] leading-[1.5] max-w-[680px]">
+          <p style={{
+            fontFamily: "'DM Sans', sans-serif",
+            fontSize: 14,
+            color: '#A89880',
+            lineHeight: 1.5,
+            maxWidth: 680,
+          }}>
             {product.description}
           </p>
         </section>
 
+        {/* ── Specifications Section ── */}
         {Object.keys(product.specs || {}).length > 0 && (
           <>
-            <div className="border-t border-[#2C2C26]" />
-            <section className="py-7">
-              <h3 className="font-cormorant text-[clamp(32px,5vw,40px)] font-medium text-[#F5F0E8] mb-4">
+            <div style={{ borderTop: '1px solid #2C2C26' }} />
+            <section style={{ maxWidth: 1280, margin: '0 auto', padding: '28px 16px' }}>
+              <h3 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(32px, 5vw, 40px)', fontWeight: 500, color: '#F5F0E8', marginBottom: 16 }}>
                 Details & Specifications
               </h3>
-              <div className="grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-[2px] max-w-[700px]">
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 2, maxWidth: 700 }}>
                 {Object.entries(product.specs || {}).map(([k, v], i) => (
-                  <div key={k} className={`flex justify-between items-center px-4 py-3 border border-[#2C2C26] ${i % 2 === 0 ? 'bg-[#1C1C17]' : 'bg-[#141410]'}`}>
-                    <span className="font-dm text-[13px] text-[#6B6055]">{k}</span>
-                    <span className="font-dm text-[13px] font-medium text-[#F5F0E8]">{v}</span>
+                  <div key={k} style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    padding: '12px 16px',
+                    background: i % 2 === 0 ? '#1C1C17' : '#141410',
+                    border: '1px solid #2C2C26',
+                  }}>
+                    <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: '#6B6055' }}>{k}</span>
+                    <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, fontWeight: 500, color: '#F5F0E8' }}>{v}</span>
                   </div>
                 ))}
               </div>
@@ -663,29 +922,34 @@ export default function ProductDetail() {
           </>
         )}
 
+        {/* Related Products */}
         {relatedProducts.length > 0 && (
-          <div className="mt-10 bg-[#141410] -mx-4 sm:-mx-6 px-4 sm:px-6 py-7">
-            <div className="flex justify-between items-center mb-5">
+          <div style={{ marginTop: 40, background: '#141410', marginLeft: -16, marginRight: -16, padding: '28px 16px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
               <div>
-                <p className="font-dm text-[11px] font-medium uppercase tracking-[0.12em] text-[#C9A96E] mb-2">
+                <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 11, fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.12em', color: '#C9A96E', marginBottom: 8 }}>
                   You May Also Like
                 </p>
-                <h2 className="font-cormorant text-[32px] font-medium text-[#F5F0E8] m-0">
+                <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 32, fontWeight: 500, color: '#F5F0E8', margin: 0 }}>
                   Related Products
                 </h2>
               </div>
-              <div className="flex gap-2">
+              <div style={{ display: 'flex', gap: 8 }}>
                 <button
                   onClick={() => setRelatedPage(p => Math.max(0, p - 1))}
                   disabled={relatedPage === 0}
-                  className={`w-11 h-11 border rounded-sm flex items-center justify-center transition-colors duration-150 ${relatedPage === 0 ? 'border-[#2C2C26] bg-[#1C1C17] text-[#A89880] opacity-35 cursor-not-allowed' : 'border-[#2C2C26] bg-[#1C1C17] text-[#A89880] cursor-pointer hover:border-[#C9A96E] hover:text-[#C9A96E]'}`}
+                  style={{ width: 44, height: 44, border: '1px solid #2C2C26', borderRadius: 2, background: '#1C1C17', color: '#A89880', cursor: relatedPage === 0 ? 'not-allowed' : 'pointer', opacity: relatedPage === 0 ? 0.35 : 1, display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.15s' }}
+                  onMouseEnter={e => { if (relatedPage > 0) { e.currentTarget.style.borderColor = '#C9A96E'; e.currentTarget.style.color = '#C9A96E'; } }}
+                  onMouseLeave={e => { e.currentTarget.style.borderColor = '#2C2C26'; e.currentTarget.style.color = '#A89880'; }}
                 >
                   <ChevronLeft size={16} />
                 </button>
                 <button
                   onClick={() => setRelatedPage(p => Math.min(relatedSlides - 1, p + 1))}
                   disabled={relatedPage >= relatedSlides - 1}
-                  className={`w-11 h-11 border rounded-sm flex items-center justify-center transition-colors duration-150 ${relatedPage >= relatedSlides - 1 ? 'border-[#2C2C26] bg-[#1C1C17] text-[#A89880] opacity-35 cursor-not-allowed' : 'border-[#2C2C26] bg-[#1C1C17] text-[#A89880] cursor-pointer hover:border-[#C9A96E] hover:text-[#C9A96E]'}`}
+                  style={{ width: 44, height: 44, border: '1px solid #2C2C26', borderRadius: 2, background: '#1C1C17', color: '#A89880', cursor: relatedPage >= relatedSlides - 1 ? 'not-allowed' : 'pointer', opacity: relatedPage >= relatedSlides - 1 ? 0.35 : 1, display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.15s' }}
+                  onMouseEnter={e => { if (relatedPage < relatedSlides - 1) { e.currentTarget.style.borderColor = '#C9A96E'; e.currentTarget.style.color = '#C9A96E'; } }}
+                  onMouseLeave={e => { e.currentTarget.style.borderColor = '#2C2C26'; e.currentTarget.style.color = '#A89880'; }}
                 >
                   <ChevronRight size={16} />
                 </button>
@@ -699,6 +963,18 @@ export default function ProductDetail() {
           </div>
         )}
       </div>
+
+      {/* Responsive */}
+      <style>{`
+  .pd-container { padding: 24px 16px; }
+  @media (min-width: 768px) { .pd-container { padding: 32px 24px; } }
+  @media (max-width: 1023px) {
+    .pd-grid { grid-template-columns: 1fr !important; gap: 32px !important; }
+  }
+  @media (max-width: 639px) { 
+    .pd-thumb { width: 56px !important; height: 56px !important; }
+  }
+      `}</style>
     </div>
   );
 }

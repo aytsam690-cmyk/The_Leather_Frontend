@@ -9,9 +9,9 @@ import { optimizeImage } from '../utils/cloudinary';
 
 function Stars({ rating }) {
   return (
-    <div className="flex items-center gap-0.5">
+    <div style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
       {[1, 2, 3, 4, 5].map((s) => (
-        <span key={s} className={`text-[11px] ${s <= Math.round(rating) ? 'text-[#C9A96E]' : 'text-[#3D3D34]'}`}>
+        <span key={s} style={{ fontSize: 11, color: s <= Math.round(rating) ? '#C9A96E' : '#3D3D34' }}>
           {s <= Math.round(rating) ? '★' : '☆'}
         </span>
       ))}
@@ -25,6 +25,7 @@ export default function ProductCard({ product, onBuyNow }) {
   const navigate = useNavigate();
 
   const { formatPrice } = useCurrency();
+
 
   const discountPct = product.comparePrice && product.comparePrice > product.price
     ? Math.round(((product.comparePrice - product.price) / product.comparePrice) * 100)
@@ -104,14 +105,32 @@ export default function ProductCard({ product, onBuyNow }) {
   const category = typeof product.category === 'object' ? product.category?.name : product.category;
 
   return (
-    <Link to={`/products/${product.slug || product._id}`} className="no-underline block">
+    <Link to={`/products/${product.slug || product._id}`} style={{ textDecoration: 'none' }}>
       <motion.div
         whileHover={{ y: -3 }}
         transition={{ duration: 0.25, ease: 'easeOut' }}
-        className="group relative bg-[#141410] border border-[#2C2C26] rounded-sm overflow-hidden cursor-pointer shadow-[0_1px_3px_rgba(0,0,0,0.25),0_4px_16px_rgba(0,0,0,0.20)] transition-all duration-250 ease-out hover:shadow-[0_4px_16px_rgba(0,0,0,0.35),0_8px_40px_rgba(0,0,0,0.25)] hover:border-[#3D3D34]"
+        className="group"
+        style={{
+          position: 'relative',
+          background: '#141410',
+          border: '1px solid #2C2C26',
+          borderRadius: 2,
+          overflow: 'hidden',
+          cursor: 'pointer',
+          boxShadow: '0 1px 3px rgba(0,0,0,0.25), 0 4px 16px rgba(0,0,0,0.20)',
+          transition: 'box-shadow 0.25s ease, border-color 0.25s ease',
+        }}
+        onMouseEnter={e => {
+          e.currentTarget.style.boxShadow = '0 4px 16px rgba(0,0,0,0.35), 0 8px 40px rgba(0,0,0,0.25)';
+          e.currentTarget.style.borderColor = '#3D3D34';
+        }}
+        onMouseLeave={e => {
+          e.currentTarget.style.boxShadow = '0 1px 3px rgba(0,0,0,0.25), 0 4px 16px rgba(0,0,0,0.20)';
+          e.currentTarget.style.borderColor = '#2C2C26';
+        }}
       >
         {/* ── Image area ─────────────────────────────────────────────────── */}
-        <div className="relative aspect-[3/4] overflow-hidden bg-[#1C1C17]">
+        <div style={{ position: 'relative', aspectRatio: '3/4', overflow: 'hidden', background: '#1C1C17' }}>
 
           {/* Product image */}
           {imageUrl ? (
@@ -120,39 +139,97 @@ export default function ProductCard({ product, onBuyNow }) {
                 src={imageUrl}
                 alt={product.name}
                 loading="lazy"
-                className={`product-card-img w-full h-full object-cover block transition-all duration-700 ease-out relative z-[1] group-hover:scale-105 ${imageUrl2 ? 'group-hover:opacity-0' : ''}`}
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover',
+                  display: 'block',
+                  transition: 'transform 700ms ease-out, opacity 400ms ease',
+                  position: 'relative',
+                  zIndex: 1,
+                }}
+                className={`product-card-img ${imageUrl2 ? 'has-hover' : ''}`}
               />
               {imageUrl2 && (
                 <img
                   src={imageUrl2}
                   alt={`${product.name} alternate view`}
                   loading="lazy"
-                  className="product-card-img-hover absolute top-0 left-0 w-full h-full object-cover block transition-all duration-700 ease-out z-[2] opacity-0 group-hover:scale-105 group-hover:opacity-100"
+                  style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                    display: 'block',
+                    transition: 'transform 700ms ease-out, opacity 400ms ease',
+                    zIndex: 2,
+                  }}
+                  className="product-card-img-hover"
                 />
               )}
             </>
           ) : (
-            <div className="w-full h-full" style={{ background: product.bg || 'linear-gradient(135deg,#1C1C17,#2C2C26)' }} />
+            <div style={{
+              width: '100%',
+              height: '100%',
+              background: product.bg || 'linear-gradient(135deg,#1C1C17,#2C2C26)',
+            }} />
           )}
 
           {/* Badges */}
-          <div className="absolute top-1.5 left-1.5 sm:top-3 sm:left-3 flex flex-col gap-1 z-[2]">
+          <div style={{ position: 'absolute', top: 8, left: 8, display: 'flex', flexDirection: 'column', gap: 4, zIndex: 2 }} className="pc-badges">
             {discountPct && (
-              <span className="bg-[#8C3A2E] text-[#F5F0E8] font-dm font-bold tracking-[0.02em] rounded-sm text-[9px] sm:text-[11px] px-1.5 py-0.5 sm:px-2.5 sm:py-1">
+              <span className="pc-badge-discount" style={{
+                background: '#8C3A2E',
+                color: '#F5F0E8',
+                fontFamily: "'DM Sans', sans-serif",
+                fontWeight: 700,
+                letterSpacing: '0.02em',
+                borderRadius: 2,
+              }}>
                 -{discountPct}%
               </span>
             )}
             {!discountPct && product.isNew && (
-              <span className="bg-[#222219] text-[#A89880] border border-[#3D3D34] font-dm font-semibold uppercase tracking-[0.06em] rounded-sm text-[8px] sm:text-[10px] px-1.5 py-0.5 sm:px-2 sm:py-[3px]">
+              <span className="pc-badge-new" style={{
+                background: '#222219',
+                color: '#A89880',
+                border: '1px solid #3D3D34',
+                fontFamily: "'DM Sans', sans-serif",
+                fontWeight: 600,
+                textTransform: 'uppercase',
+                letterSpacing: '0.06em',
+                borderRadius: 2,
+              }}>
                 New
               </span>
             )}
           </div>
 
+
+
           {/* Quick add — slides up on group hover */}
           <div
+            className="quick-add-bar"
             onClick={handleAddToCart}
-            className={`absolute bottom-0 left-0 right-0 text-center font-dm font-medium uppercase transition-all duration-300 ease-out z-[2] translate-y-full group-hover:translate-y-0 py-2 sm:py-3.5 min-h-[36px] sm:min-h-[44px] text-[9px] sm:text-[11px] tracking-[0.06em] sm:tracking-[0.10em] ${product.stock <= 0 ? 'text-[#A89880] bg-[#3D3D34] cursor-not-allowed' : clicked ? 'text-[#F5F0E8] bg-[#2C2C26] cursor-pointer' : 'text-[#F5F0E8] bg-[#1C1C17] cursor-pointer'}`}
+            style={{
+              position: 'absolute',
+              bottom: 0,
+              left: 0,
+              right: 0,
+              textAlign: 'center',
+              fontFamily: "'DM Sans', sans-serif",
+              fontWeight: 500,
+              textTransform: 'uppercase',
+              color: product.stock <= 0 ? '#A89880' : '#F5F0E8',
+              background: product.stock <= 0 ? '#3D3D34' : clicked ? '#2C2C26' : '#1C1C17',
+              cursor: product.stock <= 0 ? 'not-allowed' : 'pointer',
+              transform: 'translateY(100%)',
+              transition: 'transform 0.3s ease-out, background 0.2s ease',
+              zIndex: 2,
+            }}
           >
             <AnimatePresence mode="wait">
               {product.stock <= 0 ? (
@@ -173,46 +250,62 @@ export default function ProductCard({ product, onBuyNow }) {
         </div>
 
         {/* ── Card body ──────────────────────────────────────────────────── */}
-        <div className="p-2 sm:p-[14px_16px]">
+        <div className="pc-body">
           {/* Category */}
           {category && (
-            <p className="font-dm uppercase tracking-[0.10em] text-[#6B6055] mb-1 text-[9px] sm:text-[10px]">
+            <p className="pc-category" style={{
+              fontFamily: "'DM Sans', sans-serif",
+              textTransform: 'uppercase',
+              letterSpacing: '0.10em',
+              color: '#6B6055',
+              marginBottom: 4,
+            }}>
               {category}
             </p>
           )}
 
           {/* Product name */}
-          <h3 className="font-dm font-normal text-[#F5F0E8] leading-[1.35] line-clamp-2 overflow-hidden mb-1.5 sm:mb-2.5 text-[11px] sm:text-[14px]">
+          <h3 className="pc-name" style={{
+            fontFamily: "'DM Sans', sans-serif",
+            fontWeight: 400,
+            color: '#F5F0E8',
+            lineHeight: 1.35,
+            display: '-webkit-box',
+            WebkitLineClamp: 2,
+            WebkitBoxOrient: 'vertical',
+            overflow: 'hidden',
+          }}>
             {product.name}
           </h3>
 
           {/* Price row */}
-          <div className="flex items-baseline gap-1 flex-wrap mb-1.5 pc-price-row">
-            <span className={`font-dm font-semibold text-[13px] sm:text-[16px] ${discountPct ? 'text-[#C9A96E]' : 'text-[#F5F0E8]'}`}>
+          <div style={{ display: 'flex', alignItems: 'baseline', gap: 4, flexWrap: 'wrap', marginBottom: 6 }} className="pc-price-row">
+            <span className="pc-price" style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 600, color: discountPct ? '#C9A96E' : '#F5F0E8' }}>
               {formatPrice(product.price)}
             </span>
             {product.comparePrice && product.comparePrice > product.price && (
-              <span className="font-dm text-[#6B6055] line-through text-[10px] sm:text-[13px]">
+              <span className="pc-compare" style={{ fontFamily: "'DM Sans', sans-serif", color: '#6B6055', textDecoration: 'line-through' }}>
                 {formatPrice(product.comparePrice)}
               </span>
             )}
             {discountPct && (
-              <span className="font-dm text-[#C9A96E] font-semibold text-[9px] sm:text-[11px]">
+              <span className="pc-discount-text" style={{ fontFamily: "'DM Sans', sans-serif", color: '#C9A96E', fontWeight: 600 }}>
                 {discountPct}% off
               </span>
             )}
           </div>
 
           {/* Star row */}
-          <div className="flex items-center gap-1">
+          <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
             <Stars rating={product.ratings?.average || product.rating || 0} />
-            <span className="font-dm text-[#6B6055] text-[10px] sm:text-[11px]">
+            <span className="pc-review-count" style={{ fontFamily: "'DM Sans', sans-serif", color: '#6B6055' }}>
               ({(product.ratings?.count || product.reviews || 0).toLocaleString()})
             </span>
           </div>
 
           {/* Buy Now */}
           <button
+            className="pc-buy-now"
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
@@ -225,12 +318,66 @@ export default function ProductCard({ product, onBuyNow }) {
               }
             }}
             disabled={product.stock <= 0}
-            className={`w-full border-none rounded-sm font-dm font-medium uppercase transition-all duration-200 mt-1.5 sm:mt-2 py-[7px] sm:py-[9px] min-h-[32px] sm:min-h-[36px] text-[9px] sm:text-[10px] tracking-[0.06em] sm:tracking-[0.08em] ${product.stock <= 0 ? 'bg-[#3D3D34] text-[#fff] opacity-40 cursor-not-allowed' : 'bg-[#C9A96E] text-[#fff] cursor-pointer hover:bg-[#A07840]'}`}
+            style={{
+              width: '100%',
+              background: product.stock <= 0 ? '#3D3D34' : '#C9A96E',
+              color: '#fff',
+              border: 'none',
+              borderRadius: 2,
+              fontFamily: "'DM Sans', sans-serif",
+              fontWeight: 500,
+              textTransform: 'uppercase',
+              cursor: product.stock <= 0 ? 'not-allowed' : 'pointer',
+              transition: 'background 0.2s ease, opacity 0.2s ease, transform 0.2s ease',
+              opacity: product.stock <= 0 ? 0.4 : 1,
+            }}
+            onMouseEnter={e => { if (product.stock > 0) e.currentTarget.style.background = '#A07840'; }}
+            onMouseLeave={e => { if (product.stock > 0) e.currentTarget.style.background = '#C9A96E'; }}
           >
             {product.stock <= 0 ? 'Out of Stock' : 'Buy Now'}
           </button>
         </div>
       </motion.div>
+
+      {/* Scoped hover styles */}
+      <style>{`
+        .product-card-img.has-hover { opacity: 1; }
+        .product-card-img-hover { opacity: 0; }
+        .group:hover .product-card-img { transform: scale(1.05); }
+        .group:hover .product-card-img.has-hover { opacity: 0; }
+        .group:hover .product-card-img-hover { transform: scale(1.05); opacity: 1; }
+        .group:hover .quick-add-bar { transform: translateY(0) !important; }
+
+        /* Mobile-first card sizing (2-col layout) */
+        .pc-body { padding: 8px 10px; }
+        .pc-category { font-size: 9px; }
+        .pc-name { font-size: 11px; margin-bottom: 6px; }
+        .pc-price { font-size: 13px; }
+        .pc-compare { font-size: 10px; }
+        .pc-discount-text { font-size: 9px; }
+        .pc-review-count { font-size: 10px; }
+        .pc-badge-discount { font-size: 9px; padding: 2px 6px; }
+        .pc-badge-new { font-size: 8px; padding: 2px 6px; }
+        .pc-badges { top: 6px !important; left: 6px !important; }
+        .quick-add-bar { padding: 8px 0; min-height: 36px; font-size: 9px; letter-spacing: 0.06em; }
+        .pc-buy-now { margin-top: 6px; padding: 7px 0; min-height: 32px; font-size: 9px; letter-spacing: 0.06em; }
+
+        /* sm+ (640px) — restore desktop sizes */
+        @media (min-width: 640px) {
+          .pc-body { padding: 14px 16px; }
+          .pc-category { font-size: 10px; }
+          .pc-name { font-size: 14px; margin-bottom: 10px; }
+          .pc-price { font-size: 16px; }
+          .pc-compare { font-size: 13px; }
+          .pc-discount-text { font-size: 11px; }
+          .pc-review-count { font-size: 11px; }
+          .pc-badge-discount { font-size: 11px; padding: 4px 10px; }
+          .pc-badge-new { font-size: 10px; padding: 3px 8px; }
+          .pc-badges { top: 12px !important; left: 12px !important; }
+          .quick-add-bar { padding: 14px 0; min-height: 44px; font-size: 11px; letter-spacing: 0.10em; }
+          .pc-buy-now { margin-top: 8px; padding: 9px 0; min-height: 36px; font-size: 10px; letter-spacing: 0.08em; }
+        }
+      `}</style>
     </Link>
   );
 }
