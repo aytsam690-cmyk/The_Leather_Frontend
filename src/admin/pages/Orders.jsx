@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { X, Eye, ChevronLeft, ChevronRight, Printer, Trash2 } from 'lucide-react';
 import useAdminStore from '../store/adminStore';
-import { getAdminOrders, updateOrderStatus as apiUpdateStatus, assignTrackingId as apiAddTracking, deleteOrder as apiDeleteOrder, bulkUpdateOrders as apiBulkUpdate } from '../adminApi';
+import { getAdminOrders, updateOrderStatus as apiUpdateStatus, assignTrackingId as apiAddTracking, deleteOrder as apiDeleteOrder, bulkUpdateOrders as apiBulkUpdate, addAdminNote as apiAddNote } from '../adminApi';
 import { useCurrency } from '../../utils/currency';
 
 const CORAL = '#111111';
@@ -67,7 +67,7 @@ function OrderDrawer({ order, onClose, onStatusChange }) {
   const [tracking, setTracking] = useState('');
   const [carrier, setCarrier] = useState('DHL');
   const [note, setNote] = useState('');
-  const [notes, setNotes] = useState([{ text:'Customer requested express delivery.', time:'Jun 8, 9:01 AM' }]);
+  const [notes, setNotes] = useState(order.adminNotes || []);
   const [updating, setUpdating] = useState(false);
   const { formatPrice } = useCurrency();
 
@@ -82,16 +82,24 @@ function OrderDrawer({ order, onClose, onStatusChange }) {
     setUpdating(true);
     try {
       await apiUpdateStatus(order.id || order._id, newStatus);
-      if (onStatusChange) onStatusChange(order.id || order._id, newStatus);
-    } catch (_) {}
+      if (onStatusChange) onStatusChange(order.id || order._id, newStatus, { status: newStatus, date: new Date().toLocaleString() });
+    } catch (_) {
+      alert('Failed to update status');
+    }
     setUpdating(false);
   };
 
-  const addNote = () => {
+  const addNote = async () => {
     if (!note.trim()) return;
-    const now = new Date().toLocaleString('en-US',{ month:'short', day:'numeric', hour:'2-digit', minute:'2-digit' });
-    setNotes(n => [...n, { text: note, time: now }]);
+    const currentNote = note.trim();
     setNote('');
+    try {
+      await apiAddNote(order.id || order._id, currentNote);
+      const now = new Date().toLocaleString('en-US',{ month:'short', day:'numeric', hour:'2-digit', minute:'2-digit' });
+      setNotes(n => [...n, { text: currentNote, time: now }]);
+    } catch (err) {
+      alert('Failed to add note');
+    }
   };
 
   return (
@@ -193,8 +201,7 @@ function OrderDrawer({ order, onClose, onStatusChange }) {
                 {ALL_STATUSES.map(s => <option key={s} value={s} className="capitalize">{s.charAt(0).toUpperCase()+s.slice(1)}</option>)}
               </select>
               <button onClick={handleStatusUpdate} disabled={updating}
-                className="px-4 py-2 rounded-sm text-sm font-semibold text-white transition-all hover:opacity-90 disabled:opacity-60"
-                style={{ background: CORAL }}>
+                className="px-4 py-2 rounded-sm text-sm font-semibold text-white transition-all hover:opacity-90 disabled:opacity-60 bg-[#111111]">
                 {updating ? 'Saving…' : 'Update'}
               </button>
             </div>
@@ -204,8 +211,8 @@ function OrderDrawer({ order, onClose, onStatusChange }) {
               <div className="absolute left-[7px] top-2 bottom-2 w-0.5 bg-[#E8E8E4]" />
               {(order.statusHistory || [{ status: order.status || 'pending', note: 'Order placed' }]).map((h, i, arr) => (
                 <div key={i} className="flex items-start gap-3">
-                  <div className={`w-3 h-3 rounded-full mt-0.5 shrink-0 z-10 ${i === arr.length-1 ? 'ring-2' : ''}`}
-                    style={{ background: i === arr.length-1 ? CORAL : '#10b981', ringColor: CORAL }} />
+                  <div className={`w-3 h-3 rounded-full mt-0.5 shrink-0 z-10 ${i === arr.length-1 ? 'ring-2 ring-[#111111]' : ''}`}
+                    style={{ background: i === arr.length-1 ? '#111111' : '#10b981' }} />
                   <div>
                     <p className="text-sm font-semibold text-[#111111] capitalize">{h.status}</p>
                     <p className="text-xs text-[#9E9E9E]">{h.date || (h.timestamp ? new Date(h.timestamp).toLocaleString() : '')} · {h.note || ''}</p>
@@ -225,7 +232,7 @@ function OrderDrawer({ order, onClose, onStatusChange }) {
               </select>
               <input value={tracking} onChange={e => setTracking(e.target.value)} placeholder="Tracking number"
                 className="flex-1 text-sm border border-[#D0D0CA] rounded-sm px-3 py-2.5 outline-none focus:border-[#C9A96E] text-[#111111]" />
-              <button onClick={async () => { if(tracking.trim()) { try { await apiAddTracking(order._id || order.id, tracking.trim()); } catch(_) {} } }} className="px-4 py-2.5 rounded-sm text-sm font-semibold text-white" style={{ background: CORAL }}>Save</button>
+              <button onClick={async () => { if(tracking.trim()) { try { await apiAddTracking(order._id || order.id, tracking.trim()); alert('Tracking added'); } catch(_) { alert('Failed to add tracking'); } } }} className="px-4 py-2.5 rounded-sm text-sm font-semibold text-white bg-[#111111]">Save</button>
             </div>
           </div>
 
@@ -235,7 +242,7 @@ function OrderDrawer({ order, onClose, onStatusChange }) {
             <div className="flex gap-2 mb-3">
               <textarea value={note} onChange={e => setNote(e.target.value)} rows={2} placeholder="Add a note…"
                 className="flex-1 text-sm border border-[#D0D0CA] rounded-sm px-3 py-2.5 outline-none focus:border-[#C9A96E] text-[#111111] resize-none" />
-              <button onClick={addNote} className="px-4 py-2.5 rounded-sm text-sm font-semibold text-white self-end" style={{ background: CORAL }}>Add</button>
+              <button onClick={addNote} className="px-4 py-2.5 rounded-sm text-sm font-semibold text-white self-end bg-[#111111]">Add</button>
             </div>
             <div className="space-y-2">
               {notes.map((n, i) => (
@@ -315,19 +322,33 @@ export default function Orders() {
     if (bulkAction === 'delete') {
       if (!window.confirm(`Delete ${selected.length} order(s)? This cannot be undone.`)) return;
       const promises = selected.map(id => apiDeleteOrder(id));
-      try { await Promise.allSettled(promises); } catch(_) {}
+      try { 
+        const results = await Promise.allSettled(promises); 
+        const errors = results.filter(r => r.status === 'rejected');
+        if (errors.length > 0) alert(`Failed to delete ${errors.length} orders`);
+      } catch(_) {}
       setOrders(o => o.filter(x => !selected.includes(x.id)));
     } else {
-      try { await apiBulkUpdate(selected, bulkAction); } catch(_) {}
-      setOrders(o => o.map(x => selected.includes(x.id) ? { ...x, status: bulkAction } : x));
+      try { 
+        await apiBulkUpdate(selected, bulkAction); 
+        setOrders(o => o.map(x => selected.includes(x.id) ? { ...x, status: bulkAction } : x));
+      } catch(_) {
+        alert('Failed to apply bulk update');
+      }
     }
     setSelected([]);
   };
 
   const handleDelete = async (id) => {
-    try { await apiDeleteOrder(id); } catch(_) {}
+    const previousOrders = [...orders];
     setOrders(o => o.filter(x => x.id !== id));
     setConfirmDelete(null);
+    try { 
+      await apiDeleteOrder(id); 
+    } catch(_) {
+      alert('Failed to delete order');
+      setOrders(previousOrders);
+    }
   };
 
   const tabCounts = STATUS_TABS.reduce((acc, s) => {
@@ -338,9 +359,19 @@ export default function Orders() {
   return (
     <div>
       {/* Drawer */}
-      {drawerOrder && <OrderDrawer order={drawerOrder} onClose={() => setDrawerOrder(null)} onStatusChange={(id, status) => {
-        setOrders(os => os.map(o => (o.id === id || o._id === id) ? { ...o, status } : o));
-        setDrawerOrder(null);
+      {drawerOrder && <OrderDrawer order={drawerOrder} onClose={() => setDrawerOrder(null)} onStatusChange={(id, status, historyEntry) => {
+        setOrders(os => os.map(o => {
+          if (o.id === id || o._id === id) {
+            const currentHistory = o.statusHistory || [{ status: o.status || 'pending', note: 'Order placed' }];
+            return { ...o, status, statusHistory: historyEntry ? [...currentHistory, historyEntry] : currentHistory };
+          }
+          return o;
+        }));
+        setDrawerOrder(prev => {
+          if (!prev) return null;
+          const currentHistory = prev.statusHistory || [{ status: prev.status || 'pending', note: 'Order placed' }];
+          return { ...prev, status, statusHistory: historyEntry ? [...currentHistory, historyEntry] : currentHistory };
+        });
       }} />}
 
       {/* Top bar */}
@@ -363,8 +394,7 @@ export default function Orders() {
       <div className="flex flex-wrap gap-2 mb-4">
         {STATUS_TABS.map(s => (
           <button key={s} onClick={() => { setStatusTab(s); setPage(1); }}
-            className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold capitalize transition-all border"
-            style={statusTab === s ? { background: CORAL, color:'white', borderColor: CORAL } : { borderColor:'#e2e8f0', color:'#64748b', background:'white' }}>
+            className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold capitalize transition-all border ${statusTab === s ? 'bg-[#111111] text-white border-[#111111]' : 'border-slate-200 text-slate-500 bg-white'}`}>
             {s === 'all' ? 'All' : s.charAt(0).toUpperCase()+s.slice(1)}
             <span className={`ml-0.5 px-1.5 py-0.5 rounded-full text-[10px] font-bold ${statusTab === s ? 'bg-white/30 text-white' : 'bg-[#F8F8F6] text-[#6B6B6B]'}`}>
               {tabCounts[s]}
@@ -383,7 +413,7 @@ export default function Orders() {
             {ALL_STATUSES.map(s => <option key={s} value={s} className="capitalize">{s.charAt(0).toUpperCase()+s.slice(1)}</option>)}
             <option value="delete" style={{ color: '#9B2226' }}>🗑 Delete</option>
           </select>
-          <button onClick={applyBulk} className="px-4 py-1.5 text-sm font-semibold text-white rounded-sm" style={{ background: CORAL }}>Apply</button>
+          <button onClick={applyBulk} className="px-4 py-1.5 text-sm font-semibold text-white rounded-sm bg-[#111111]">Apply</button>
           <button onClick={() => setSelected([])} className="text-[#9E9E9E] hover:text-[#6B6B6B] ml-auto"><X size={16} /></button>
         </div>
       )}
@@ -411,7 +441,7 @@ export default function Orders() {
                       <input type="checkbox" checked={selected.includes(o.id)} onChange={() => toggleSelect(o.id)} className="accent-orange-500" />
                     </td>
                     <td className="px-4 py-3">
-                      <button onClick={() => setDrawerOrder(o)} className="text-sm font-bold hover:underline" style={{ color: CORAL }}>
+                      <button onClick={() => setDrawerOrder(o)} className="text-sm font-bold hover:underline text-[#111111]">
                         #{o.id}
                       </button>
                     </td>
@@ -470,8 +500,7 @@ export default function Orders() {
               </button>
               {Array.from({ length: totalPages }, (_, i) => i+1).map(n => (
                 <button key={n} onClick={() => setPage(n)}
-                  className="w-8 h-8 rounded-sm text-xs font-semibold border transition-all"
-                  style={page===n ? { background: CORAL, color:'white', borderColor: CORAL } : { borderColor:'#e2e8f0', color:'#64748b' }}>
+                  className={`w-8 h-8 rounded-sm text-xs font-semibold border transition-all ${page === n ? 'bg-[#111111] text-white border-[#111111]' : 'border-slate-200 text-slate-500 hover:bg-slate-50'}`}>
                   {n}
                 </button>
               ))}

@@ -152,8 +152,7 @@ function ProductForm({ initial, saving, onCancel, onSave, categories }) {
             <div className="flex gap-2">
               {['active','inactive','draft'].map(s => (
                 <button key={s} onClick={() => set('status', s)}
-                  className="px-4 py-2 rounded-sm text-sm font-medium border-2 capitalize transition-all"
-                  style={form.status === s ? { borderColor: CORAL, color: CORAL, background: `${CORAL}10` } : { borderColor: '#e2e8f0', color: '#6B6B6B' }}>
+                  className={`px-4 py-2 rounded-sm text-sm font-medium border-2 capitalize transition-all ${form.status === s ? 'border-[#111111] text-[#111111] bg-[#111111]/10' : 'border-slate-200 text-[#6B6B6B]'}`}>
                   {s}
                 </button>
               ))}
@@ -173,7 +172,7 @@ function ProductForm({ initial, saving, onCancel, onSave, categories }) {
           ))}
         </div>
         {form.price && form.comparePrice && Number(form.comparePrice) > Number(form.price) && (
-          <p className="text-xs mb-4" style={{ color: '#E53935', fontWeight: 600 }}>
+          <p className="text-xs mb-4 text-[#E53935] font-semibold">
             🏷️ Discount: {Math.round(((Number(form.comparePrice) - Number(form.price)) / Number(form.comparePrice)) * 100)}% OFF — Customer will see crossed-out original price
           </p>
         )}
@@ -209,7 +208,7 @@ function ProductForm({ initial, saving, onCancel, onSave, categories }) {
         {form.images.length > 0 && (
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {form.images.map((img, i) => (
-              <div key={img.id} className="relative rounded-sm overflow-hidden border border-[#D0D0CA]" style={{ aspectRatio:'1' }}>
+              <div key={img.id} className="relative rounded-sm overflow-hidden border border-[#D0D0CA] aspect-square">
                 <img src={img.url} alt={img.name} className="w-full h-full object-cover" />
                 <button onClick={() => set('images', form.images.filter((_, j) => j !== i))}
                   className="absolute top-1 right-1 w-6 h-6 bg-[#9B2226] text-white rounded-full flex items-center justify-center text-xs hover:bg-[#7A1B1E]">
@@ -240,8 +239,7 @@ function ProductForm({ initial, saving, onCancel, onSave, categories }) {
             </div>
           ))}
         </div>
-        <button onClick={addVariant} className="text-sm font-semibold px-4 py-2 rounded-sm border-2 transition-all"
-          style={{ borderColor: CORAL, color: CORAL }}>
+        <button onClick={addVariant} className="text-sm font-semibold px-4 py-2 rounded-sm border-2 transition-all border-[#111111] text-[#111111] hover:bg-[#111111] hover:text-white">
           + Add Variant
         </button>
         {form.variants.length > 0 && (
@@ -280,8 +278,7 @@ function ProductForm({ initial, saving, onCancel, onSave, categories }) {
             <input className={inputCls} value={specRow.value} onChange={e => setSpecRow(r => ({ ...r, value: e.target.value }))} placeholder="Specification Value" />
           </div>
         </div>
-        <button onClick={addSpec} className="text-sm font-semibold px-4 py-2 rounded-sm border-2 transition-all"
-          style={{ borderColor: CORAL, color: CORAL }}>
+        <button onClick={addSpec} className="text-sm font-semibold px-4 py-2 rounded-sm border-2 transition-all border-[#111111] text-[#111111] hover:bg-[#111111] hover:text-white">
           + Add Specification
         </button>
         {Object.keys(form.specs || {}).length > 0 && (
@@ -358,13 +355,11 @@ function ProductForm({ initial, saving, onCancel, onSave, categories }) {
           Cancel
         </button>
         <button onClick={() => onSave({ ...form, status: 'draft' })} disabled={saving}
-          className="px-6 py-2.5 rounded-sm text-sm font-semibold border-2 transition-all disabled:opacity-50"
-          style={{ borderColor: CORAL, color: CORAL }}>
+          className="px-6 py-2.5 rounded-sm text-sm font-semibold border-2 transition-all disabled:opacity-50 border-[#111111] text-[#111111] hover:bg-[#111111] hover:text-white">
           {saving ? <span className="flex items-center gap-1"><Loader2 size={14} className="animate-spin" /> Saving…</span> : 'Save Draft'}
         </button>
         <button onClick={() => onSave({ ...form, status: 'active' })} disabled={saving}
-          className="px-6 py-2.5 rounded-sm text-sm font-semibold text-white transition-all hover:opacity-90 disabled:opacity-50"
-          style={{ background: CORAL }}>
+          className="px-6 py-2.5 rounded-sm text-sm font-semibold text-white transition-all hover:opacity-90 disabled:opacity-50 bg-[#111111]">
           {saving ? <span className="flex items-center gap-1"><Loader2 size={14} className="animate-spin" /> Publishing…</span> : 'Publish Product'}
         </button>
       </div>
@@ -382,7 +377,6 @@ export default function Products() {
   const [liveCategories, setLiveCategories] = useState([]);
   const [selected, setSelected] = useState([]);
   const [search, setSearch] = useState('');
-  const [debouncedSearch, setDebouncedSearch] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
   const [page, setPage] = useState(1);
@@ -431,14 +425,8 @@ export default function Products() {
       .finally(() => setLoading(false));
   };
 
-  // Debounce search
-  useEffect(() => {
-    const t = setTimeout(() => setDebouncedSearch(search), 300);
-    return () => clearTimeout(t);
-  }, [search]);
-
   const filtered = products.filter(p => {
-    const matchSearch = !debouncedSearch || p.name.toLowerCase().includes(debouncedSearch.toLowerCase()) || p.sku.toLowerCase().includes(debouncedSearch.toLowerCase());
+    const matchSearch = !search || p.name.toLowerCase().includes(search.toLowerCase()) || p.sku.toLowerCase().includes(search.toLowerCase());
     const matchCat = !categoryFilter || p.category === categoryFilter;
     const matchStatus = !statusFilter || (statusFilter === 'out-of-stock' ? p.stock === 0 : p.status === statusFilter);
     return matchSearch && matchCat && matchStatus;
@@ -452,51 +440,64 @@ export default function Products() {
 
   const applyBulk = async () => {
     if (!bulkAction || selected.length === 0) return;
-    // Process bulk actions one at a time through the API
     const promises = selected.map(id => {
       if (bulkAction === 'delete') return apiDeleteProduct(id);
       return apiUpdateProduct(id, { isActive: bulkAction === 'active' });
     });
-    try { await Promise.allSettled(promises); } catch(_) {}
+    try { 
+      const results = await Promise.allSettled(promises);
+      const errors = results.filter(r => r.status === 'rejected');
+      if (errors.length > 0) alert(`Failed to apply action to ${errors.length} items.`);
+    } catch(_) {}
     loadProducts();
     setSelected([]);
   };
 
   const saveStock = async (id, val) => {
     const stock = parseInt(val) || 0;
+    const previousProducts = [...products];
     setProducts(p => p.map(x => x.id === id ? { ...x, stock } : x));
     setEditingStock(null);
-    try { await apiUpdateProduct(id, { stock }); } catch(_) {}
+    try { 
+      await apiUpdateProduct(id, { stock }); 
+    } catch(err) {
+      alert('Failed to update stock');
+      setProducts(previousProducts);
+    }
   };
 
   const handleDelete = async (id) => {
-    try {
-      await apiDeleteProduct(id);
-    } catch (_) {} // best effort
+    const previousProducts = [...products];
     setProducts(p => p.filter(x => x.id !== id));
     setConfirmDelete(null);
+    try {
+      await apiDeleteProduct(id);
+    } catch (err) {
+      alert('Failed to delete product');
+      setProducts(previousProducts);
+    } 
   };
 
   const handleSave = async (data) => {
     setSaveError('');
     setSaving(true);
     try {
-      // Upload new images first
-      const uploadedImages = [];
-      for (const img of (data.images || [])) {
+      // Upload new images in parallel
+      const uploadPromises = (data.images || []).map(async (img) => {
         if (img.file) {
-          // New file that needs uploading
           try {
             const result = await uploadImage(img.file);
-            uploadedImages.push({ url: result.url, alt: data.name, isPrimary: false });
+            return { url: result.url, alt: data.name, isPrimary: false };
           } catch (uploadErr) {
             console.error('Image upload failed:', uploadErr);
+            return null;
           }
         } else if (img.url && !img.url.startsWith('blob:')) {
-          // Already uploaded image (from editing)
-          uploadedImages.push({ url: img.url, alt: img.alt || data.name, isPrimary: false });
+          return { url: img.url, alt: img.alt || data.name, isPrimary: false };
         }
-      }
+        return null;
+      });
+      const uploadedImages = (await Promise.all(uploadPromises)).filter(Boolean);
 
       // Map form fields → backend model fields
       const payload = {
@@ -516,7 +517,7 @@ export default function Products() {
           const match = liveCategories.find(
             c => c.name === data.category || c.slug === data.category
           );
-          return match ? match._id : undefined;
+          return match ? match._id : data.category;
         })(),
         variants: data.variants || [],
         specs: data.specs || {},
@@ -585,8 +586,7 @@ export default function Products() {
             <option value="out-of-stock">Out of Stock</option>
           </select>
           <button onClick={() => { setShowForm(true); setEditProduct(null); }}
-            className="flex items-center gap-1.5 px-4 py-2.5 rounded-sm text-sm font-semibold text-white transition-all hover:opacity-90"
-            style={{ background: CORAL }}>
+            className="flex items-center gap-1.5 px-4 py-2.5 rounded-sm text-sm font-semibold text-white transition-all hover:opacity-90 bg-[#111111]">
             <Plus size={15} /> Add Product
           </button>
         </div>
@@ -603,7 +603,7 @@ export default function Products() {
             <option value="inactive">Deactivate</option>
             <option value="delete">Delete</option>
           </select>
-          <button onClick={applyBulk} className="px-4 py-1.5 text-sm font-semibold text-white rounded-sm" style={{ background: CORAL }}>Apply</button>
+          <button onClick={applyBulk} className="px-4 py-1.5 text-sm font-semibold text-white rounded-sm bg-[#111111]">Apply</button>
           <button onClick={() => setSelected([])} className="text-[#9E9E9E] hover:text-[#6B6B6B] ml-auto"><X size={16} /></button>
         </div>
       )}
@@ -698,8 +698,7 @@ export default function Products() {
               </button>
               {Array.from({ length: totalPages }, (_, i) => i+1).map(n => (
                 <button key={n} onClick={() => setPage(n)}
-                  className="w-8 h-8 rounded-sm text-xs font-semibold border transition-all"
-                  style={page === n ? { background: CORAL, color:'white', borderColor: CORAL } : { borderColor:'#e2e8f0', color:'#64748b' }}>
+                  className={`w-8 h-8 rounded-sm text-xs font-semibold border transition-all ${page === n ? 'bg-[#111111] text-white border-[#111111]' : 'border-slate-200 text-slate-500 hover:bg-slate-50'}`}>
                   {n}
                 </button>
               ))}
