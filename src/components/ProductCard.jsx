@@ -34,6 +34,8 @@ export default function ProductCard({ product, onBuyNow }) {
   const handleAddToCart = (e) => {
     e.preventDefault();
     e.stopPropagation();
+    
+    if (product.stock <= 0) return;
 
     // Fly-to-cart animation
     const cardImg = e.currentTarget.closest('.group')?.querySelector('.product-card-img');
@@ -221,16 +223,20 @@ export default function ProductCard({ product, onBuyNow }) {
               fontFamily: "'DM Sans', sans-serif",
               fontWeight: 500,
               textTransform: 'uppercase',
-              color: '#F5F0E8',
-              background: clicked ? '#2C2C26' : '#1C1C17',
-              cursor: 'pointer',
+              color: product.stock <= 0 ? '#A89880' : '#F5F0E8',
+              background: product.stock <= 0 ? '#3D3D34' : clicked ? '#2C2C26' : '#1C1C17',
+              cursor: product.stock <= 0 ? 'not-allowed' : 'pointer',
               transform: 'translateY(100%)',
               transition: 'transform 0.3s ease-out, background 0.2s ease',
               zIndex: 2,
             }}
           >
             <AnimatePresence mode="wait">
-              {clicked ? (
+              {product.stock <= 0 ? (
+                <motion.span key="outofstock" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+                  Out of Stock
+                </motion.span>
+              ) : clicked ? (
                 <motion.span key="added" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
                   ✓ Added to Cart
                 </motion.span>
