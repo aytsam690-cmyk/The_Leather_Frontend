@@ -50,15 +50,15 @@ export default function About() {
     <div style={{ background: '#0D0D0B', minHeight: '100vh' }}>
       <Helmet>
         <title>About Us — {siteName}</title>
-        <meta name="description" content={`Learn about ${siteName} — our story, values, and commitment to bringing you premium products with exceptional quality.`} />
+        <meta name="description" content={`Discover ${siteName}'s journey — Pakistan's trusted brand for handcrafted genuine leather wallets, bags & fashion accessories. Premium quality since day one.`} />
         <link rel="canonical" href={`https://www.crafthid.com${window.location.pathname}`} />
         <meta property="og:title" content={`About Us — ${siteName}`} />
-        <meta property="og:description" content={`Learn about ${siteName} — our story, values, and commitment to bringing you premium products with exceptional quality.`} />
+        <meta property="og:description" content={`Discover ${siteName}'s journey — Pakistan's trusted brand for handcrafted genuine leather wallets, bags & fashion accessories.`} />
         <meta property="og:url" content={window.location.origin + '/about'} />
         <meta property="og:image" content={settings?.logo || ''} />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={`About Us — ${siteName}`} />
-        <meta name="twitter:description" content={`Learn about ${siteName} — our story, values, and commitment to bringing you premium products with exceptional quality.`} />
+        <meta name="twitter:description" content={`Discover ${siteName}'s journey — Pakistan's trusted brand for handcrafted genuine leather wallets, bags & fashion accessories.`} />
         <meta name="twitter:image" content={settings?.logo || ''} />
       </Helmet>
 

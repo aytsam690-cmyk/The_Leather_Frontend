@@ -406,15 +406,15 @@ export default function Products() {
       <div className="products-container" style={{ maxWidth: 1280, margin: '0 auto', padding: '0 16px' }}>
         <Helmet>
           <title>{filters.search ? `Search: ${filters.search}` : filters.category !== 'All' ? `${filters.category} Products` : 'All Products'} — {settings?.siteName || 'Store'}</title>
-          <meta name="description" content="Browse our extensive collection of products. Filter by category, brand, price, and more." />
+          <meta name="description" content={`Shop premium leather wallets, women's bags, cardholders & accessories at ${settings?.siteName || 'CRAFT HID'}. Genuine handcrafted leather goods with free delivery across Pakistan.`} />
           <link rel="canonical" href={`https://www.crafthid.com${window.location.pathname}`} />
           <meta property="og:title" content={`${filters.search ? `Search: ${filters.search}` : filters.category !== 'All' ? `${filters.category} Products` : 'All Products'} — ${settings?.siteName || 'Store'}`} />
-          <meta property="og:description" content="Browse our extensive collection of products. Filter by category, brand, price, and more." />
+          <meta property="og:description" content={`Shop premium leather wallets, women's bags, cardholders & accessories at ${settings?.siteName || 'CRAFT HID'}. Genuine handcrafted leather goods with free delivery across Pakistan.`} />
           <meta property="og:url" content={window.location.origin + '/products'} />
           <meta property="og:image" content={settings?.logo || ''} />
           <meta name="twitter:card" content="summary_large_image" />
           <meta name="twitter:title" content={`${filters.category !== 'All' ? `${filters.category} Products` : 'All Products'} — ${settings?.siteName || 'Store'}`} />
-          <meta name="twitter:description" content="Browse our extensive collection of products. Filter by category, brand, price, and more." />
+          <meta name="twitter:description" content={`Shop premium leather wallets, women's bags, cardholders & accessories at ${settings?.siteName || 'CRAFT HID'}. Free delivery across Pakistan.`} />
           <meta name="twitter:image" content={settings?.logo || ''} />
           <script type="application/ld+json">{JSON.stringify({
             '@context': 'https://schema.org',

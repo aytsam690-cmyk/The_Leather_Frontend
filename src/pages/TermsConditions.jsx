@@ -53,6 +53,14 @@ export default function TermsConditions() {
       <Helmet>
         <title>Terms & Conditions — {siteName}</title>
         <meta name="description" content={`Terms and Conditions for ${siteName}. Read the rules and guidelines for using our website and purchasing our products.`} />
+        <link rel="canonical" href={`https://www.crafthid.com/terms-conditions`} />
+        <meta property="og:title" content={`Terms & Conditions — ${siteName}`} />
+        <meta property="og:description" content={`Terms and Conditions for ${siteName}. Read the rules and guidelines for using our website and purchasing our products.`} />
+        <meta property="og:url" content={window.location.origin + '/terms-conditions'} />
+        <meta property="og:image" content={settings?.logo || ''} />
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:title" content={`Terms & Conditions — ${siteName}`} />
+        <meta name="twitter:description" content={`Terms and Conditions for ${siteName}. Read the rules and guidelines for using our website and purchasing our products.`} />
       </Helmet>
 
       <div style={{ maxWidth: 800, margin: '0 auto', padding: '0 24px' }}>

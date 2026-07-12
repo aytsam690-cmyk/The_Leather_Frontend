@@ -45,6 +45,14 @@ export default function ReturnPolicy() {
       <Helmet>
         <title>Return Policy — {siteName}</title>
         <meta name="description" content={`Return Policy for ${siteName}. Learn about our 7-day return process.`} />
+        <link rel="canonical" href={`https://www.crafthid.com/return-policy`} />
+        <meta property="og:title" content={`Return Policy — ${siteName}`} />
+        <meta property="og:description" content={`Return Policy for ${siteName}. Learn about our 7-day return process.`} />
+        <meta property="og:url" content={window.location.origin + '/return-policy'} />
+        <meta property="og:image" content={settings?.logo || ''} />
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:title" content={`Return Policy — ${siteName}`} />
+        <meta name="twitter:description" content={`Return Policy for ${siteName}. Learn about our 7-day return process.`} />
       </Helmet>
 
       <div style={{ maxWidth: 800, margin: '0 auto', padding: '0 24px' }}>

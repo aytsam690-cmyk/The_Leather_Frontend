@@ -3,9 +3,11 @@ Allow: /
 Disallow: /admin/
 Disallow: /checkout
 Disallow: /account
+Disallow: /profile
+Disallow: /orders
 Disallow: /login
 Disallow: /register
 Disallow: /forgot-password
 Disallow: /reset-password
 
-Sitemap: https://crafthid.com/sitemap.xml
+Sitemap: https://www.crafthid.com/sitemap.xml

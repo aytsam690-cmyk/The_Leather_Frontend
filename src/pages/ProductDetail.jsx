@@ -437,6 +437,48 @@ export default function ProductDetail() {
         <meta name="description" content={product.metaDescription || product.description?.slice(0, 155) || `Buy ${product.name} at ${settings?.siteName || 'our store'}`} />
         {product.metaKeywords && <meta name="keywords" content={product.metaKeywords} />}
         <link rel="canonical" href={`https://www.crafthid.com${window.location.pathname}`} />
+        <meta property="og:title" content={`${product.metaTitle || product.name} | ${settings?.siteName || 'Store'}`} />
+        <meta property="og:description" content={product.metaDescription || product.description?.slice(0, 155) || `Buy ${product.name} at ${settings?.siteName || 'our store'}`} />
+        <meta property="og:url" content={`https://www.crafthid.com${window.location.pathname}`} />
+        <meta property="og:image" content={product.images?.[0]?.url || settings?.logo || ''} />
+        <meta property="og:type" content="product" />
+        <meta property="og:site_name" content={settings?.siteName || 'CRAFT HID'} />
+        <meta property="product:price:amount" content={String(product.comparePrice && product.comparePrice > product.price ? product.price : product.price)} />
+        <meta property="product:price:currency" content="PKR" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={`${product.metaTitle || product.name} | ${settings?.siteName || 'Store'}`} />
+        <meta name="twitter:description" content={product.metaDescription || product.description?.slice(0, 155) || `Buy ${product.name} at ${settings?.siteName || 'our store'}`} />
+        <meta name="twitter:image" content={product.images?.[0]?.url || settings?.logo || ''} />
+        <script type="application/ld+json">{JSON.stringify({
+          "@context": "https://schema.org/",
+          "@type": "Product",
+          "name": product.name,
+          "image": product.images?.map(img => img.url) || [],
+          "description": product.description,
+          "sku": product.SKU || product._id,
+          "brand": {
+            "@type": "Brand",
+            "name": settings?.siteName || "CRAFT HID"
+          },
+          ...(product.ratings?.count > 0 ? {
+            "aggregateRating": {
+              "@type": "AggregateRating",
+              "ratingValue": product.ratings.average,
+              "reviewCount": product.ratings.count
+            }
+          } : {}),
+          "offers": {
+            "@type": "Offer",
+            "url": `https://www.crafthid.com${window.location.pathname}`,
+            "priceCurrency": "PKR",
+            "price": product.price,
+            "availability": product.stock > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
+            "seller": {
+              "@type": "Organization",
+              "name": settings?.siteName || "CRAFT HID"
+            }
+          }
+        })}</script>
       </Helmet>
 
       <div className="max-w-[1280px] mx-auto px-4 sm:px-6 py-6 sm:py-8">
