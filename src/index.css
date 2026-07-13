@@ -136,6 +136,9 @@ img { max-width: 100%; height: auto; }
     grid-template-columns: 1fr !important;
   }
 
+  /* Why Shop With Us: 3 cols on tablet */
+  .why-us-grid { grid-template-columns: repeat(3, 1fr) !important; max-width: none !important; }
+
   /* About page grids */
   .about-team-grid   { grid-template-columns: 1fr 1fr !important; }
   .about-values-grid { grid-template-columns: 1fr 1fr !important; }

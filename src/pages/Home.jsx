@@ -725,11 +725,12 @@ export default function Home() {
             </p>
           </motion.div>
 
-          <div className="why-us-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 20, maxWidth: 960, margin: '0 auto' }}>
+          <div className="why-us-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 20, maxWidth: 1200, margin: '0 auto' }}>
             {[
               { icon: '🚚', title: 'Free Delivery', desc: 'Free shipping on all orders. Fast and reliable delivery across Pakistan.' },
               { icon: '💵', title: 'Cash on Delivery', desc: 'Pay when your order arrives. No online payment required.' },
               { icon: '📦', title: '3–5 Days Delivery', desc: 'Quick processing and fast shipping. Get your order within days.' },
+              { icon: '🔄', title: '7 Days Return', desc: 'Not satisfied? Return within 7 days for a hassle-free exchange or refund.' },
               { icon: '✅', title: 'Authentic Products', desc: '100% genuine products sourced directly from brands.' },
             ].map((card, i) => (
               <motion.div key={card.title} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
