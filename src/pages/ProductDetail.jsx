@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { getProduct, addReview, addGuestReview } from '../services/api';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -50,76 +50,175 @@ function Gallery({ images, productName }) {
   const [active, setActive] = useState(0);
   const [direction, setDirection] = useState(0);
   const [lightboxOpen, setLightboxOpen] = useState(false);
+  const scrollRef = React.useRef(null);
+  const isScrollingRef = React.useRef(false);
 
-  const slideVariants = {
-    enter: (dir) => ({ x: dir > 0 ? '100%' : '-100%', opacity: 0 }),
-    center: { zIndex: 1, x: 0, opacity: 1 },
-    exit: (dir) => ({ zIndex: 0, x: dir < 0 ? '100%' : '-100%', opacity: 0 }),
+  // Sync dot indicators with scroll position
+  useEffect(() => {
+    const container = scrollRef.current;
+    if (!container) return;
+    const handleScroll = () => {
+      if (isScrollingRef.current) return;
+      const scrollLeft = container.scrollLeft;
+      const width = container.offsetWidth;
+      const newIndex = Math.round(scrollLeft / width);
+      if (newIndex !== active && newIndex >= 0 && newIndex < images.length) {
+        setActive(newIndex);
+      }
+    };
+    container.addEventListener('scroll', handleScroll, { passive: true });
+    return () => container.removeEventListener('scroll', handleScroll);
+  }, [active, images.length]);
+
+  // Scroll to image when thumbnail is clicked (desktop)
+  const scrollToIndex = (index) => {
+    const container = scrollRef.current;
+    if (!container) return;
+    isScrollingRef.current = true;
+    setDirection(index > active ? 1 : -1);
+    setActive(index);
+    container.scrollTo({ left: index * container.offsetWidth, behavior: 'smooth' });
+    setTimeout(() => { isScrollingRef.current = false; }, 400);
   };
 
   return (
     <>
       <div>
-        <div className="relative aspect-square bg-[#1C1C17] border border-[#2C2C26] rounded-sm overflow-hidden cursor-zoom-in group">
-          <AnimatePresence initial={false} custom={direction}>
-            <motion.div
-              key={active}
-              custom={direction}
-              variants={slideVariants}
-              initial="enter"
-              animate="center"
-              exit="exit"
-              transition={{ x: { type: 'spring', stiffness: 300, damping: 30 }, opacity: { duration: 0.2 } }}
-              className="absolute inset-0 touch-pan-y"
-              drag="x"
-              dragConstraints={{ left: 0, right: 0 }}
-              dragElastic={1}
-              onDragEnd={(e, { offset }) => {
-                const swipe = offset.x;
-                if (swipe < -40) {
-                  setDirection(1);
-                  setActive(a => (a + 1) % images.length);
-                } else if (swipe > 40) {
-                  setDirection(-1);
-                  setActive(a => (a - 1 + images.length) % images.length);
-                } else {
-                  setLightboxOpen(true);
-                }
-              }}
-            >
-              {images[active]?.url ? (
-                <img
-                  src={images[active].url}
-                  alt={images[active].alt || 'Product'}
-                  className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105 pointer-events-none"
-                />
-              ) : (
-                <div className="w-full h-full" style={{ background: images[active]?.bg || '#F8F8F6' }} />
-              )}
-            </motion.div>
-          </AnimatePresence>
-          <div className="absolute bottom-3 right-3 font-dm text-[10px] uppercase tracking-[0.08em] text-[#9E9E9E] bg-white/90 px-2 py-1 rounded-sm">
-            Click to zoom
+        {/* ── Mobile: Horizontal scroll-snap slider ── */}
+        <div className="pd-gallery-mobile" style={{ display: 'none' }}>
+          <div
+            ref={scrollRef}
+            style={{
+              display: 'flex',
+              overflowX: 'auto',
+              scrollSnapType: 'x mandatory',
+              WebkitOverflowScrolling: 'touch',
+              scrollbarWidth: 'none',
+              msOverflowStyle: 'none',
+              borderRadius: 2,
+              border: '1px solid #2C2C26',
+              background: '#1C1C17',
+            }}
+            className="hide-scrollbar"
+          >
+            {images.map((img, i) => (
+              <div
+                key={i}
+                style={{
+                  flex: '0 0 100%',
+                  scrollSnapAlign: 'start',
+                  aspectRatio: '1 / 1',
+                  position: 'relative',
+                }}
+              >
+                {img.url ? (
+                  <img
+                    src={optimizeImage(img.url, 800)}
+                    alt={img.alt || `${productName} - Image ${i + 1}`}
+                    loading={i === 0 ? 'eager' : 'lazy'}
+                    style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                  />
+                ) : (
+                  <div style={{ width: '100%', height: '100%', background: img.bg || '#F8F8F6' }} />
+                )}
+              </div>
+            ))}
           </div>
+
+          {/* Dot indicators */}
+          {images.length > 1 && (
+            <div style={{
+              display: 'flex', justifyContent: 'center', gap: 6,
+              marginTop: 12,
+            }}>
+              {images.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => scrollToIndex(i)}
+                  aria-label={`Go to image ${i + 1}`}
+                  style={{
+                    width: i === active ? 20 : 7,
+                    height: 7,
+                    borderRadius: 4,
+                    border: 'none',
+                    background: i === active ? '#C9A96E' : '#3D3D34',
+                    cursor: 'pointer',
+                    padding: 0,
+                    transition: 'all 0.3s ease',
+                  }}
+                />
+              ))}
+            </div>
+          )}
         </div>
 
-        <div className="flex gap-3 mt-4 overflow-x-auto pb-1">
-          {images.map((img, i) => (
-            <button
-              key={i}
-              onClick={() => {
-                setDirection(i > active ? 1 : -1);
-                setActive(i);
-              }}
-              className={`w-14 h-14 sm:w-16 sm:h-16 shrink-0 rounded-sm overflow-hidden cursor-pointer bg-[#1C1C17] p-0 transition-colors duration-200 border-2 ${i === active ? 'border-[#C9A96E]' : 'border-transparent hover:border-[#3D3D34]'}`}
-            >
-              {img.url ? (
-                <img src={optimizeImage(img.url, 200)} alt={img.alt || `${productName} Thumbnail ${i + 1}`} loading="lazy" className="w-full h-full object-cover" />
-              ) : (
-                <div className="w-full h-full" style={{ background: img.bg || '#2C2C26' }} />
-              )}
-            </button>
-          ))}
+        {/* ── Desktop: AnimatePresence slider with thumbnails ── */}
+        <div className="pd-gallery-desktop">
+          <div className="relative aspect-square bg-[#1C1C17] border border-[#2C2C26] rounded-sm overflow-hidden cursor-zoom-in group">
+            <AnimatePresence initial={false} custom={direction}>
+              <motion.div
+                key={active}
+                custom={direction}
+                variants={{
+                  enter: (dir) => ({ x: dir > 0 ? '100%' : '-100%', opacity: 0 }),
+                  center: { zIndex: 1, x: 0, opacity: 1 },
+                  exit: (dir) => ({ zIndex: 0, x: dir < 0 ? '100%' : '-100%', opacity: 0 }),
+                }}
+                initial="enter"
+                animate="center"
+                exit="exit"
+                transition={{ x: { type: 'spring', stiffness: 300, damping: 30 }, opacity: { duration: 0.2 } }}
+                className="absolute inset-0 touch-pan-y"
+                drag="x"
+                dragConstraints={{ left: 0, right: 0 }}
+                dragElastic={1}
+                onDragEnd={(e, { offset }) => {
+                  const swipe = offset.x;
+                  if (swipe < -40) {
+                    setDirection(1);
+                    setActive(a => (a + 1) % images.length);
+                  } else if (swipe > 40) {
+                    setDirection(-1);
+                    setActive(a => (a - 1 + images.length) % images.length);
+                  } else {
+                    setLightboxOpen(true);
+                  }
+                }}
+              >
+                {images[active]?.url ? (
+                  <img
+                    src={images[active].url}
+                    alt={images[active].alt || 'Product'}
+                    className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105 pointer-events-none"
+                  />
+                ) : (
+                  <div className="w-full h-full" style={{ background: images[active]?.bg || '#F8F8F6' }} />
+                )}
+              </motion.div>
+            </AnimatePresence>
+            <div className="absolute bottom-3 right-3 font-dm text-[10px] uppercase tracking-[0.08em] text-[#9E9E9E] bg-white/90 px-2 py-1 rounded-sm">
+              Click to zoom
+            </div>
+          </div>
+
+          <div className="flex gap-3 mt-4 overflow-x-auto pb-1">
+            {images.map((img, i) => (
+              <button
+                key={i}
+                onClick={() => {
+                  setDirection(i > active ? 1 : -1);
+                  setActive(i);
+                }}
+                className={`w-14 h-14 sm:w-16 sm:h-16 shrink-0 rounded-sm overflow-hidden cursor-pointer bg-[#1C1C17] p-0 transition-colors duration-200 border-2 ${i === active ? 'border-[#C9A96E]' : 'border-transparent hover:border-[#3D3D34]'}`}
+              >
+                {img.url ? (
+                  <img src={optimizeImage(img.url, 200)} alt={img.alt || `${productName} Thumbnail ${i + 1}`} loading="lazy" className="w-full h-full object-cover" />
+                ) : (
+                  <div className="w-full h-full" style={{ background: img.bg || '#2C2C26' }} />
+                )}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 

@@ -97,6 +97,17 @@ img { max-width: 100%; height: auto; }
   .navbar-login-btn     { display: flex !important; }
 }
 
+/* ── Product Gallery: mobile vs desktop ──────────────────────────────────────── */
+.hide-scrollbar::-webkit-scrollbar { display: none; }
+.hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+.pd-gallery-mobile  { display: none !important; }
+.pd-gallery-desktop { display: block !important; }
+
+@media (max-width: 639px) {
+  .pd-gallery-mobile  { display: block !important; }
+  .pd-gallery-desktop { display: none !important; }
+}
+
 /* ── Tablet & Mobile (≤1023px) ──────────────────────────────────────────────── */
 @media (max-width: 1023px) {
 
