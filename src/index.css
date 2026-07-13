@@ -97,15 +97,23 @@ img { max-width: 100%; height: auto; }
   .navbar-login-btn     { display: flex !important; }
 }
 
-/* ── Product Gallery: mobile vs desktop ──────────────────────────────────────── */
+/* ── Scrollbar hiding ── */
 .hide-scrollbar::-webkit-scrollbar { display: none; }
 .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* ── Product Gallery: mobile vs desktop ── */
 .pd-gallery-mobile  { display: none !important; }
 .pd-gallery-desktop { display: block !important; }
+
+/* ── Why Shop With Us: mobile vs desktop ── */
+.why-us-mobile  { display: none !important; }
+.why-us-desktop { display: grid !important; }
 
 @media (max-width: 639px) {
   .pd-gallery-mobile  { display: block !important; }
   .pd-gallery-desktop { display: none !important; }
+  .why-us-mobile  { display: block !important; }
+  .why-us-desktop { display: none !important; }
 }
 
 /* ── Tablet & Mobile (≤1023px) ──────────────────────────────────────────────── */
@@ -148,7 +156,7 @@ img { max-width: 100%; height: auto; }
   }
 
   /* Why Shop With Us: 3 cols on tablet */
-  .why-us-grid { grid-template-columns: repeat(3, 1fr) !important; max-width: none !important; }
+  .why-us-desktop { grid-template-columns: repeat(3, 1fr) !important; max-width: none !important; }
 
   /* About page grids */
   .about-team-grid   { grid-template-columns: 1fr 1fr !important; }
@@ -171,8 +179,7 @@ img { max-width: 100%; height: auto; }
   /* Hero CTA buttons: stack on very small screens */
   .hero-cta-wrap { flex-direction: column !important; align-items: flex-start !important; gap: 12px !important; }
 
-  /* Why Shop With Us: keep 2 cols on mobile */
-  .why-us-grid { grid-template-columns: repeat(2, 1fr) !important; max-width: none !important; }
+
 
   /* Home: footer — brand full-width, link columns stay 3-up */
   .footer-grid { grid-template-columns: repeat(3, 1fr) !important; }

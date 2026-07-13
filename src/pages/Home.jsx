@@ -725,33 +725,70 @@ export default function Home() {
             </p>
           </motion.div>
 
-          <div className="why-us-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 20, maxWidth: 1200, margin: '0 auto' }}>
-            {[
+          {(() => {
+            const cards = [
               { icon: '🚚', title: 'Free Delivery', desc: 'Free shipping on all orders. Fast and reliable delivery across Pakistan.' },
               { icon: '💵', title: 'Cash on Delivery', desc: 'Pay when your order arrives. No online payment required.' },
               { icon: '📦', title: '3–5 Days Delivery', desc: 'Quick processing and fast shipping. Get your order within days.' },
               { icon: '🔄', title: '7 Days Return', desc: 'Not satisfied? Return within 7 days for a hassle-free exchange or refund.' },
               { icon: '✅', title: 'Authentic Products', desc: '100% genuine products sourced directly from brands.' },
-            ].map((card, i) => (
-              <motion.div key={card.title} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }} transition={{ delay: i * 0.08, duration: 0.45 }}>
-                <div style={{
-                  background: '#1C1C17', border: '1px solid #2C2C26', borderRadius: 2,
-                  padding: 'clamp(16px, 3vw, 28px)', height: '100%', boxSizing: 'border-box', transition: 'box-shadow 0.25s ease, border-color 0.25s ease',
-                }}
-                  onMouseEnter={e => { e.currentTarget.style.boxShadow = '0 4px 20px rgba(0,0,0,0.35)'; e.currentTarget.style.borderColor = '#3D3D34'; }}
-                  onMouseLeave={e => { e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.borderColor = '#2C2C26'; }}>
-                  <div style={{
-                    width: 44, height: 44, background: '#222219', border: '1px solid #3D3D34',
-                    borderRadius: 2, display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    fontSize: 20, marginBottom: 20,
-                  }}>{card.icon}</div>
-                  <h3 style={{ fontFamily: S.dm, fontSize: 14, fontWeight: 500, color: '#F5F0E8', margin: '0 0 8px' }}>{card.title}</h3>
-                  <p style={{ fontFamily: S.dm, fontSize: 13, color: '#A89880', lineHeight: 1.65, fontWeight: 300, margin: 0 }}>{card.desc}</p>
+            ];
+            return (
+              <>
+                {/* ── Mobile: Horizontal scroll strip ── */}
+                <div className="why-us-mobile" style={{ display: 'none' }}>
+                  <div className="hide-scrollbar" style={{
+                    display: 'flex', gap: 12, overflowX: 'auto',
+                    scrollSnapType: 'x mandatory', WebkitOverflowScrolling: 'touch',
+                    paddingBottom: 4, margin: '0 -16px', padding: '0 16px 4px',
+                  }}>
+                    {cards.map((card, i) => (
+                      <motion.div key={card.title} initial={{ opacity: 0, y: 15 }} whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }} transition={{ delay: i * 0.06, duration: 0.4 }}
+                        style={{ flex: '0 0 auto', width: 'clamp(200px, 42vw, 240px)', scrollSnapAlign: 'start' }}>
+                        <div style={{
+                          background: '#1C1C17', border: '1px solid #2C2C26', borderRadius: 6,
+                          padding: '20px 16px', height: '100%', boxSizing: 'border-box',
+                          display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center',
+                        }}>
+                          <div style={{
+                            width: 44, height: 44, background: '#222219', border: '1px solid #3D3D34',
+                            borderRadius: 22, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            fontSize: 20, marginBottom: 12,
+                          }}>{card.icon}</div>
+                          <h3 style={{ fontFamily: S.dm, fontSize: 13, fontWeight: 600, color: '#F5F0E8', margin: '0 0 6px', whiteSpace: 'nowrap' }}>{card.title}</h3>
+                          <p style={{ fontFamily: S.dm, fontSize: 11.5, color: '#A89880', lineHeight: 1.55, fontWeight: 300, margin: 0 }}>{card.desc}</p>
+                        </div>
+                      </motion.div>
+                    ))}
+                  </div>
                 </div>
-              </motion.div>
-            ))}
-          </div>
+
+                {/* ── Desktop: 5 column grid ── */}
+                <div className="why-us-desktop" style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 20, maxWidth: 1200, margin: '0 auto' }}>
+                  {cards.map((card, i) => (
+                    <motion.div key={card.title} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }} transition={{ delay: i * 0.08, duration: 0.45 }}>
+                      <div style={{
+                        background: '#1C1C17', border: '1px solid #2C2C26', borderRadius: 2,
+                        padding: 'clamp(16px, 3vw, 28px)', height: '100%', boxSizing: 'border-box', transition: 'box-shadow 0.25s ease, border-color 0.25s ease',
+                      }}
+                        onMouseEnter={e => { e.currentTarget.style.boxShadow = '0 4px 20px rgba(0,0,0,0.35)'; e.currentTarget.style.borderColor = '#3D3D34'; }}
+                        onMouseLeave={e => { e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.borderColor = '#2C2C26'; }}>
+                        <div style={{
+                          width: 44, height: 44, background: '#222219', border: '1px solid #3D3D34',
+                          borderRadius: 2, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                          fontSize: 20, marginBottom: 20,
+                        }}>{card.icon}</div>
+                        <h3 style={{ fontFamily: S.dm, fontSize: 14, fontWeight: 500, color: '#F5F0E8', margin: '0 0 8px' }}>{card.title}</h3>
+                        <p style={{ fontFamily: S.dm, fontSize: 13, color: '#A89880', lineHeight: 1.65, fontWeight: 300, margin: 0 }}>{card.desc}</p>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+              </>
+            );
+          })()}
         </div>
       </section>
 
