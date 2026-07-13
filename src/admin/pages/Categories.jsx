@@ -218,7 +218,7 @@ export default function Categories() {
     getAdminCategories()
       .then(data => {
         const items = Array.isArray(data) ? data : [];
-        setCats(items.map(c => ({ ...c, id: c._id, emoji: c.emoji || '📦', children: c.children || [], productCount: c.productCount || 0 })));
+        setCats(items.map(c => ({ ...c, id: c._id, active: c.isActive !== false, emoji: c.emoji || '📦', children: c.children || [], productCount: c.productCount || 0 })));
       })
       .catch(() => setCats([]));
   };
