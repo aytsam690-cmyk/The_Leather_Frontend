@@ -736,11 +736,11 @@ export default function Home() {
             return (
               <>
                 {/* ── Mobile: Horizontal scroll strip ── */}
-                <div className="why-us-mobile" style={{ display: 'none' }}>
+                <div className="why-us-mobile" style={{ display: 'none', overflow: 'hidden' }}>
                   <div className="hide-scrollbar" style={{
                     display: 'flex', gap: 12, overflowX: 'auto',
                     scrollSnapType: 'x mandatory', WebkitOverflowScrolling: 'touch',
-                    paddingBottom: 4, margin: '0 -16px', padding: '0 16px 4px',
+                    paddingBottom: 4,
                   }}>
                     {cards.map((card, i) => (
                       <motion.div key={card.title} initial={{ opacity: 0, y: 15 }} whileInView={{ opacity: 1, y: 0 }}
