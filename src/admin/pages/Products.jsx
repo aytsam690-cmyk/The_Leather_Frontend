@@ -443,6 +443,7 @@ export default function Products() {
           specs: p.specs || {},
           metaTitle: p.metaTitle || '',
           metaDescription: p.metaDescription || '',
+          metaKeywords: p.metaKeywords || '',
           bg: `linear-gradient(135deg,${['#667eea,#764ba2','#f093fb,#f5576c','#4facfe,#00f2fe','#43e97b,#38f9d7','#fa709a,#fee140','#a18cd1,#fbc2eb'][i % 6]})`
         })));
       })
@@ -549,6 +550,7 @@ export default function Products() {
         images: uploadedImages,
         metaTitle: data.metaTitle || data.name,
         metaDescription: data.metaDescription || '',
+        metaKeywords: data.metaKeywords || '',
       };
 
       if (editProduct) {
