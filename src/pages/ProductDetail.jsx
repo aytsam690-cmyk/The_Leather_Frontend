@@ -760,7 +760,7 @@ export default function ProductDetail() {
                 { icon: <Check size={15} />, text: 'Free Delivery All Over Pakistan' },
                 { icon: <Truck size={15} />, text: 'Cash on delivery available nationwide' },
                 { icon: <Shield size={15} />, text: '100% authentic, sourced from brand' },
-                { icon: <RotateCcw size={15} />, text: <>7 days return policy available. <Link to="/return-policy" className="text-[#C9A96E] hover:underline transition-colors hover:text-[#e0c58e]">Read Return Policy</Link></> },
+                { icon: <RotateCcw size={15} />, text: <>Shop with confidence: 7-Day Hassle-Free Returns! <Link to="/return-policy" className="text-[#C9A96E] hover:underline transition-colors hover:text-[#e0c58e]">Read Policy</Link></> },
               ].map((item, i) => (
                 <div key={i} className="flex items-center gap-3">
                   <span className="text-[#C9A96E] shrink-0">{item.icon}</span>
