@@ -303,16 +303,47 @@ export default function AdminBlogForm() {
             </div>
           </div>
           
-          <div className="bg-[#111111] p-6 rounded-sm shadow-sm overflow-x-auto">
-            <h3 className="text-white text-sm font-bold mb-4 uppercase tracking-wider border-b border-white/10 pb-2">Live Preview</h3>
-            <div className="blog-content text-[#EAE6DF]" dangerouslySetInnerHTML={{ __html: formData.content || '<p class="text-white/40 italic">Preview will appear here...</p>' }} />
-            <style>{`
-              .blog-content { font-family: 'DM Sans', sans-serif; font-size: 16px; line-height: 1.8; }
-              .blog-content h1, .blog-content h2, .blog-content h3 { font-family: 'Cormorant Garamond', serif; color: #F5F0E8; margin-top: 1.5em; margin-bottom: 0.5em; }
-              .blog-content h2 { font-size: 24px; }
-              .blog-content a { color: #C9A96E; }
-              .blog-content img { max-width: 100%; border-radius: 4px; }
-            `}</style>
+          <div className="bg-[#111111] p-6 rounded-sm shadow-sm flex flex-col min-h-[500px] h-full">
+            <h3 className="text-white text-sm font-bold mb-4 uppercase tracking-wider border-b border-white/10 pb-2 shrink-0">Live Preview</h3>
+            <iframe 
+              className="w-full flex-1 bg-transparent border-0"
+              srcDoc={`
+                <!DOCTYPE html>
+                <html>
+                  <head>
+                    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+                    <style>
+                      body { 
+                        font-family: 'DM Sans', sans-serif; 
+                        font-size: 16px; 
+                        line-height: 1.8; 
+                        color: #EAE6DF; 
+                        margin: 0;
+                        padding: 0;
+                      }
+                      h1, h2, h3 { 
+                        font-family: 'Cormorant Garamond', serif; 
+                        color: #F5F0E8; 
+                        margin-top: 1.5em; 
+                        margin-bottom: 0.5em; 
+                      }
+                      h2 { font-size: 24px; }
+                      a { color: #C9A96E; text-decoration: none; }
+                      a:hover { text-decoration: underline; }
+                      img { max-width: 100%; border-radius: 4px; height: auto; }
+                      ::-webkit-scrollbar { width: 8px; }
+                      ::-webkit-scrollbar-track { background: #111111; }
+                      ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+                    </style>
+                  </head>
+                  <body>
+                    ${formData.content || '<p style="color: rgba(255,255,255,0.4); font-style: italic;">Preview will appear here...</p>'}
+                  </body>
+                </html>
+              `}
+              title="Live Preview"
+              sandbox="allow-same-origin"
+            />
           </div>
         </div>
 
