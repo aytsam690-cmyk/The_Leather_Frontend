@@ -11,9 +11,3 @@ Disallow: /forgot-password
 Disallow: /reset-password
 
 Sitemap: https://www.crafthid.com/sitemap.xml
-# BLOG FEATURE — PATCH 6 — SITEMAP & SEO
-Sitemap: https://www.crafthid.com/blog-sitemap.xml
-
-User-agent: *
-Disallow: /admin/blog
-Disallow: /api/admin/
