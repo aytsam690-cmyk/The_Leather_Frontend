@@ -152,8 +152,7 @@ export default function ProductCard({ product, onBuyNow }) {
           {/* Quick add — slides up on group hover */}
           <div
             onClick={handleAddToCart}
-            className={`absolute -bottom-[2px] left-0 right-0 text-center font-dm font-medium uppercase transition-all duration-300 ease-out z-[2] translate-y-full group-hover:translate-y-0 pt-2 pb-[calc(0.5rem+2px)] sm:pt-3.5 sm:pb-[calc(0.875rem+2px)] min-h-[36px] sm:min-h-[44px] text-[9px] sm:text-[11px] tracking-[0.06em] sm:tracking-[0.10em] border-none outline-none ${product.stock <= 0 ? 'text-[#A89880] bg-[#3D3D34] cursor-not-allowed' : clicked ? 'text-[#F5F0E8] bg-[#2C2C26] cursor-pointer' : 'text-[#F5F0E8] bg-[#1C1C17] cursor-pointer'}`}
-            style={{ willChange: 'transform' }}
+            className={`absolute bottom-0 left-0 right-0 text-center font-dm font-medium uppercase transition-all duration-300 ease-out z-[2] translate-y-full group-hover:translate-y-0 py-2 sm:py-3.5 min-h-[36px] sm:min-h-[44px] text-[9px] sm:text-[11px] tracking-[0.06em] sm:tracking-[0.10em] ${product.stock <= 0 ? 'text-[#A89880] bg-[#3D3D34] cursor-not-allowed' : clicked ? 'text-[#F5F0E8] bg-[#2C2C26] cursor-pointer' : 'text-[#F5F0E8] bg-[#1C1C17] cursor-pointer'}`}
           >
             <AnimatePresence mode="wait">
               {product.stock <= 0 ? (
