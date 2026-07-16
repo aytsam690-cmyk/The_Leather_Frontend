@@ -111,7 +111,7 @@ export default function ProductCard({ product, onBuyNow }) {
         className="group relative bg-[#141410] border border-[#2C2C26] rounded-sm overflow-hidden cursor-pointer shadow-[0_1px_3px_rgba(0,0,0,0.25),0_4px_16px_rgba(0,0,0,0.20)] transition-all duration-250 ease-out hover:shadow-[0_4px_16px_rgba(0,0,0,0.35),0_8px_40px_rgba(0,0,0,0.25)] hover:border-[#3D3D34]"
       >
         {/* ── Image area ─────────────────────────────────────────────────── */}
-        <div className="relative aspect-[3/4] overflow-hidden bg-[#1C1C17]">
+        <div className="relative aspect-square overflow-hidden bg-[#1C1C17]">
 
           {/* Product image */}
           {imageUrl ? (
