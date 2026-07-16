@@ -27,6 +27,8 @@ const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy'));
 const TermsConditions = lazy(() => import('./pages/TermsConditions'));
 const ReturnPolicy = lazy(() => import('./pages/ReturnPolicy'));
 const Contact = lazy(() => import('./pages/Contact'));
+const Blog = lazy(() => import('./pages/Blog'));
+const BlogPost = lazy(() => import('./pages/BlogPost'));
 
 // ─── Lazy-loaded admin pages (never loaded for regular visitors) ─────────────
 const AdminLayout = lazy(() => import('./admin/AdminLayout'));
@@ -41,6 +43,10 @@ const AdminCoupons = lazy(() => import('./admin/pages/Coupons'));
 const AdminBanners = lazy(() => import('./admin/pages/Banners'));
 const AdminSettings = lazy(() => import('./admin/pages/Settings'));
 const AdminReviews = lazy(() => import('./admin/pages/Reviews'));
+const AdminBlogList = lazy(() => import('./admin/pages/AdminBlogList'));
+const AdminBlogForm = lazy(() => import('./admin/pages/AdminBlogForm'));
+const AdminBlogCategories = lazy(() => import('./admin/pages/AdminBlogCategories'));
+const AdminBlogSubscribers = lazy(() => import('./admin/pages/AdminBlogSubscribers'));
 
 // ─── Loading spinner ─────────────────────────────────────────────────────────
 const PageLoader = () => (
@@ -123,6 +129,8 @@ function CustomerRoutes() {
           <Route path="/account"      element={<ProtectedRoute><Account defaultTab="profile" /></ProtectedRoute>} />
           <Route path="/profile"      element={<ProtectedRoute><Account defaultTab="profile" /></ProtectedRoute>} />
           <Route path="/orders"       element={<ProtectedRoute><Account defaultTab="orders" /></ProtectedRoute>} />
+          <Route path="/blog"         element={<Blog />} />
+          <Route path="/blog/:slug"   element={<BlogPost />} />
 
           <Route path="*" element={
             <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 16, background: '#FFFFFF' }}>
@@ -210,6 +218,11 @@ function App() {
               <Route path="banners"    element={<AdminBanners />} />
               <Route path="settings"   element={<AdminSettings />} />
               <Route path="reviews"    element={<AdminReviews />} />
+              <Route path="blog"       element={<AdminBlogList />} />
+              <Route path="blog/create" element={<AdminBlogForm />} />
+              <Route path="blog/edit/:id" element={<AdminBlogForm />} />
+              <Route path="blog/categories" element={<AdminBlogCategories />} />
+              <Route path="blog/subscribers" element={<AdminBlogSubscribers />} />
             </Route>
           </Route>
           <Route path="/*" element={
