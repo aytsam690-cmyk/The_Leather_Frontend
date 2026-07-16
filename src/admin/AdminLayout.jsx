@@ -3,7 +3,7 @@ import { NavLink, Outlet, useNavigate, Link } from 'react-router-dom';
 import {
   LayoutDashboard, Package, ShoppingCart, Users, FolderTree,
   Tag, Image, Settings, ChevronLeft, ChevronRight, Bell,
-  Search, LogOut, User, Menu, X, Home, Star
+  Search, LogOut, User, Menu, X, Home, Star, FileText
 } from 'lucide-react';
 import useAdminAuthStore from './store/adminAuthStore';
 import useAdminStore from './store/adminStore';
@@ -29,6 +29,7 @@ const NAV_LINKS = [
   { path: '/aytsam-abdullah/categories',label:'Categories', icon: FolderTree },
   { path: '/aytsam-abdullah/coupons',  label: 'Coupons',    icon: Tag },
   { path: '/aytsam-abdullah/reviews',  label: 'Reviews',    icon: Star },
+  { path: '/aytsam-abdullah/blog',     label: 'Blog',       icon: FileText },
   { path: '/aytsam-abdullah/banners',  label: 'Banners',    icon: Image },
   { path: '/aytsam-abdullah/settings', label: 'Settings',   icon: Settings },
 ];
