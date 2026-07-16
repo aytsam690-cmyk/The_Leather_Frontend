@@ -96,7 +96,7 @@ export default function AdminBlogList() {
           <p className="text-sm text-[#6B6B6B]">Manage your blog content and articles</p>
         </div>
         <button
-          onClick={() => navigate('/admin/blog/create')}
+          onClick={() => navigate('/aytsam-abdullah/blog/create')}
           className="flex items-center gap-2 px-4 py-2 text-white text-sm font-medium rounded-sm transition-all hover:opacity-90"
           style={{ background: CORAL }}
         >
@@ -179,7 +179,7 @@ export default function AdminBlogList() {
                         <button onClick={() => toggleStatus(post)} className="p-1.5 text-[#9E9E9E] hover:text-[#111111] transition-colors" title="Toggle Status">
                           {post.status === 'published' ? <XCircle size={16} /> : <CheckCircle size={16} />}
                         </button>
-                        <button onClick={() => navigate(`/admin/blog/edit/${post._id}`)} className="p-1.5 text-[#9E9E9E] hover:text-[#111111] transition-colors" title="Edit">
+                        <button onClick={() => navigate(`/aytsam-abdullah/blog/edit/${post._id}`)} className="p-1.5 text-[#9E9E9E] hover:text-[#111111] transition-colors" title="Edit">
                           <Edit2 size={16} />
                         </button>
                         <button onClick={() => handleDelete(post._id)} className="p-1.5 text-[#9E9E9E] hover:text-[#DC2626] transition-colors" title="Delete">

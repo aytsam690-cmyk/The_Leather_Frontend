@@ -211,7 +211,7 @@ export default function AdminBlogForm() {
       } else {
         await adminApi.post('/admin/blog', payload);
       }
-      navigate('/admin/blog');
+      navigate('/aytsam-abdullah/blog');
     } catch (err) {
       alert(err.response?.data?.message || 'Failed to save post');
     } finally {
@@ -223,7 +223,7 @@ export default function AdminBlogForm() {
     if (!window.confirm('Are you sure you want to delete this post completely?')) return;
     try {
       await adminApi.delete(`/admin/blog/${id}`);
-      navigate('/admin/blog');
+      navigate('/aytsam-abdullah/blog');
     } catch (e) {
       alert('Failed to delete');
     }
