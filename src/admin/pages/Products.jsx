@@ -508,22 +508,22 @@ export default function Products() {
     setSaveError('');
     setSaving(true);
     try {
-      // Upload new images in parallel
-      const uploadPromises = (data.images || []).map(async (img) => {
+      // Upload new images sequentially to avoid Cloudinary concurrent rate limits
+      const uploadedImages = [];
+      for (const img of (data.images || [])) {
         if (img.file) {
           try {
             const result = await uploadImage(img.file);
-            return { url: result.url, alt: data.name, isPrimary: false };
+            if (result && result.url) {
+              uploadedImages.push({ url: result.url, alt: data.name, isPrimary: false });
+            }
           } catch (uploadErr) {
             console.error('Image upload failed:', uploadErr);
-            return null;
           }
         } else if (img.url && !img.url.startsWith('blob:')) {
-          return { url: img.url, alt: img.alt || data.name, isPrimary: false };
+          uploadedImages.push({ url: img.url, alt: img.alt || data.name, isPrimary: false });
         }
-        return null;
-      });
-      const uploadedImages = (await Promise.all(uploadPromises)).filter(Boolean);
+      }
 
       // Map form fields → backend model fields
       const payload = {
