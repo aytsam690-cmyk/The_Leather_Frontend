@@ -120,7 +120,7 @@ export default function ProductCard({ product, onBuyNow }) {
                 src={imageUrl}
                 alt={product.name}
                 loading="lazy"
-                className={`product-card-img w-full h-full object-cover block transition-all duration-700 ease-out relative z-[1] group-hover:scale-105 ${imageUrl2 ? 'group-hover:opacity-0' : ''}`}
+                className={`product-card-img absolute inset-0 w-full h-full object-cover block transition-all duration-700 ease-out z-[1] group-hover:scale-105 ${imageUrl2 ? 'group-hover:opacity-0' : ''}`}
               />
               {imageUrl2 && (
                 <img
