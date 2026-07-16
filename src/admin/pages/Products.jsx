@@ -354,13 +354,37 @@ function ProductForm({ initial, saving, onCancel, onSave, categories }) {
         <button onClick={onCancel} disabled={saving} className="px-6 py-2.5 rounded-sm text-sm font-semibold text-[#6B6B6B] border border-[#D0D0CA] hover:bg-[#F8F8F6] transition-all disabled:opacity-50">
           Cancel
         </button>
-        <button onClick={() => onSave({ ...form, status: 'draft' })} disabled={saving}
-          className="px-6 py-2.5 rounded-sm text-sm font-semibold border-2 transition-all disabled:opacity-50 border-[#111111] text-[#111111] hover:bg-[#111111] hover:text-white">
-          {saving ? <span className="flex items-center gap-1"><Loader2 size={14} className="animate-spin" /> Saving…</span> : 'Save Draft'}
+        <button 
+          onClick={() => {
+            const finalForm = { ...form };
+            if (specRow.key && specRow.value) {
+              finalForm.specs = { ...finalForm.specs, [specRow.key]: specRow.value };
+            }
+            if (variantRow.size || variantRow.color) {
+              finalForm.variants = [...finalForm.variants, { ...variantRow, id: Date.now() }];
+            }
+            onSave({ ...finalForm, status: 'draft' });
+          }} 
+          disabled={saving}
+          className="px-6 py-2.5 rounded-sm text-sm font-semibold border-2 transition-all disabled:opacity-50 border-[#111111] text-[#111111] hover:bg-[#111111] hover:text-white"
+        >
+          {saving ? <span className="flex items-center gap-1"><Loader2 size={14} className="animate-spin" /> Saving...</span> : 'Save Draft'}
         </button>
-        <button onClick={() => onSave({ ...form, status: 'active' })} disabled={saving}
-          className="px-6 py-2.5 rounded-sm text-sm font-semibold text-white transition-all hover:opacity-90 disabled:opacity-50 bg-[#111111]">
-          {saving ? <span className="flex items-center gap-1"><Loader2 size={14} className="animate-spin" /> Publishing…</span> : 'Publish Product'}
+        <button 
+          onClick={() => {
+            const finalForm = { ...form };
+            if (specRow.key && specRow.value) {
+              finalForm.specs = { ...finalForm.specs, [specRow.key]: specRow.value };
+            }
+            if (variantRow.size || variantRow.color) {
+              finalForm.variants = [...finalForm.variants, { ...variantRow, id: Date.now() }];
+            }
+            onSave({ ...finalForm, status: 'active' });
+          }} 
+          disabled={saving}
+          className="px-6 py-2.5 rounded-sm text-sm font-semibold text-white transition-all hover:opacity-90 disabled:opacity-50 bg-[#111111]"
+        >
+          {saving ? <span className="flex items-center gap-1"><Loader2 size={14} className="animate-spin" /> Publishing...</span> : 'Publish Product'}
         </button>
       </div>
     </div>
@@ -416,6 +440,7 @@ export default function Products() {
           brand: p.brand || '',
           images: p.images || [],
           variants: p.variants || [],
+          specs: p.specs || {},
           metaTitle: p.metaTitle || '',
           metaDescription: p.metaDescription || '',
           bg: `linear-gradient(135deg,${['#667eea,#764ba2','#f093fb,#f5576c','#4facfe,#00f2fe','#43e97b,#38f9d7','#fa709a,#fee140','#a18cd1,#fbc2eb'][i % 6]})`
