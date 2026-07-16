@@ -109,9 +109,8 @@ export default function ProductCard({ product, onBuyNow }) {
         whileHover={{ y: -3 }}
         transition={{ duration: 0.25, ease: 'easeOut' }}
         className="group relative bg-[#141410] border border-[#2C2C26] rounded-sm overflow-hidden cursor-pointer shadow-[0_1px_3px_rgba(0,0,0,0.25),0_4px_16px_rgba(0,0,0,0.20)] transition-all duration-250 ease-out hover:shadow-[0_4px_16px_rgba(0,0,0,0.35),0_8px_40px_rgba(0,0,0,0.25)] hover:border-[#3D3D34]"
-      >
-        {/* ── Image area ─────────────────────────────────────────────────── */}
-        <div className="relative aspect-square overflow-hidden bg-[#1C1C17]">
+             {/* ── Image area ──────────────────────────────────────────────────── */}
+        <div className="relative aspect-square overflow-hidden bg-[#1C1C17] isolate border-b border-[#141410] shadow-[0_1px_0_#141410]">
 
           {/* Product image */}
           {imageUrl ? (
@@ -149,10 +148,10 @@ export default function ProductCard({ product, onBuyNow }) {
             )}
           </div>
 
-          {/* Quick add — fades and slides up smoothly inside the container */}
+          {/* Quick add — pure fade, no movement, slightly taller to overlap edge */}
           <div
             onClick={handleAddToCart}
-            className={`absolute bottom-0 left-0 right-0 text-center font-dm font-medium uppercase transition-all duration-300 ease-out z-[10] py-2 sm:py-3.5 min-h-[36px] sm:min-h-[44px] text-[9px] sm:text-[11px] tracking-[0.06em] sm:tracking-[0.10em] opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 ${product.stock <= 0 ? 'text-[#A89880] bg-[#3D3D34] cursor-not-allowed' : clicked ? 'text-[#F5F0E8] bg-[#2C2C26] cursor-pointer' : 'text-[#F5F0E8] bg-[#1C1C17] cursor-pointer'}`}
+            className={`absolute -bottom-[1px] left-0 right-0 text-center font-dm font-medium uppercase transition-opacity duration-300 ease-out z-[10] pt-2 pb-[calc(0.5rem+1px)] sm:pt-3.5 sm:pb-[calc(0.875rem+1px)] min-h-[36px] sm:min-h-[44px] text-[9px] sm:text-[11px] tracking-[0.06em] sm:tracking-[0.10em] opacity-0 group-hover:opacity-100 border-none outline-none ${product.stock <= 0 ? 'text-[#A89880] bg-[#3D3D34] cursor-not-allowed' : clicked ? 'text-[#F5F0E8] bg-[#2C2C26] cursor-pointer' : 'text-[#F5F0E8] bg-[#1C1C17] cursor-pointer'}`}
           >
             <AnimatePresence mode="wait">
               {product.stock <= 0 ? (
