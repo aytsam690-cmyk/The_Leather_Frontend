@@ -2,11 +2,17 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { ChevronLeft, ChevronRight, Twitter, Linkedin, Facebook, Link as LinkIcon, Check } from 'lucide-react';
-import useSettingsStore from '../store/settingsStore';
-import useCartStore from '../store/cartStore';
-import ProductCard from '../components/ProductCard';
-import BlogCard from '../components/BlogCard';
+import { ChevronLeft, ChevronRight, Link as LinkIcon, Check } from "lucide-react";
+
+const TwitterIcon = ({size=16, fill="currentColor"}) => (
+  <svg width={size} height={size} fill={fill} viewBox="0 0 24 24"><path d="M24 4.557a9.83 9.83 0 0 1-2.828.775 4.932 4.932 0 0 0 2.165-2.724 9.864 9.864 0 0 1-3.127 1.195 4.916 4.916 0 0 0-8.39 4.49 13.944 13.944 0 0 1-10.119-5.133 4.916 4.916 0 0 0 1.523 6.574 4.903 4.903 0 0 1-2.229-.616c-.054 2.281 1.581 4.415 3.949 4.89a4.935 4.935 0 0 1-2.224.084 4.918 4.918 0 0 0 4.588 3.417A9.867 9.867 0 0 1 0 19.54a13.94 13.94 0 0 0 7.548 2.212c9.057 0 14.01-7.502 14.01-14.01 0-.213-.005-.425-.014-.636A10.012 10.012 0 0 0 24 4.557z"/></svg>
+);
+const FacebookIcon = ({size=16, fill="currentColor"}) => (
+  <svg width={size} height={size} fill={fill} viewBox="0 0 24 24"><path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"/></svg>
+);
+const LinkedinIcon = ({size=16, fill="currentColor"}) => (
+  <svg width={size} height={size} fill={fill} viewBox="0 0 24 24"><path d="M4.98 3.5c0 1.381-1.11 2.5-2.48 2.5s-2.48-1.119-2.48-2.5c0-1.38 1.11-2.5 2.48-2.5s2.48 1.12 2.48 2.5zm.02 4.5h-5v16h5v-16zm7.982 0h-4.968v16h4.969v-8.399c0-4.67 6.029-5.052 6.029 0v8.399h4.988v-10.131c0-7.88-8.922-7.593-11.018-3.714v-2.155z"/></svg>
+);
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
@@ -288,7 +294,7 @@ export default function BlogPost() {
       {/* Progress Bar */}
       <div 
         className="fixed top-0 left-0 h-[3px] bg-[#C9A96E] z-[9999] transition-all duration-100 ease-out" 
-        style={{ width: \`\${scrollProgress}%\` }}
+        style={{ width: `${scrollProgress}%` }}
       />
 
       {/* HERO SECTION */}
@@ -466,13 +472,13 @@ export default function BlogPost() {
               <h4 className="font-cm text-xl text-[#F5F0E8] mb-4">Share this article</h4>
               <div className="flex items-center gap-3">
                 <button onClick={() => handleShare('x')} className="w-10 h-10 flex items-center justify-center bg-[#1C1C17] border border-[#2C2C26] rounded-full text-[#A89880] hover:bg-[#C9A96E] hover:text-[#0D0D0B] hover:border-[#C9A96E] transition-all cursor-pointer">
-                  <Twitter size={16} fill="currentColor" />
+                  <TwitterIcon size={16} fill="currentColor" />
                 </button>
                 <button onClick={() => handleShare('linkedin')} className="w-10 h-10 flex items-center justify-center bg-[#1C1C17] border border-[#2C2C26] rounded-full text-[#A89880] hover:bg-[#C9A96E] hover:text-[#0D0D0B] hover:border-[#C9A96E] transition-all cursor-pointer">
-                  <Linkedin size={16} fill="currentColor" />
+                  <LinkedinIcon size={16} fill="currentColor" />
                 </button>
                 <button onClick={() => handleShare('facebook')} className="w-10 h-10 flex items-center justify-center bg-[#1C1C17] border border-[#2C2C26] rounded-full text-[#A89880] hover:bg-[#C9A96E] hover:text-[#0D0D0B] hover:border-[#C9A96E] transition-all cursor-pointer">
-                  <Facebook size={16} fill="currentColor" />
+                  <FacebookIcon size={16} fill="currentColor" />
                 </button>
                 <div className="relative">
                   <button onClick={() => handleShare('copy')} className="w-10 h-10 flex items-center justify-center bg-[#1C1C17] border border-[#2C2C26] rounded-full text-[#A89880] hover:bg-[#C9A96E] hover:text-[#0D0D0B] hover:border-[#C9A96E] transition-all cursor-pointer">
