@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { getProduct, addReview, addGuestReview } from '../services/api';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ShoppingCart, Star, X, ChevronLeft, ChevronRight, Share2, Check, Truck, Shield } from 'lucide-react';
+import { ShoppingCart, Star, X, ChevronLeft, ChevronRight, Share2, Check, Truck, Shield, RotateCcw } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
 import useCartStore from '../store/cartStore';
 import useAuthStore from '../store/authStore';
@@ -760,6 +760,7 @@ export default function ProductDetail() {
                 { icon: <Check size={15} />, text: 'Free Delivery All Over Pakistan' },
                 { icon: <Truck size={15} />, text: 'Cash on delivery available nationwide' },
                 { icon: <Shield size={15} />, text: '100% authentic, sourced from brand' },
+                { icon: <RotateCcw size={15} />, text: <>7 days return policy available. <Link to="/return-policy" className="text-[#C9A96E] hover:underline transition-colors hover:text-[#e0c58e]">Read Return Policy</Link></> },
               ].map((item, i) => (
                 <div key={i} className="flex items-center gap-3">
                   <span className="text-[#C9A96E] shrink-0">{item.icon}</span>
