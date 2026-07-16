@@ -77,12 +77,33 @@ function ProductForm({ initial, saving, onCancel, onSave, categories }) {
   };
   const [form, setForm] = useState({ ...defaults, ...(initial || {}), images: (initial?.images || []), variants: (initial?.variants || []), specs: (initial?.specs || {}) });
   const [variantRow, setVariantRow] = useState({ size:'', color:'', price:'', stock:'' });
-  const [specRow, setSpecRow] = useState({ key: '', value: '' });
+  const [bulkSpecs, setBulkSpecs] = useState('');
 
-  const addSpec = () => {
-    if (!specRow.key || !specRow.value) return;
-    set('specs', { ...form.specs, [specRow.key]: specRow.value });
-    setSpecRow({ key: '', value: '' });
+  const parseBulkSpecsText = (text) => {
+    if (!text || !text.trim()) return {};
+    const lines = text.split('\n');
+    const newSpecs = {};
+    lines.forEach(line => {
+      let separator = ':';
+      if (!line.includes(':') && line.includes('-')) separator = '-';
+      if (!line.includes(':') && !line.includes('-') && line.includes('\t')) separator = '\t';
+      
+      const parts = line.split(separator);
+      if (parts.length >= 2) {
+        const key = parts[0].trim();
+        const val = parts.slice(1).join(separator).trim();
+        if (key && val) newSpecs[key] = val;
+      }
+    });
+    return newSpecs;
+  };
+
+  const addBulkSpecs = () => {
+    const parsed = parseBulkSpecsText(bulkSpecs);
+    if (Object.keys(parsed).length > 0) {
+      set('specs', { ...form.specs, ...parsed });
+    }
+    setBulkSpecs('');
   };
 
   const removeSpec = (k) => {
@@ -268,19 +289,18 @@ function ProductForm({ initial, saving, onCancel, onSave, categories }) {
 
       {/* Section 5.5 — Specifications */}
       <Section title="Product Specifications">
-        <div className="grid grid-cols-2 gap-3 mb-3">
-          <div>
-            <label className={labelCls}>Name (e.g. Material)</label>
-            <input className={inputCls} value={specRow.key} onChange={e => setSpecRow(r => ({ ...r, key: e.target.value }))} placeholder="Specification Name" />
-          </div>
-          <div>
-            <label className={labelCls}>Value (e.g. 100% Leather)</label>
-            <input className={inputCls} value={specRow.value} onChange={e => setSpecRow(r => ({ ...r, value: e.target.value }))} placeholder="Specification Value" />
-          </div>
+        <div className="mb-3">
+          <label className={labelCls}>Paste Specifications (e.g. "Material: Leather" - one per line)</label>
+          <textarea 
+            className={`${inputCls} min-h-[100px] mb-2`}
+            value={bulkSpecs}
+            onChange={e => setBulkSpecs(e.target.value)}
+            placeholder={`Material: Genuine Leather\nColor: Black\nHardware: Silver Tone`}
+          />
+          <button onClick={addBulkSpecs} className="text-sm font-semibold px-4 py-2 rounded-sm border-2 transition-all border-[#111111] text-[#111111] hover:bg-[#111111] hover:text-white">
+            Parse & Add Specifications
+          </button>
         </div>
-        <button onClick={addSpec} className="text-sm font-semibold px-4 py-2 rounded-sm border-2 transition-all border-[#111111] text-[#111111] hover:bg-[#111111] hover:text-white">
-          + Add Specification
-        </button>
         {Object.keys(form.specs || {}).length > 0 && (
           <div className="mt-3 rounded-sm overflow-hidden border border-[#D0D0CA]">
             <table className="w-full text-sm">
@@ -357,8 +377,9 @@ function ProductForm({ initial, saving, onCancel, onSave, categories }) {
         <button 
           onClick={() => {
             const finalForm = { ...form };
-            if (specRow.key && specRow.value) {
-              finalForm.specs = { ...finalForm.specs, [specRow.key]: specRow.value };
+            const parsedSpecs = parseBulkSpecsText(bulkSpecs);
+            if (Object.keys(parsedSpecs).length > 0) {
+              finalForm.specs = { ...finalForm.specs, ...parsedSpecs };
             }
             if (variantRow.size || variantRow.color) {
               finalForm.variants = [...finalForm.variants, { ...variantRow, id: Date.now() }];
@@ -373,8 +394,8 @@ function ProductForm({ initial, saving, onCancel, onSave, categories }) {
         <button 
           onClick={() => {
             const finalForm = { ...form };
-            if (specRow.key && specRow.value) {
-              finalForm.specs = { ...finalForm.specs, [specRow.key]: specRow.value };
+            const parsedSpecs = parseBulkSpecsText(bulkSpecs); if (Object.keys(parsedSpecs).length > 0) {
+              finalForm.specs = { ...finalForm.specs, ...parsedSpecs };
             }
             if (variantRow.size || variantRow.color) {
               finalForm.variants = [...finalForm.variants, { ...variantRow, id: Date.now() }];
