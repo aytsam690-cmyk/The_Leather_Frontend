@@ -127,6 +127,35 @@ export const updateBanner    = (id, data)    => r(adminApi.put(`/banners/${id}`,
 export const deleteBanner    = (id)          => r(adminApi.delete(`/banners/${id}`));
 export const reorderBanners  = (order)       => r(adminApi.post('/banners/reorder', { order }));
 
+// ─── Blog — Posts ─────────────────────────────────────────────────────────────
+export const getAdminPosts   = (params)      => r(adminApi.get('/blog/admin/posts', { params }));
+export const getAdminPost    = (id)          => r(adminApi.get(`/blog/admin/posts/${id}`));
+export const createPost      = (data)        => r(adminApi.post('/blog/admin/posts', data));
+export const updatePost      = (id, data)    => r(adminApi.put(`/blog/admin/posts/${id}`, data));
+export const deletePost      = (id)          => r(adminApi.delete(`/blog/admin/posts/${id}`));
+
+// ─── Blog — Categories ────────────────────────────────────────────────────────
+export const getBlogCategories   = ()          => r(adminApi.get('/blog/admin/categories'));
+export const createBlogCategory  = (data)      => r(adminApi.post('/blog/admin/categories', data));
+export const updateBlogCategory  = (id, data)  => r(adminApi.put(`/blog/admin/categories/${id}`, data));
+export const deleteBlogCategory  = (id)        => r(adminApi.delete(`/blog/admin/categories/${id}`));
+
+// ─── Blog — Tags ──────────────────────────────────────────────────────────────
+export const getBlogTags     = ()            => r(adminApi.get('/blog/admin/tags'));
+export const createBlogTag   = (data)        => r(adminApi.post('/blog/admin/tags', data));
+export const updateBlogTag   = (id, data)    => r(adminApi.put(`/blog/admin/tags/${id}`, data));
+export const deleteBlogTag   = (id)          => r(adminApi.delete(`/blog/admin/tags/${id}`));
+
+// ─── Blog — Image upload (blog pipeline) ──────────────────────────────────────
+export const uploadBlogImage = async (file) => {
+  const formData = new FormData();
+  formData.append('image', file);
+  const res = await adminApi.post('/blog/admin/upload', formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  });
+  return res.data; // { url, public_id }
+};
+
 // ─── Settings ─────────────────────────────────────────────────────────────────
 export const getSettings     = ()      => r(adminApi.get('/admin/settings'));
 export const updateSettings  = (data)  => r(adminApi.put('/admin/settings', data));

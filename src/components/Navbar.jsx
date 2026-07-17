@@ -11,6 +11,7 @@ import { optimizeImage } from '../utils/cloudinary';
 const navLinks = [
   { label: 'Home', path: '/' },
   { label: 'Products', path: '/products' },
+  { label: 'Journal', path: '/blogs' },
   { label: 'Track Order', path: '/track-order' },
   { label: 'About', path: '/about' },
 ];
