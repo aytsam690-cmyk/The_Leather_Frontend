@@ -27,8 +27,6 @@ const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy'));
 const TermsConditions = lazy(() => import('./pages/TermsConditions'));
 const ReturnPolicy = lazy(() => import('./pages/ReturnPolicy'));
 const Contact = lazy(() => import('./pages/Contact'));
-const Blogs = lazy(() => import('./pages/Blogs'));
-const BlogDetail = lazy(() => import('./pages/BlogDetail'));
 
 // ─── Lazy-loaded admin pages (never loaded for regular visitors) ─────────────
 const AdminLayout = lazy(() => import('./admin/AdminLayout'));
@@ -43,8 +41,6 @@ const AdminCoupons = lazy(() => import('./admin/pages/Coupons'));
 const AdminBanners = lazy(() => import('./admin/pages/Banners'));
 const AdminSettings = lazy(() => import('./admin/pages/Settings'));
 const AdminReviews = lazy(() => import('./admin/pages/Reviews'));
-const AdminBlogs = lazy(() => import('./admin/pages/Blogs'));
-const AdminBlogTaxonomy = lazy(() => import('./admin/pages/BlogTaxonomy'));
 
 // ─── Loading spinner ─────────────────────────────────────────────────────────
 const PageLoader = () => (
@@ -124,8 +120,6 @@ function CustomerRoutes() {
           <Route path="/terms-conditions" element={<TermsConditions />} />
           <Route path="/return-policy" element={<ReturnPolicy />} />
           <Route path="/contact"      element={<Contact />} />
-          <Route path="/blogs"        element={<Blogs />} />
-          <Route path="/blog/:slug"   element={<BlogDetail />} />
           <Route path="/account"      element={<ProtectedRoute><Account defaultTab="profile" /></ProtectedRoute>} />
           <Route path="/profile"      element={<ProtectedRoute><Account defaultTab="profile" /></ProtectedRoute>} />
           <Route path="/orders"       element={<ProtectedRoute><Account defaultTab="orders" /></ProtectedRoute>} />
@@ -216,8 +210,6 @@ function App() {
               <Route path="banners"    element={<AdminBanners />} />
               <Route path="settings"   element={<AdminSettings />} />
               <Route path="reviews"    element={<AdminReviews />} />
-              <Route path="blogs"      element={<AdminBlogs />} />
-              <Route path="blog-taxonomy" element={<AdminBlogTaxonomy />} />
             </Route>
           </Route>
           <Route path="/*" element={

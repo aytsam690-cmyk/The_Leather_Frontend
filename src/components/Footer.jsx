@@ -62,7 +62,7 @@ export default function Footer() {
           </div>
           {(settings?.footerColumns?.length > 0 ? settings.footerColumns : [
             { title: 'Shop', links: [{ label: 'All Products', url: '/products' }] },
-            { title: 'Help', links: [{ label: 'Journal', url: '/blogs' }, { label: 'Track Order', url: '/track-order' }, { label: 'Return Policy', url: '/return-policy' }] },
+            { title: 'Help', links: [{ label: 'Track Order', url: '/track-order' }, { label: 'Return Policy', url: '/return-policy' }] },
             { title: 'Legal', links: [{ label: 'Privacy Policy', url: '/privacy-policy' }, { label: 'Terms & Conditions', url: '/terms-conditions' }] },
           ]).map((col, idx) => (
             <div key={col.title || idx}>

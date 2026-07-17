@@ -110,10 +110,4 @@ export const addGuestReview = (productId, data) => api.post(`/reviews/guest/${pr
 // Banners
 export const getBanners = () => api.get('/banners').then((r) => r.data);
 
-// Blog
-export const getBlogPosts = (params) => api.get('/blog/posts', { params }).then((r) => r.data);
-export const getBlogPost = (slug) => api.get(`/blog/posts/${slug}`).then((r) => r.data);
-export const getBlogCategories = () => api.get('/blog/categories').then((r) => r.data);
-export const getBlogTags = () => api.get('/blog/tags').then((r) => r.data);
-
 export default api;
