@@ -341,10 +341,10 @@ export default function Home() {
       <Helmet>
         <title>{settings?.metaTags?.title || `${settings?.siteName || 'CRAFT HID'} | Premium Leather Wallets, Bags & Accessories`}</title>
         <meta name="description" content={settings?.metaTags?.description || `Shop ${settings?.siteName || 'CRAFT HID'}'s handcrafted genuine leather wallets, bags & accessories. Premium quality leather goods with free delivery across Pakistan.`} />
-        <link rel="canonical" href={`https://www.crafthid.com${window.location.pathname}`} />
+        <link rel="canonical" href="https://www.crafthid.com/" />
         <meta property="og:title" content={settings?.metaTags?.title || `${settings?.siteName || 'CRAFT HID'} | Premium Leather Wallets, Bags & Accessories`} />
         <meta property="og:description" content={settings?.metaTags?.description || `Shop ${settings?.siteName || 'CRAFT HID'}'s handcrafted genuine leather wallets, bags & accessories. Premium quality leather goods with free delivery across Pakistan.`} />
-        <meta property="og:url" content={window.location.origin} />
+        <meta property="og:url" content="https://www.crafthid.com/" />
         <meta property="og:image" content={settings?.metaTags?.ogImage || settings?.logo || ''} />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={settings?.metaTags?.title || `${settings?.siteName || 'CRAFT HID'} | Premium Leather Wallets, Bags & Accessories`} />

@@ -51,10 +51,10 @@ export default function About() {
       <Helmet>
         <title>About Us — {siteName}</title>
         <meta name="description" content={`Discover ${siteName}'s journey — Pakistan's trusted brand for handcrafted genuine leather wallets, bags & fashion accessories. Premium quality since day one.`} />
-        <link rel="canonical" href={`https://www.crafthid.com${window.location.pathname}`} />
+        <link rel="canonical" href="https://www.crafthid.com/about" />
         <meta property="og:title" content={`About Us — ${siteName}`} />
         <meta property="og:description" content={`Discover ${siteName}'s journey — Pakistan's trusted brand for handcrafted genuine leather wallets, bags & fashion accessories.`} />
-        <meta property="og:url" content={window.location.origin + '/about'} />
+        <meta property="og:url" content="https://www.crafthid.com/about" />
         <meta property="og:image" content={settings?.logo || ''} />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={`About Us — ${siteName}`} />

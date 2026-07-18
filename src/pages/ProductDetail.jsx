@@ -535,10 +535,10 @@ export default function ProductDetail() {
         <title>{product.metaTitle || product.name} | {settings?.siteName || 'Store'}</title>
         <meta name="description" content={product.metaDescription || product.description?.slice(0, 155) || `Buy ${product.name} at ${settings?.siteName || 'our store'}`} />
         {product.metaKeywords && <meta name="keywords" content={product.metaKeywords} />}
-        <link rel="canonical" href={`https://www.crafthid.com${window.location.pathname}`} />
+        <link rel="canonical" href={`https://www.crafthid.com/products/${product.slug || id}`} />
         <meta property="og:title" content={`${product.metaTitle || product.name} | ${settings?.siteName || 'Store'}`} />
         <meta property="og:description" content={product.metaDescription || product.description?.slice(0, 155) || `Buy ${product.name} at ${settings?.siteName || 'our store'}`} />
-        <meta property="og:url" content={`https://www.crafthid.com${window.location.pathname}`} />
+        <meta property="og:url" content={`https://www.crafthid.com/products/${product.slug || id}`} />
         <meta property="og:image" content={product.images?.[0]?.url || settings?.logo || ''} />
         <meta property="og:type" content="product" />
         <meta property="og:site_name" content={settings?.siteName || 'CRAFT HID'} />

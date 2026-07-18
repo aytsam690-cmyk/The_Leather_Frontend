@@ -46,7 +46,7 @@ export default function Contact() {
         <link rel="canonical" href={`https://www.crafthid.com/contact`} />
         <meta property="og:title" content={`Contact Us — ${siteName}`} />
         <meta property="og:description" content={`Get in touch with ${siteName}. We're here to help with your orders and inquiries.`} />
-        <meta property="og:url" content={window.location.origin + '/contact'} />
+        <meta property="og:url" content="https://www.crafthid.com/contact" />
         <meta property="og:image" content={settings?.logo || ''} />
         <meta name="twitter:card" content="summary" />
         <meta name="twitter:title" content={`Contact Us — ${siteName}`} />

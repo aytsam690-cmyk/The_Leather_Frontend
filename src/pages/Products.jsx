@@ -407,10 +407,10 @@ export default function Products() {
         <Helmet>
           <title>{filters.search ? `Search: ${filters.search}` : filters.category !== 'All' ? `${filters.category} Products` : 'All Products'} — {settings?.siteName || 'Store'}</title>
           <meta name="description" content={`Shop premium leather wallets, women's bags, cardholders & accessories at ${settings?.siteName || 'CRAFT HID'}. Genuine handcrafted leather goods with free delivery across Pakistan.`} />
-          <link rel="canonical" href={`https://www.crafthid.com${window.location.pathname}`} />
+          <link rel="canonical" href="https://www.crafthid.com/products" />
           <meta property="og:title" content={`${filters.search ? `Search: ${filters.search}` : filters.category !== 'All' ? `${filters.category} Products` : 'All Products'} — ${settings?.siteName || 'Store'}`} />
           <meta property="og:description" content={`Shop premium leather wallets, women's bags, cardholders & accessories at ${settings?.siteName || 'CRAFT HID'}. Genuine handcrafted leather goods with free delivery across Pakistan.`} />
-          <meta property="og:url" content={window.location.origin + '/products'} />
+          <meta property="og:url" content="https://www.crafthid.com/products" />
           <meta property="og:image" content={settings?.logo || ''} />
           <meta name="twitter:card" content="summary_large_image" />
           <meta name="twitter:title" content={`${filters.category !== 'All' ? `${filters.category} Products` : 'All Products'} — ${settings?.siteName || 'Store'}`} />

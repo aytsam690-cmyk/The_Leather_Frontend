@@ -52,7 +52,7 @@ export default function PrivacyPolicy() {
         <link rel="canonical" href={`https://www.crafthid.com/privacy-policy`} />
         <meta property="og:title" content={`Privacy Policy — ${siteName}`} />
         <meta property="og:description" content={`Privacy Policy for ${siteName}. Learn how we collect, use, and protect your data.`} />
-        <meta property="og:url" content={window.location.origin + '/privacy-policy'} />
+        <meta property="og:url" content="https://www.crafthid.com/privacy-policy" />
         <meta property="og:image" content={settings?.logo || ''} />
         <meta name="twitter:card" content="summary" />
         <meta name="twitter:title" content={`Privacy Policy — ${siteName}`} />
