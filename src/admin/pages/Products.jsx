@@ -533,13 +533,11 @@ export default function Products() {
       const uploadedImages = [];
       for (const img of (data.images || [])) {
         if (img.file) {
-          try {
-            const result = await uploadImage(img.file);
-            if (result && result.url) {
-              uploadedImages.push({ url: result.url, alt: data.name, isPrimary: false });
-            }
-          } catch (uploadErr) {
-            console.error('Image upload failed:', uploadErr);
+          const result = await uploadImage(img.file);
+          if (result && result.url) {
+            uploadedImages.push({ url: result.url, alt: data.name, isPrimary: false });
+          } else {
+            throw new Error(`Failed to upload image "${img.name || 'unknown'}". Please try again.`);
           }
         } else if (img.url && !img.url.startsWith('blob:')) {
           uploadedImages.push({ url: img.url, alt: img.alt || data.name, isPrimary: false });
