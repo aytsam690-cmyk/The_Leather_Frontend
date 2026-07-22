@@ -72,7 +72,7 @@ function ProductForm({ initial, saving, onCancel, onSave, categories }) {
   const defaults = {
     name:'', category:'', subcategory:'', brand:'', status:'active',
     price:'', comparePrice:'', costPrice:'', sku:'', barcode:'', stock:'', trackInventory:true,
-    description:'', metaTitle:'', metaDescription:'', metaKeywords:'', slug:'',
+    description:'', metaTitle:'', metaDescription:'', metaKeywords:'', slug:'', sortOrder: 0,
     images:[], variants:[], specs:{}, isFeatured: false,
   };
   const [form, setForm] = useState({ ...defaults, ...(initial || {}), images: (initial?.images || []), variants: (initial?.variants || []), specs: (initial?.specs || {}) });
@@ -148,7 +148,7 @@ function ProductForm({ initial, saving, onCancel, onSave, categories }) {
             <label className={labelCls}>Product Name *</label>
             <input className={inputCls} value={form.name} onChange={e => set('name', e.target.value)} placeholder="Enter product name" />
           </div>
-          <div className="grid sm:grid-cols-3 gap-4">
+          <div className="grid sm:grid-cols-4 gap-4">
             <div>
               <label className={labelCls}>Category</label>
               <select className={inputCls} value={form.category} onChange={e => { set('category', e.target.value); set('subcategory',''); }}>
@@ -166,6 +166,10 @@ function ProductForm({ initial, saving, onCancel, onSave, categories }) {
             <div>
               <label className={labelCls}>Brand</label>
               <input className={inputCls} value={form.brand} onChange={e => set('brand', e.target.value)} placeholder="Brand name" />
+            </div>
+            <div>
+              <label className={labelCls}>Sort Order <span style={{color:'#9E9E9E',fontWeight:400}}>(1 = first)</span></label>
+              <input className={inputCls} type="number" min="0" value={form.sortOrder} onChange={e => set('sortOrder', Number(e.target.value))} placeholder="0" />
             </div>
           </div>
           <div>
@@ -456,6 +460,7 @@ export default function Products() {
           price: p.price, comparePrice: p.comparePrice || '', stock: p.stock,
           status: p.isActive ? 'active' : 'inactive',
           isFeatured: p.isFeatured || false,
+          sortOrder: p.sortOrder ?? 0,
           slug: p.slug,
           description: p.description || '',
           brand: p.brand || '',
@@ -567,6 +572,7 @@ export default function Products() {
         variants: data.variants || [],
         specs: data.specs || {},
         images: uploadedImages,
+        sortOrder: Number(data.sortOrder) || 0,
         metaTitle: data.metaTitle || data.name,
         metaDescription: data.metaDescription || '',
         metaKeywords: data.metaKeywords || '',
@@ -664,7 +670,7 @@ export default function Products() {
                   <input type="checkbox" checked={selected.length === paginated.length && paginated.length > 0} onChange={toggleAll} className="accent-orange-500" />
                 </th>
                 <th className="px-4 py-3 text-left text-xs font-semibold text-[#9E9E9E] uppercase tracking-wider w-12">IMG</th>
-                {['Product', 'Category', 'Price', 'Stock', 'Status', 'Actions'].map(h => (
+                {['Sort #', 'Product', 'Category', 'Price', 'Stock', 'Status', 'Actions'].map(h => (
                   <th key={h} className="px-4 py-3 text-left text-xs font-semibold text-[#9E9E9E] uppercase tracking-wider whitespace-nowrap">{h}</th>
                 ))}
               </tr>
@@ -684,6 +690,11 @@ export default function Products() {
                     <td className="px-4 py-3">
                       <p className="text-sm font-semibold text-[#111111] max-w-[200px] truncate">{p.name}</p>
                       <p className="text-xs text-[#9E9E9E]">{p.sku}</p>
+                    </td>
+                    <td className="px-4 py-3">
+                      <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-[#F8F8F6] border border-[#E8E8E4] text-xs font-bold text-[#C9A96E]">
+                        {p.sortOrder || 0}
+                      </span>
                     </td>
                     <td className="px-4 py-3 text-sm text-[#6B6B6B] whitespace-nowrap">{p.category}</td>
                     <td className="px-4 py-3 text-sm font-semibold text-[#111111]">{formatPrice(p.price)}</td>
