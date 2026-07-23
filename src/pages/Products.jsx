@@ -365,7 +365,11 @@ export default function Products() {
     if (sort === 'price_asc') return a.price - b.price;
     if (sort === 'price_desc') return b.price - a.price;
     if (sort === 'popular') return (b.reviews || 0) - (a.reviews || 0);
-    return (b._id || '').localeCompare(a._id || '');
+    // Default: sort by manual sortOrder (0 = unset, goes last), then by newest
+    const aOrder = a.sortOrder > 0 ? a.sortOrder : Infinity;
+    const bOrder = b.sortOrder > 0 ? b.sortOrder : Infinity;
+    if (aOrder !== bOrder) return aOrder - bOrder;
+    return (b._id || '').localeCompare(a._id || ''); // newest first as tiebreaker
   });
 
   const totalPages = Math.ceil(sorted.length / PAGE_SIZE);
