@@ -563,14 +563,32 @@ export default function ProductDetail() {
             "aggregateRating": {
               "@type": "AggregateRating",
               "ratingValue": product.ratings.average,
-              "reviewCount": product.ratings.count
+              "reviewCount": product.ratings.count,
+              "bestRating": 5,
+              "worstRating": 1
             }
+          } : {}),
+          ...(Array.isArray(reviews) && reviews.length > 0 ? {
+            "review": reviews.map(r => ({
+              "@type": "Review",
+              "reviewRating": {
+                "@type": "Rating",
+                "ratingValue": r.rating,
+                "bestRating": 5
+              },
+              "author": {
+                "@type": "Person",
+                "name": r.user?.name || r.name || "Verified Buyer"
+              },
+              "reviewBody": r.comment || ""
+            }))
           } : {}),
           "offers": {
             "@type": "Offer",
-            "url": `https://www.crafthid.com${window.location.pathname}`,
+            "url": `https://www.crafthid.com/products/${product.slug || id}`,
             "priceCurrency": "PKR",
             "price": product.price,
+            "priceValidUntil": new Date(Date.now() + 365*24*60*60*1000).toISOString().split('T')[0],
             "availability": product.stock > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
             "seller": {
               "@type": "Organization",
