@@ -41,6 +41,7 @@ const AdminCoupons = lazy(() => import('./admin/pages/Coupons'));
 const AdminBanners = lazy(() => import('./admin/pages/Banners'));
 const AdminSettings = lazy(() => import('./admin/pages/Settings'));
 const AdminReviews = lazy(() => import('./admin/pages/Reviews'));
+const AdminExpenses = lazy(() => import('./admin/pages/Expenses'));
 
 // ─── Loading spinner ─────────────────────────────────────────────────────────
 const PageLoader = () => (
@@ -209,6 +210,7 @@ function App() {
               <Route path="banners"    element={<AdminBanners />} />
               <Route path="settings"   element={<AdminSettings />} />
               <Route path="reviews"    element={<AdminReviews />} />
+              <Route path="expenses"   element={<AdminExpenses />} />
             </Route>
           </Route>
           <Route path="/*" element={

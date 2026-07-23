@@ -3,7 +3,7 @@ import { NavLink, Outlet, useNavigate, Link } from 'react-router-dom';
 import {
   LayoutDashboard, Package, ShoppingCart, Users, FolderTree,
   Tag, Image, Settings, ChevronLeft, ChevronRight, Bell,
-  Search, LogOut, User, Menu, X, Home, Star
+  Search, LogOut, User, Menu, X, Home, Star, Receipt
 } from 'lucide-react';
 import useAdminAuthStore from './store/adminAuthStore';
 import useAdminStore from './store/adminStore';
@@ -25,6 +25,7 @@ const NAV_LINKS = [
   { path: '/aytsam-abdullah',          label: 'Dashboard',  icon: LayoutDashboard, end: true },
   { path: '/aytsam-abdullah/products', label: 'Products',   icon: Package },
   { path: '/aytsam-abdullah/orders',   label: 'Orders',     icon: ShoppingCart },
+  { path: '/aytsam-abdullah/expenses', label: 'Expenses',   icon: Receipt },
   { path: '/aytsam-abdullah/customers',label: 'Customers',  icon: Users },
   { path: '/aytsam-abdullah/categories',label:'Categories', icon: FolderTree },
   { path: '/aytsam-abdullah/coupons',  label: 'Coupons',    icon: Tag },

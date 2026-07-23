@@ -131,6 +131,13 @@ export const reorderBanners  = (order)       => r(adminApi.post('/banners/reorde
 export const getSettings     = ()      => r(adminApi.get('/admin/settings'));
 export const updateSettings  = (data)  => r(adminApi.put('/admin/settings', data));
 
+// ─── Expenses ─────────────────────────────────────────────────────────────────
+export const getExpenses     = (params) => r(adminApi.get('/expenses', { params }));
+export const getExpenseStats = ()       => r(adminApi.get('/expenses/stats'));
+export const createExpense   = (data)   => r(adminApi.post('/expenses', data));
+export const updateExpense   = (id, data) => r(adminApi.put(`/expenses/${id}`, data));
+export const deleteExpense   = (id)     => r(adminApi.delete(`/expenses/${id}`));
+
 // ─── Upload ───────────────────────────────────────────────────────────────────
 export const uploadImage = async (file) => {
   const formData = new FormData();
