@@ -579,6 +579,7 @@ export default function Products() {
       };
 
       if (editProduct) {
+        console.log('[DEBUG handleSave] data.price:', data.price, '| payload.price:', payload.price, '| editProduct.id:', editProduct.id);
         await apiUpdateProduct(editProduct.id, payload);
       } else {
         await apiCreateProduct(payload);
