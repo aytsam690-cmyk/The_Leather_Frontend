@@ -169,7 +169,7 @@ function ProductForm({ initial, saving, onCancel, onSave, categories }) {
             </div>
             <div>
               <label className={labelCls}>Sort Order <span style={{color:'#9E9E9E',fontWeight:400}}>(1 = first)</span></label>
-              <input className={inputCls} type="number" min="0" value={form.sortOrder} onChange={e => set('sortOrder', Number(e.target.value))} placeholder="0" />
+              <input className={inputCls} type="number" min="0" value={form.sortOrder} onChange={e => set('sortOrder', Number(e.target.value))} onWheel={e => e.target.blur()} placeholder="0" />
             </div>
           </div>
           <div>
@@ -192,7 +192,7 @@ function ProductForm({ initial, saving, onCancel, onSave, categories }) {
           {[[`Selling Price (${symbol})`, 'price'], [`Original Price / MRP (${symbol})`, 'comparePrice'], [`Cost Price (${symbol})`, 'costPrice']].map(([l, k]) => (
             <div key={k}>
               <label className={labelCls}>{l}</label>
-              <input type="number" className={inputCls} value={form[k]} onChange={e => set(k, e.target.value)} placeholder="0.00" />
+              <input type="number" className={inputCls} value={form[k]} onChange={e => set(k, e.target.value)} onWheel={e => e.target.blur()} placeholder="0.00" />
             </div>
           ))}
         </div>
@@ -701,7 +701,7 @@ export default function Products() {
                     <td className="px-4 py-3 text-sm font-semibold text-[#111111]">{formatPrice(p.price)}</td>
                     <td className="px-4 py-3">
                       {editingStock === p.id ? (
-                        <input type="number" defaultValue={p.stock} autoFocus
+                        <input type="number" defaultValue={p.stock} autoFocus onWheel={e => e.target.blur()}
                           className="w-16 border border-[#C9A96E] rounded-sm px-2 py-1 text-sm outline-none"
                           onBlur={e => saveStock(p.id, e.target.value)}
                           onKeyDown={e => e.key === 'Enter' && saveStock(p.id, e.target.value)} />
