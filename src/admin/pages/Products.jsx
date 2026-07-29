@@ -217,32 +217,57 @@ function ProductForm({ initial, saving, onCancel, onSave, categories }) {
 
       {/* Section 3 — Images */}
       <Section title="Product Images">
-        <div className="border-2 border-dashed border-[#D0D0CA] rounded-sm p-8 text-center hover:border-[#C9A96E] transition-colors cursor-pointer mb-4"
-          onClick={() => document.getElementById('img-upload').click()}>
-          <Upload size={32} className="mx-auto mb-3 text-[#9E9E9E]" />
-          <p className="text-sm font-semibold text-[#6B6B6B]">Drop images here or click to browse</p>
-          <p className="text-xs text-[#9E9E9E] mt-1">PNG, JPG, WEBP — Max 5MB each (Recommended: 800x800px)</p>
-          {/* Uploads to Cloudinary: fetch POST to https://api.cloudinary.com/v1_1/${VITE_CLOUDINARY_CLOUD_NAME}/image/upload with FormData */}
-          <input id="img-upload" type="file" multiple accept="image/*" className="hidden"
-            onChange={e => {
-              const files = Array.from(e.target.files);
-              const previews = files.map(f => ({ url: URL.createObjectURL(f), name: f.name, id: Date.now() + Math.random(), file: f }));
-              set('images', [...form.images, ...previews]);
-            }} />
-        </div>
+          {/* Upload zone */}
+          <div className="border-2 border-dashed border-[#D0D0CA] rounded-sm p-8 text-center hover:border-[#C9A96E] transition-colors cursor-pointer mb-4"
+            onClick={() => document.getElementById('img-upload').click()}>
+            <Upload size={32} className="mx-auto mb-3 text-[#9E9E9E]" />
+            <p className="text-sm font-semibold text-[#6B6B6B]">Drop images here or click to browse</p>
+            <p className="text-xs text-[#9E9E9E] mt-1">PNG, JPG, WEBP — Max 5MB each (Recommended: 800x800px)</p>
+            {/* Uploads to Cloudinary: fetch POST to https://api.cloudinary.com/v1_1/${VITE_CLOUDINARY_CLOUD_NAME}/image/upload with FormData */}
+            <input id="img-upload" type="file" multiple accept="image/*" className="hidden"
+              onChange={e => {
+                const files = Array.from(e.target.files);
+                const previews = files.map(f => ({ url: URL.createObjectURL(f), name: f.name, id: Date.now() + Math.random(), file: f, variantId: '' }));
+                set('images', [...form.images, ...previews]);
+              }} />
+          </div>
         {form.images.length > 0 && (
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {form.images.map((img, i) => (
-              <div key={img.id} className="relative rounded-sm overflow-hidden border border-[#D0D0CA] aspect-square">
-                <img src={img.url} alt={img.name} className="w-full h-full object-cover" />
-                <button onClick={() => set('images', form.images.filter((_, j) => j !== i))}
-                  className="absolute top-1 right-1 w-6 h-6 bg-[#9B2226] text-white rounded-full flex items-center justify-center text-xs hover:bg-[#7A1B1E]">
-                  <X size={10} />
-                </button>
-                <div className="absolute bottom-1 left-1 text-[#9E9E9E] cursor-move"><GripVertical size={14} /></div>
+              <div key={img.id || i} className="relative rounded-sm overflow-hidden border border-[#D0D0CA]">
+                <div className="aspect-square">
+                  <img src={img.url} alt={img.name || ''} className="w-full h-full object-cover" />
+                  <button onClick={() => set('images', form.images.filter((_, j) => j !== i))}
+                    className="absolute top-1 right-1 w-6 h-6 bg-[#9B2226] text-white rounded-full flex items-center justify-center text-xs hover:bg-[#7A1B1E] z-10">
+                    <X size={10} />
+                  </button>
+                  <div className="absolute bottom-1 left-1 text-[#9E9E9E] cursor-move"><GripVertical size={14} /></div>
+                </div>
+                {/* Variant tag dropdown */}
+                <div className="bg-white border-t border-[#E8E8E4] px-1.5 py-1">
+                  <select
+                    value={img.variantId || ''}
+                    onChange={e => {
+                      const updated = [...form.images];
+                      updated[i] = { ...updated[i], variantId: e.target.value };
+                      set('images', updated);
+                    }}
+                    className="w-full text-[10px] border border-[#D0D0CA] rounded px-1 py-0.5 text-[#111111] outline-none focus:border-[#C9A96E] bg-white"
+                  >
+                    <option value="">🏷 Default</option>
+                    {form.variants.map((v, vi) => {
+                      const label = [v.color, v.size].filter(Boolean).join(' / ') || `Variant ${vi + 1}`;
+                      const val = [v.color, v.size].filter(Boolean).join('-') || String(vi);
+                      return <option key={vi} value={val}>{label}</option>;
+                    })}
+                  </select>
+                </div>
               </div>
             ))}
           </div>
+        )}
+        {form.variants.length > 0 && form.images.length > 0 && (
+          <p className="text-[11px] text-[#9E9E9E] mt-2">💡 Tag each image to a variant using the dropdown. Images tagged "Default" show for all variants.</p>
         )}
       </Section>
 
@@ -540,12 +565,12 @@ export default function Products() {
         if (img.file) {
           const result = await uploadImage(img.file);
           if (result && result.url) {
-            uploadedImages.push({ url: result.url, alt: data.name, isPrimary: false });
+            uploadedImages.push({ url: result.url, alt: data.name, isPrimary: false, variantId: img.variantId || '' });
           } else {
             throw new Error(`Failed to upload image "${img.name || 'unknown'}". Please try again.`);
           }
         } else if (img.url && !img.url.startsWith('blob:')) {
-          uploadedImages.push({ url: img.url, alt: img.alt || data.name, isPrimary: false });
+          uploadedImages.push({ url: img.url, alt: img.alt || data.name, isPrimary: false, variantId: img.variantId || '' });
         }
       }
 

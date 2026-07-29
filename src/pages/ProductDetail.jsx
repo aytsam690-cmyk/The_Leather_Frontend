@@ -433,8 +433,8 @@ export default function ProductDetail() {
   const [reviews, setReviews] = useState([]);
   const [relatedProducts, setRelatedProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [selectedColor, setSelectedColor] = useState(0);
-  const [selectedSize, setSelectedSize] = useState('M');
+  const [selectedColor, setSelectedColor] = useState('');
+  const [selectedSize, setSelectedSize] = useState('');
   const [qty, setQty] = useState(1);
   const [addedAnim, setAddedAnim] = useState(false);
   const [relatedPage, setRelatedPage] = useState(0);
@@ -460,16 +460,25 @@ export default function ProductDetail() {
             }))
           : [{ url: '', bg: DEFAULT_GRADIENT, alt: 'Product' }];
 
+        // Extract unique colors & sizes from variants array
+        const vColors = Array.from(new Set((p.variants || []).map(v => v.color).filter(Boolean)));
+        const vSizes = Array.from(new Set((p.variants || []).map(v => v.size).filter(Boolean)));
+
         const mappedProduct = {
           ...p,
           images,
           ratings: { average: p.ratings?.average || 0, count: p.ratings?.count || 0 },
-          colors: p.colors || [],
-          sizes: p.sizes || [],
+          colors: vColors.length > 0 ? vColors : (p.colors || []),
+          sizes: vSizes.length > 0 ? vSizes : (p.sizes || []),
+          variants: p.variants || [],
           specs: p.specs || {},
           stock: p.stock ?? 0,
           comparePrice: p.comparePrice || p.price,
         };
+
+        // Auto-select the first available combination
+        if (mappedProduct.colors.length > 0) setSelectedColor(mappedProduct.colors[0]);
+        if (mappedProduct.sizes.length > 0) setSelectedSize(mappedProduct.sizes[0]);
 
         setProduct(mappedProduct);
         trackViewContent(mappedProduct); // Meta Pixel: ViewContent
@@ -512,21 +521,53 @@ export default function ProductDetail() {
     );
   }
 
-  const discountPct = product.comparePrice > product.price
-    ? Math.round(((product.comparePrice - product.price) / product.comparePrice) * 100)
+  // ─── Variant-aware derived values ──────────────────────────────────────────
+  const selectedVariant = product.variants?.find(v =>
+    (!v.color || v.color === selectedColor) && (!v.size || v.size === selectedSize)
+  ) || product.variants?.[0];
+
+  const currentPrice = selectedVariant?.price || product.price;
+  const currentStock = selectedVariant?.stock ?? product.stock;
+  const currentComparePrice = product.comparePrice || product.price;
+  const discountPct = currentComparePrice > currentPrice
+    ? Math.round(((currentComparePrice - currentPrice) / currentComparePrice) * 100)
     : 0;
 
+  // Build the gallery for the selected variant:
+  // 1. Images tagged to this variant (by color-size key)
+  // 2. Fall back to untagged/default images if none tagged
+  const displayImages = React.useMemo(() => {
+    if (!product) return [];
+    const variantKey = [selectedColor, selectedSize].filter(Boolean).join('-');
+    const colorKey = selectedColor || '';
+    const tagged = product.images.filter(img =>
+      img.variantId && (img.variantId === variantKey || img.variantId === colorKey)
+    );
+    const defaults = product.images.filter(img => !img.variantId);
+    // Use tagged images if any, otherwise fall back to defaults
+    return tagged.length > 0 ? tagged : (defaults.length > 0 ? defaults : product.images);
+  }, [product, selectedColor, selectedSize]);
+
   const handleAddToCart = () => {
-    addItem({ ...product, ratings: { average: product.ratings.average, count: product.ratings.count } }, qty, { size: selectedSize, color: product.colors[selectedColor] });
-    trackAddToCart(product, qty); // Meta Pixel: AddToCart
+    if (currentStock <= 0) return;
+    addItem(
+      { ...product, price: currentPrice, ratings: { average: product.ratings.average, count: product.ratings.count } },
+      qty,
+      { size: selectedSize, color: selectedColor, variantId: selectedVariant?._id }
+    );
+    trackAddToCart(product, qty);
     setAddedAnim(true);
     setTimeout(() => setAddedAnim(false), 1500);
   };
 
   const handleBuyNow = () => {
-    if (product.stock <= 0) return;
-    addItem({ ...product, ratings: { average: product.ratings.average, count: product.ratings.count } }, qty, { size: selectedSize, color: product.colors[selectedColor] });
-    trackAddToCart(product, qty); // Meta Pixel: AddToCart (Buy Now)
+    if (currentStock <= 0) return;
+    addItem(
+      { ...product, price: currentPrice, ratings: { average: product.ratings.average, count: product.ratings.count } },
+      qty,
+      { size: selectedSize, color: selectedColor, variantId: selectedVariant?._id }
+    );
+    trackAddToCart(product, qty);
     navigate('/checkout');
   };
 
@@ -620,8 +661,8 @@ export default function ProductDetail() {
 
         {/* Two-column grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
-          {/* LEFT: Gallery */}
-          <Gallery images={product.images} productName={product.name} />
+          {/* LEFT: Gallery — switches per variant */}
+          <Gallery images={displayImages} productName={product.name} />
 
           {/* RIGHT: Product info */}
           <div>
@@ -642,12 +683,12 @@ export default function ProductDetail() {
 
             <div className="border-y border-[#2C2C26] py-3.5 mt-3.5 flex items-center gap-3 flex-wrap">
               <span className={`font-dm text-[28px] font-semibold ${discountPct ? 'text-[#C9A96E]' : 'text-[#F5F0E8]'}`}>
-                {formatPrice(product.price)}
+                {formatPrice(currentPrice)}
               </span>
-              {product.comparePrice > product.price && (
+              {currentComparePrice > currentPrice && (
                 <>
                   <span className="font-dm text-[18px] text-[#6B6055] line-through">
-                    {formatPrice(product.comparePrice)}
+                    {formatPrice(currentComparePrice)}
                   </span>
                   <span className="font-dm text-[12px] font-bold text-[#0D0D0B] bg-[#C9A96E] px-2.5 py-1 rounded-sm">
                     {discountPct}% OFF
@@ -659,16 +700,22 @@ export default function ProductDetail() {
             {product.colors.length > 0 && (
               <div className="mt-4">
                 <label className="font-dm text-[10px] font-medium uppercase tracking-[0.08em] text-[#6B6055] block mb-2.5">
-                  Colour: {product.colors[selectedColor]}
+                  Colour: <span className="text-[#F5F0E8]">{selectedColor}</span>
                 </label>
-                <div className="flex gap-2.5">
-                  {product.colors.map((c, i) => (
+                <div className="flex gap-2.5 flex-wrap">
+                  {product.colors.map((c) => (
                     <button
-                      key={i}
-                      onClick={() => setSelectedColor(i)}
-                      className={`w-11 h-11 rounded-full border-2 border-transparent cursor-pointer transition-transform duration-150 hover:scale-110 ${selectedColor === i ? 'outline outline-2 outline-[#C9A96E] outline-offset-2' : 'outline-none'}`}
-                      style={{ background: c }}
-                    />
+                      key={c}
+                      onClick={() => setSelectedColor(c)}
+                      title={c}
+                      className={`w-11 h-11 rounded-sm border-2 cursor-pointer transition-all duration-150 hover:scale-105 font-dm text-[11px] font-medium ${
+                        selectedColor === c
+                          ? 'border-[#C9A96E] text-[#C9A96E] bg-[#1C1C17]'
+                          : 'border-[#2C2C26] text-[#A89880] bg-transparent hover:border-[#3D3D34]'
+                      }`}
+                    >
+                      {c}
+                    </button>
                   ))}
                 </div>
               </div>
@@ -708,7 +755,7 @@ export default function ProductDetail() {
                   {qty}
                 </span>
                 <button
-                  onClick={() => setQty(q => Math.min(product.stock, q + 1))}
+                  onClick={() => setQty(q => Math.min(currentStock, q + 1))}
                   className="w-11 h-11 bg-transparent border-none cursor-pointer text-[#A89880] text-[18px] flex items-center justify-center transition-colors hover:text-[#F5F0E8] hover:bg-[#1C1C17]"
                 >
                   +
@@ -716,8 +763,8 @@ export default function ProductDetail() {
               </div>
             </div>
 
-            <p className={`font-dm text-[12px] uppercase tracking-[0.06em] mt-3 ${product.stock > 0 ? 'text-[#2D6A4F]' : 'text-[#C0392B]'}`}>
-              {product.stock > 0 ? `● In Stock (${product.stock} left)` : '● Out of Stock'}
+            <p className={`font-dm text-[12px] uppercase tracking-[0.06em] mt-3 ${currentStock > 0 ? 'text-[#2D6A4F]' : 'text-[#C0392B]'}`}>
+              {currentStock > 0 ? `● In Stock (${currentStock} left)` : '● Out of Stock'}
             </p>
 
             <div className="mt-4 flex flex-col gap-2.5">
@@ -736,8 +783,8 @@ export default function ProductDetail() {
                   <motion.button
                     key="add"
                     onClick={handleAddToCart}
-                    disabled={product.stock === 0}
-                    className={`w-full py-4 rounded-sm border-none font-dm text-[13px] font-medium uppercase tracking-[0.06em] flex items-center justify-center gap-2 transition-colors duration-200 ${product.stock === 0 ? 'bg-[#3D3D34] text-[#0D0D0B] cursor-not-allowed' : 'bg-[#F5F0E8] text-[#0D0D0B] cursor-pointer hover:bg-[#C9A96E]'}`}
+                    disabled={currentStock === 0}
+                    className={`w-full py-4 rounded-sm border-none font-dm text-[13px] font-medium uppercase tracking-[0.06em] flex items-center justify-center gap-2 transition-colors duration-200 ${currentStock === 0 ? 'bg-[#3D3D34] text-[#0D0D0B] cursor-not-allowed' : 'bg-[#F5F0E8] text-[#0D0D0B] cursor-pointer hover:bg-[#C9A96E]'}`}
                   >
                     <ShoppingCart size={16} /> Add to Cart
                   </motion.button>
@@ -746,9 +793,9 @@ export default function ProductDetail() {
 
               <motion.button
                 onClick={handleBuyNow}
-                disabled={product.stock === 0}
+                disabled={currentStock === 0}
                 whileTap={{ scale: 0.97 }}
-                className={`w-full py-4 rounded-sm border-none text-white font-dm text-[13px] font-medium uppercase tracking-[0.06em] flex items-center justify-center gap-2 transition-colors duration-200 ${product.stock === 0 ? 'bg-[#3D3D34] opacity-40 cursor-not-allowed' : 'bg-[#C9A96E] cursor-pointer hover:bg-[#A07840]'}`}
+                className={`w-full py-4 rounded-sm border-none text-white font-dm text-[13px] font-medium uppercase tracking-[0.06em] flex items-center justify-center gap-2 transition-colors duration-200 ${currentStock === 0 ? 'bg-[#3D3D34] opacity-40 cursor-not-allowed' : 'bg-[#C9A96E] cursor-pointer hover:bg-[#A07840]'}`}
               >
                 Buy Now
               </motion.button>
