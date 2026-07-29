@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import ProductCard from '../components/ProductCard';
 import { getProducts, getCategories, getFilters, getBanners } from '../services/api';
 import useSettingsStore from '../store/settingsStore';
+import { trackSearch } from '../utils/pixel';
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 const INITIAL_FILTERS = { category: 'All', brands: [], sizes: [], colors: [], minRating: 0, inStock: false, search: '' };
@@ -314,6 +315,7 @@ export default function Products() {
     ])
       .then(([productsData, filtersData, categoriesData, bannersData]) => {
         const items = productsData?.products || productsData || [];
+        if (filters.search) trackSearch(filters.search); // Meta Pixel: Search
         setAllProducts(items.map((p, i) => {
           const firstImage = p.images?.[0]?.url || p.images?.[0];
           return {

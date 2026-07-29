@@ -8,6 +8,7 @@ import { ShieldCheck, MapPin, ArrowRight, ArrowLeft, Check, Package } from 'luci
 import useCartStore from '../store/cartStore';
 import useAuthStore from '../store/authStore';
 import { useCurrency } from '../utils/currency';
+import { trackInitiateCheckout, trackPurchase } from '../utils/pixel';
 import { optimizeImage } from '../utils/cloudinary';
 
 // ─── Confetti (CSS-based) ────────────────────────────────────
@@ -609,6 +610,14 @@ export default function Checkout() {
   const settings = useSettingsStore(s => s.settings);
   const siteName = settings?.siteName || 'Store';
 
+  // Meta Pixel: InitiateCheckout when page loads with items
+  useEffect(() => {
+    if (items.length > 0) {
+      const total = items.reduce((sum, i) => sum + i.price * (i.qty || i.quantity || 1), 0);
+      trackInitiateCheckout(items, total);
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
   if (items.length === 0 && !orderNumber) {
     return (
       <div className="min-h-screen bg-[#0D0D0B] flex items-center justify-center flex-col gap-4">
@@ -646,6 +655,7 @@ export default function Checkout() {
       };
       const result = await createOrder(orderData);
       setOrderNumber(result.orderNumber || `#ORD-${Date.now()}`);
+      trackPurchase(result.orderNumber, orderData.items, orderData.total); // Meta Pixel: Purchase
       clearCart();
     } catch (err) {
       alert(err.response?.data?.message || 'Failed to place order. Please try again.');

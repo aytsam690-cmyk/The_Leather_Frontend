@@ -9,6 +9,7 @@ import useAuthStore from '../store/authStore';
 import useSettingsStore from '../store/settingsStore';
 import { useCurrency } from '../utils/currency';
 import { optimizeImage } from '../utils/cloudinary';
+import { trackViewContent, trackAddToCart } from '../utils/pixel';
 import ProductCard from '../components/ProductCard';
 import ImageUploader from '../components/ImageUploader';
 
@@ -471,6 +472,7 @@ export default function ProductDetail() {
         };
 
         setProduct(mappedProduct);
+        trackViewContent(mappedProduct); // Meta Pixel: ViewContent
         setReviews(p.reviews || []);
         setRelatedProducts(data.relatedProducts || []);
       } catch (err) {
@@ -516,6 +518,7 @@ export default function ProductDetail() {
 
   const handleAddToCart = () => {
     addItem({ ...product, ratings: { average: product.ratings.average, count: product.ratings.count } }, qty, { size: selectedSize, color: product.colors[selectedColor] });
+    trackAddToCart(product, qty); // Meta Pixel: AddToCart
     setAddedAnim(true);
     setTimeout(() => setAddedAnim(false), 1500);
   };
@@ -523,6 +526,7 @@ export default function ProductDetail() {
   const handleBuyNow = () => {
     if (product.stock <= 0) return;
     addItem({ ...product, ratings: { average: product.ratings.average, count: product.ratings.count } }, qty, { size: selectedSize, color: product.colors[selectedColor] });
+    trackAddToCart(product, qty); // Meta Pixel: AddToCart (Buy Now)
     navigate('/checkout');
   };
 

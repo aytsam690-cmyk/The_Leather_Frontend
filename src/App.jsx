@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-route
 import { AnimatePresence, motion } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
 import useSettingsStore from './store/settingsStore';
+import { initPixel, trackPageView } from './utils/pixel';
 
 // ─── Always-loaded components (above the fold) ────────────────────────────────
 import Navbar from './components/Navbar';
@@ -101,7 +102,7 @@ const pageVariants = {
 
 function CustomerRoutes() {
   const location = useLocation();
-  useEffect(() => { window.scrollTo(0, 0); }, [location.pathname]);
+  useEffect(() => { window.scrollTo(0, 0); trackPageView(); }, [location.pathname]);
 
   return (
     <AnimatePresence mode="wait">
@@ -148,6 +149,7 @@ function App() {
 
   useEffect(() => {
     fetchSettings();
+    initPixel(); // Initialize Meta Pixel once on app load
   }, [fetchSettings]);
 
   // Update document title as soon as settings load

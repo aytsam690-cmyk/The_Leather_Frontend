@@ -6,6 +6,7 @@ import { Eye, EyeOff, Check, Mail, Lock, Phone, User, ShieldCheck } from 'lucide
 import useAuthStore from '../store/authStore';
 import useSettingsStore from '../store/settingsStore';
 import { register as apiRegister } from '../services/api';
+import { trackCompleteRegistration } from '../utils/pixel';
 
 function getPasswordStrength(pwd) {
   let score = 0;
@@ -123,6 +124,7 @@ export default function Register() {
       const data = await apiRegister({ name: form.name, email: form.email, password: form.password, phone: form.phone });
       const token = data.accessToken || data.token;
       storeLogin({ _id: data._id, name: data.name, email: data.email, role: data.role }, token);
+      trackCompleteRegistration(); // Meta Pixel: CompleteRegistration
       navigate('/');
     } catch (err) {
       setApiError(err.response?.data?.message || 'Something went wrong. Please try again.');
