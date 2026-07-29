@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Search, Plus, Pencil, Trash2, ChevronLeft, ChevronRight,
-  X, ChevronDown, Upload, GripVertical, AlertCircle, Loader2
+  X, ChevronDown, Upload, GripVertical, AlertCircle, Loader2, ImagePlus
 } from 'lucide-react';
 import useAdminStore from '../store/adminStore';
 import { getAdminProducts, createProduct as apiCreateProduct, updateProduct as apiUpdateProduct, deleteProduct as apiDeleteProduct, getAdminCategories, uploadImage } from '../adminApi';
@@ -76,7 +76,8 @@ function ProductForm({ initial, saving, onCancel, onSave, categories }) {
     images:[], variants:[], specs:{}, isFeatured: false,
   };
   const [form, setForm] = useState({ ...defaults, ...(initial || {}), images: (initial?.images || []), variants: (initial?.variants || []), specs: (initial?.specs || {}) });
-  const [variantRow, setVariantRow] = useState({ size:'', color:'', price:'', stock:'' });
+  const [variantRow, setVariantRow] = useState({ size:'', color:'', price:'', stock:'', image:'' });
+  const [uploadingVariantImg, setUploadingVariantImg] = useState(null);
   const [bulkSpecs, setBulkSpecs] = useState('');
 
   const parseBulkSpecsText = (text) => {
@@ -123,7 +124,24 @@ function ProductForm({ initial, saving, onCancel, onSave, categories }) {
   const addVariant = () => {
     if (!variantRow.size && !variantRow.color) return;
     set('variants', [...form.variants, { ...variantRow, id: Date.now() }]);
-    setVariantRow({ size:'', color:'', price:'', stock:'' });
+    setVariantRow({ size:'', color:'', price:'', stock:'', image:'' });
+  };
+
+  const handleVariantImageUpload = async (index, file) => {
+    if (!file) return;
+    setUploadingVariantImg(index);
+    try {
+      const result = await uploadImage(file);
+      if (result && result.url) {
+        const newVariants = [...form.variants];
+        newVariants[index].image = result.url;
+        set('variants', newVariants);
+      }
+    } catch (err) {
+      alert('Failed to upload variant image');
+    } finally {
+      setUploadingVariantImg(null);
+    }
   };
 
   const inputCls = 'w-full border border-[#D0D0CA] rounded-sm px-3 py-2.5 text-sm text-[#111111] outline-none focus:border-[#C9A96E] transition-all bg-white';
@@ -271,11 +289,28 @@ function ProductForm({ initial, saving, onCancel, onSave, categories }) {
           <div className="mt-3 rounded-sm overflow-hidden border border-[#D0D0CA]">
             <table className="w-full text-sm">
               <thead className="bg-[#F8F8F6]">
-                <tr>{['Size','Color','Price','Stock',''].map(h => <th key={h} className="px-3 py-2 text-left text-xs font-semibold text-[#6B6B6B]">{h}</th>)}</tr>
+                <tr>{['Image','Size','Color','Price','Stock',''].map(h => <th key={h} className="px-3 py-2 text-left text-xs font-semibold text-[#6B6B6B]">{h}</th>)}</tr>
               </thead>
               <tbody>
                 {form.variants.map((v, i) => (
                   <tr key={v.id} className="border-t border-[#E8E8E4]">
+                    <td className="px-3 py-2 w-16">
+                      <label className="w-10 h-10 border border-[#D0D0CA] rounded-sm flex items-center justify-center cursor-pointer overflow-hidden group relative">
+                        {uploadingVariantImg === i ? (
+                          <Loader2 size={16} className="animate-spin text-[#9E9E9E]" />
+                        ) : v.image ? (
+                          <>
+                            <img src={v.image} alt="variant" className="w-full h-full object-cover" />
+                            <div className="absolute inset-0 bg-black/50 hidden group-hover:flex items-center justify-center">
+                              <ImagePlus size={14} className="text-white" />
+                            </div>
+                          </>
+                        ) : (
+                          <ImagePlus size={16} className="text-[#9E9E9E] group-hover:text-[#111111]" />
+                        )}
+                        <input type="file" accept="image/*" className="hidden" onChange={e => handleVariantImageUpload(i, e.target.files[0])} />
+                      </label>
+                    </td>
                     <td className="px-3 py-2">{v.size}</td>
                     <td className="px-3 py-2">{v.color}</td>
                     <td className="px-3 py-2">{formatPrice(v.price)}</td>
