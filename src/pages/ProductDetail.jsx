@@ -496,6 +496,18 @@ export default function ProductDetail() {
     fetchProduct();
   }, [id]);
 
+  // ─── useMemo must be BEFORE any early returns (Rules of Hooks) ────────────────────
+  const displayImages = React.useMemo(() => {
+    if (!product) return [];
+    const variantKey = [selectedColor, selectedSize].filter(Boolean).join('-');
+    const colorKey = selectedColor || '';
+    const tagged = product.images.filter(img =>
+      img.variantId && (img.variantId === variantKey || img.variantId === colorKey)
+    );
+    const defaults = product.images.filter(img => !img.variantId);
+    return tagged.length > 0 ? tagged : (defaults.length > 0 ? defaults : product.images);
+  }, [product, selectedColor, selectedSize]);
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#0D0D0B]">
@@ -521,7 +533,7 @@ export default function ProductDetail() {
     );
   }
 
-  // ─── Variant-aware derived values ──────────────────────────────────────────
+  // ─── Variant-aware derived values (safe after null guard above) ─────────────────
   const selectedVariant = product.variants?.find(v =>
     (!v.color || v.color === selectedColor) && (!v.size || v.size === selectedSize)
   ) || product.variants?.[0];
@@ -532,21 +544,6 @@ export default function ProductDetail() {
   const discountPct = currentComparePrice > currentPrice
     ? Math.round(((currentComparePrice - currentPrice) / currentComparePrice) * 100)
     : 0;
-
-  // Build the gallery for the selected variant:
-  // 1. Images tagged to this variant (by color-size key)
-  // 2. Fall back to untagged/default images if none tagged
-  const displayImages = React.useMemo(() => {
-    if (!product) return [];
-    const variantKey = [selectedColor, selectedSize].filter(Boolean).join('-');
-    const colorKey = selectedColor || '';
-    const tagged = product.images.filter(img =>
-      img.variantId && (img.variantId === variantKey || img.variantId === colorKey)
-    );
-    const defaults = product.images.filter(img => !img.variantId);
-    // Use tagged images if any, otherwise fall back to defaults
-    return tagged.length > 0 ? tagged : (defaults.length > 0 ? defaults : product.images);
-  }, [product, selectedColor, selectedSize]);
 
   const handleAddToCart = () => {
     if (currentStock <= 0) return;
