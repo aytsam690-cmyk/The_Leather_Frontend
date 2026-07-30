@@ -37,7 +37,8 @@ export const initPixel = () => {
   })(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
 
   window.fbq('init', PIXEL_ID);
-  window.fbq('track', 'PageView');
+  // NOTE: Do NOT call fbq('track', 'PageView') here.
+  // trackPageView() is called on every route change in App.jsx, including initial load.
 
   // Add noscript fallback image
   const noscript = document.createElement('noscript');
