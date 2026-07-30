@@ -7,7 +7,7 @@
  * Pixel ID is read from VITE_META_PIXEL_ID env variable.
  */
 
-const PIXEL_ID = import.meta.env.VITE_META_PIXEL_ID || '1041438008624092';
+const PIXEL_ID = '1041438008624092'; // Craft Hid Dataset ID
 
 let initialized = false;
 
